@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "k6c8U1db5Aa11KtFMx/6okL5Ki60FLAy19dfmWavb2YudnbroargXWkkv+p2V6BzDRmo1O9cwZn7u+E5bz3JXA==",
+  "success": true,
+  "projectFilePath": "Z:\\Files\\SoftwareDev\\Autodesk\\synthesis\\exporter\\SynthImporterLib\\SynthImporterLib\\SynthImporterLib.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Victo\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Victo\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
