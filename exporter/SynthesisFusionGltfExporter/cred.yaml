@@ -1,0 +1,16 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: v1
+data:
+  .dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaXRsYWIuZ2FzbWVkaWEuY29tOjUwNTAiOiB7CgkJCSJhdXRoIjogImRtbGpkRzl5ZVdadmNuQm9hV3c2U0ZGT05pRlNSbkJoVkdwa1drSnpjVUZhVmpNPSIKCQl9Cgl9LAoJIkh0dHBIZWFkZXJzIjogewoJCSJVc2VyLUFnZW50IjogIkRvY2tlci1DbGllbnQvMTkuMDMuNSAobGludXgpIgoJfSwKCSJjcmVkSGVscGVycyI6IHsKCQkiYXNpYS5nY3IuaW8iOiAiZ2Nsb3VkIiwKCQkiZXUuZ2NyLmlvIjogImdjbG91ZCIsCgkJImdjci5pbyI6ICJnY2xvdWQiLAoJCSJtYXJrZXRwbGFjZS5nY3IuaW8iOiAiZ2Nsb3VkIiwKCQkic3RhZ2luZy1rOHMuZ2NyLmlvIjogImdjbG91ZCIsCgkJInVzLmdjci5pbyI6ICJnY2xvdWQiCgl9Cn0=
+kind: Secret
+metadata:
+  creationTimestamp: "2020-02-17T21:48:41Z"
+  name: regcred
+  namespace: gmg-asia
+  resourceVersion: "524476"
+  selfLink: /api/v1/namespaces/default/secrets/regcred
+  uid: 433d84ce-51cf-11ea-9908-42010a8000ef
+type: kubernetes.io/dockerconfigjson

@@ -50,9 +50,10 @@ try:
 
     from .commands.ExportCommand import ExportCommand
     from .commands.ExportPaletteCommand import ExportPaletteSendCommand, ExportPaletteShowCommand
-
+    
     my_addin = apper.FusionApp(config.app_name, config.company_name, False)
-
+    #watcher = FileWatcher("C:/Users/Victo/AppData/Local/Autodesk/Synthesis/watch.synth")
+    
     # my_addin.add_command(
     #     'Export Assembly',
     #     ExportCommand,
@@ -100,11 +101,17 @@ except:
 
 # Set to True to display various useful messages when debugging your app
 debug = False
+from .commands.FileExportCommand import FileManager
+
+fileCmd = None
 
 def run(context):
+    FileManager().start()
+    
     my_addin.run_app()
 
 def stop(context):
+    FileManager().deleteMe()
     my_addin.stop_app()
     sys.path.pop(0)
     sys.path.pop(0)
