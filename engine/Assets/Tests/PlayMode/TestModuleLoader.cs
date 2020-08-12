@@ -50,7 +50,7 @@ namespace Tests
             writer.Flush();
             textFile.Close();
 
-            ZipFile.CreateFromDirectory(sourceFolderPath, zipPath);
+            //ZipFile.CreateFromDirectory(sourceFolderPath, zipPath);
 
             Directory.Delete(sourceFolderPath, true);
         }

@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using Assets.Scripts.Engine.Util;
+using Ionic.Zip;
 using SynthesisAPI.AssetManager;
 using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EventBus;
@@ -13,7 +14,7 @@ using SynthesisAPI.Modules.Attributes;
 using SynthesisAPI.Utilities;
 using SynthesisAPI.VirtualFileSystem;
 using Logger = SynthesisAPI.Utilities.Logger;
-using PreloadedModule = System.ValueTuple<System.IO.Compression.ZipArchive, Engine.ModuleLoader.ModuleMetadata>;
+using PreloadedModule = System.ValueTuple<Ionic.Zip.ZipFile, Engine.ModuleLoader.ModuleMetadata>;
 
 using Directory = System.IO.Directory;
 using Type = System.Type;
@@ -112,10 +113,11 @@ namespace Engine.ModuleLoader
 		{
 			var fullPath = $"{_moduleSourcePath}{Path.DirectorySeparatorChar}{filePath}";
 
-			var module = ZipFile.Open(fullPath, ZipArchiveMode.Read);
+			var module = ZipFile.Read(fullPath);
+			var metadataPath = GetPath(module.Entries.First(e => e.FileName.Contains(ModuleMetadata.MetadataFilename)).FileName);
 
 			// Ensure module contains metadata
-			if (module.Entries.All(e => e.Name != ModuleMetadata.MetadataFilename))
+			if (module.Entries.All(e => RemovePath(metadataPath, e.FileName) != ModuleMetadata.MetadataFilename))
 			{
 				Logger.Log($"Potential module missing is metadata file: {filePath}", LogLevel.Warning);
 				return null;
@@ -124,8 +126,10 @@ namespace Engine.ModuleLoader
 			// Parse module metadata
 			try
 			{
-				var metadata = ModuleMetadata.Deserialize(module.Entries
-					.First(e => e.Name == ModuleMetadata.MetadataFilename).Open());
+				var stream = new MemoryStream();
+				module.Entries.First(e => e.FileName.Contains(ModuleMetadata.MetadataFilename)).Extract(stream);
+				stream.Seek(0, SeekOrigin.Begin);
+				var metadata = ModuleMetadata.Deserialize(stream);
 				return (module, metadata);
 			}
 			catch (Exception e)
@@ -135,8 +139,9 @@ namespace Engine.ModuleLoader
 			}
 		}
 
-		public static void ResolveDependencies(List<(ZipArchive archive, ModuleMetadata metadata)> moduleList)
+		public static void ResolveDependencies(List<(ZipFile archive, ModuleMetadata metadata)> moduleList)
 		{
+
 			foreach (var (_, metadata) in moduleList)
 			{
 				foreach (var dependency in metadata.Dependencies)
@@ -158,7 +163,7 @@ namespace Engine.ModuleLoader
 
 			// TODO check for cyclic dependencies and throw
 			var resolvedEntries = moduleList.Where(t => !t.metadata.Dependencies.Any()).ToList();
-			var solutionSet = new Queue<(ZipArchive archive, ModuleMetadata metadata)>();
+			var solutionSet = new Queue<(ZipFile archive, ModuleMetadata metadata)>();
 			while (resolvedEntries.Count > 0)
 			{
 				var element = resolvedEntries.PopAt(0);
@@ -179,7 +184,7 @@ namespace Engine.ModuleLoader
 		private static string GetPath(string fullName)
 		{
 			var i = fullName.LastIndexOf(SynthesisAPI.VirtualFileSystem.Directory.DirectorySeparatorChar, fullName.Length - 1, fullName.Length - 2);
-			if (i == -1 || i == (fullName.Length - 1))
+			if (i == -1 || i == fullName.Length - 1)
 			{
 				return "";
 			}
@@ -195,44 +200,46 @@ namespace Engine.ModuleLoader
 			return fullName;
 		}
 
-		public static void LoadModule((ZipArchive archive, ModuleMetadata metadata) moduleInfo)
+		public static void LoadModule((ZipFile archive, ModuleMetadata metadata) moduleInfo)
 		{
 			var fileManifest = new List<string>();
 			fileManifest.AddRange(moduleInfo.metadata.FileManifest);
 
-			var metadataPath = GetPath(moduleInfo.archive.Entries.First(e => e.Name == ModuleMetadata.MetadataFilename).FullName);
+			var metadataPath = GetPath(moduleInfo.archive.Entries.First(e => e.FileName.Contains(ModuleMetadata.MetadataFilename)).FileName);
 
 			foreach (var entry in moduleInfo.archive.Entries.Where(e =>
 			{
-				var name = RemovePath(metadataPath, e.FullName);
+				var name = RemovePath(metadataPath, e.FileName);
 				return name != ModuleMetadata.MetadataFilename && moduleInfo.metadata.FileManifest.Contains(name);
 			}))
 			{
-				fileManifest.Remove(RemovePath(metadataPath, entry.FullName));
-				var extension = Path.GetExtension(entry.Name);
-				var stream = entry.Open();
+				fileManifest.Remove(RemovePath(metadataPath, entry.FileName));
+				var extension = Path.GetExtension(entry.FileName);
+				var stream = new MemoryStream();
+				entry.Extract(stream);
+				stream.Seek(0, SeekOrigin.Begin);
 				if (extension == ".dll")
 				{
 					if (!LoadModuleAssembly(stream, moduleInfo.metadata.Name))
 					{
-						throw new LoadModuleException($"Failed to load assembly: {entry.Name}");
+						throw new LoadModuleException($"Failed to load assembly: {entry.FileName}");
 					}
 				}
 				else
 				{
 					var targetPath = _baseModuleTargetPath + SynthesisAPI.VirtualFileSystem.Directory.DirectorySeparatorChar +
 						moduleInfo.metadata.TargetPath + SynthesisAPI.VirtualFileSystem.Directory.DirectorySeparatorChar +
-						GetPath(RemovePath(metadataPath, entry.FullName));
+						GetPath(RemovePath(metadataPath, entry.FileName));
 					var perm = Permissions.PublicReadWrite;
 					var type = AssetManager.GetTypeFromFileExtension(extension);
 					if (type == null)
 					{
-						throw new LoadModuleException($"Failed to determine asset type from file extension of asset: {entry.Name}");
+						throw new LoadModuleException($"Failed to determine asset type from file extension of asset: {entry.FileName}");
 					}
 					else if (AssetManager.Import(type,
-						new DeflateStreamWrapper(stream, entry.Length), targetPath, entry.Name, perm, "") == null)
+						new DeflateStreamWrapper(stream, entry.UncompressedSize), targetPath, entry.FileName, perm, "") == null)
 					{
-						throw new LoadModuleException($"Failed to import asset: {entry.Name}");
+						throw new LoadModuleException($"Failed to import asset: {entry.FileName}");
 					}
 				}
 			}
@@ -516,8 +523,5 @@ namespace Engine.ModuleLoader
 						.Invoke(null, new object[] {e})
 				});
 		}
-
-
-
 	}
 }
