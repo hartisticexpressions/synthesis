@@ -11,7 +11,8 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll",
-        "Api.dll"
+        "Api.dll",
+        "DotNetZip.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

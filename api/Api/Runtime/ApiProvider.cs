@@ -11,16 +11,16 @@ namespace SynthesisAPI.Runtime
 {
 	internal static class ApiProvider
 	{
-		private static IApiProvider? Instance => Inner.Instance;
+		private static ApiInstance? Instance => Inner.Instance;
 
-		public static void RegisterApiProvider(IApiProvider provider)
+		public static void RegisterApiProvider(ApiInstance instance)
 		{
 			if (Inner.Instance != null)
 			{
 				throw new Exception("Attempt to register multiple API instances");
 			}
 
-			Inner.Instance = provider;
+			Inner.Instance = instance;
 		}
 
 		private static class Inner
@@ -28,7 +28,7 @@ namespace SynthesisAPI.Runtime
 			// ReSharper disable once EmptyConstructor
 			static Inner() {}
 			// ReSharper disable once MemberHidesStaticFromOuterClass
-			internal static IApiProvider? Instance;
+			internal static ApiInstance? Instance;
 		}
 
 		public static void AddEntityToScene(Entity entity) => Instance?.AddEntityToScene(entity);

@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Engine.ModuleLoader;
 using System.IO;
-using System.IO.Compression;
+
 using System;
+using Ionic.Zip;
 using UnityEngine.SceneManagement;
 using SynthesisAPI.AssetManager;
 
@@ -50,7 +51,11 @@ namespace Tests
             writer.Flush();
             textFile.Close();
 
-            //ZipFile.CreateFromDirectory(sourceFolderPath, zipPath);
+            using (var zip = new ZipFile())
+            {
+                zip.AddFiles(Directory.GetFiles(sourceFolderPath));
+                zip.Save(zipPath);
+            }
 
             Directory.Delete(sourceFolderPath, true);
         }

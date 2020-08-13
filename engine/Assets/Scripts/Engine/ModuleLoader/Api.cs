@@ -167,7 +167,7 @@ namespace Engine.ModuleLoader
 			}
 		}
 
-		private class ApiProviderImpl : IApiProvider
+		private class ApiProviderImpl : ApiInstance
 		{
 			private readonly Dictionary<Type, Type> _builtins;
 
@@ -183,7 +183,7 @@ namespace Engine.ModuleLoader
 				};
 			}
 
-			public void AddEntityToScene(Entity entity)
+			public override void AddEntityToScene(Entity entity)
 			{
 				if (ApiProviderData.GameObjects.ContainsKey(entity))
 					throw new Exception($"Entity \"{entity}\" already exists");
@@ -192,7 +192,7 @@ namespace Engine.ModuleLoader
 				ApiProviderData.GameObjects.Add(entity, gameObject);
 			}
 
-			public void RemoveEntityFromScene(Entity entity)
+			public override void RemoveEntityFromScene(Entity entity)
 			{
 				GameObject gameObject;
 				if (!ApiProviderData.GameObjects.TryGetValue(entity, out gameObject))
@@ -200,7 +200,7 @@ namespace Engine.ModuleLoader
 				Destroy(gameObject);
 			}
 
-			public Component AddComponentToScene(Entity entity, Type t)
+			public override Component AddComponentToScene(Entity entity, Type t)
 			{
 				GameObject gameObject;
 				if (!ApiProviderData.GameObjects.TryGetValue(entity, out gameObject))
@@ -250,7 +250,7 @@ namespace Engine.ModuleLoader
 				return component;
 			}
 
-			public void AddComponentToScene(Entity entity, Component component)
+			public override void AddComponentToScene(Entity entity, Component component)
 			{
 				GameObject gameObject;
 				if (!ApiProviderData.GameObjects.TryGetValue(entity, out gameObject))
@@ -274,7 +274,7 @@ namespace Engine.ModuleLoader
 				type.GetMethod("SetInstance").Invoke(gameObjectComponent, new[] { component });
 			}
 
-			public void RemoveComponentFromScene(Entity entity, Type t)
+			public override void RemoveComponentFromScene(Entity entity, Type t)
 			{
 				GameObject gameObject;
 				if (!ApiProviderData.GameObjects.TryGetValue(entity, out gameObject))
@@ -295,10 +295,10 @@ namespace Engine.ModuleLoader
 				Destroy(gameObject.GetComponent(type));
 			}
 
-			public T CreateUnityType<T>(params object[] args) where T : class =>
+			public override T CreateUnityType<T>(params object[] args) =>
 				(T)Activator.CreateInstance(typeof(T), args);
 
-			public VisualTreeAsset GetDefaultUIAsset(string assetName)
+			public override VisualTreeAsset GetDefaultUIAsset(string assetName)
 			{
 				int index = Array.IndexOf(ResourceLedger.Instance.Keys, assetName);
 				if (index != -1)
@@ -309,7 +309,7 @@ namespace Engine.ModuleLoader
 			public TUnityType InstantiateFocusable<TUnityType>() where TUnityType : Focusable =>
 				(TUnityType)Activator.CreateInstance(typeof(TUnityType));
 
-			public VisualElement GetRootVisualElement()
+			public override VisualElement GetRootVisualElement()
 			{
 				// TODO: Re-evaluate this
 				return PanelRenderer.visualTree;

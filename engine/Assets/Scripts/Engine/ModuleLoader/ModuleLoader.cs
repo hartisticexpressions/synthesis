@@ -13,6 +13,7 @@ using SynthesisAPI.Modules;
 using SynthesisAPI.Modules.Attributes;
 using SynthesisAPI.Utilities;
 using SynthesisAPI.VirtualFileSystem;
+using ZipFile = Ionic.Zip.ZipFile;
 using Logger = SynthesisAPI.Utilities.Logger;
 using PreloadedModule = System.ValueTuple<Ionic.Zip.ZipFile, Engine.ModuleLoader.ModuleMetadata>;
 

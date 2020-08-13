@@ -16,7 +16,7 @@ namespace MockApi
     {
         public static void Init()
         {
-            SynthesisAPI.Runtime.ApiProvider.RegisterApiProvider(new MockApiProvider());
+            SynthesisAPI.Runtime.ApiProvider.RegisterApiProvider(new MockApiInstance());
             foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a =>
                  a.GetTypes()).Where(e => e.IsSubclassOf(typeof(SystemBase))))
             {
@@ -84,7 +84,7 @@ namespace MockApi
         }
 
 
-        private class MockApiProvider : IApiProvider
+        private class MockApiInstance : ApiInstance
         {
             private bool debugLogsEnabled = false;
 
@@ -98,30 +98,30 @@ namespace MockApi
                 Log(m);
             }
 
-            public void AddEntityToScene(Entity entity)
+            public override void AddEntityToScene(Entity entity)
             {
                 LogAction($"Add Entity {entity}");
             }
 
-            public void RemoveEntityFromScene(Entity entity)
+            public override void RemoveEntityFromScene(Entity entity)
             {
                 LogAction($"Remove Entity {entity}");
             }
 
 #nullable enable
-            public Component? AddComponentToScene(Entity entity, Type t)
+            public override Component? AddComponentToScene(Entity entity, Type t)
             {
                 LogAction("Add Component", $"Adding {t} to {entity}");
                 return (Component?)Activator.CreateInstance(t);
             }
 
-            public void AddComponentToScene(Entity entity, Component component)
+            public override void AddComponentToScene(Entity entity, Component component)
             {
                 LogAction("Add Component", $"Adding instance of {component.GetType()} to {entity}");
             }
 
 
-            public void RemoveComponentFromScene(Entity entity, Type t)
+            public override void RemoveComponentFromScene(Entity entity, Type t)
             {
                 LogAction("Remove Component", $"Adding {t} to {entity}");
             }
@@ -157,12 +157,12 @@ namespace MockApi
             }
 
 
-            public T CreateUnityType<T>(params object[] args) where T : class
+            public override T CreateUnityType<T>(params object[] args) where T : class
             {
                 throw new NotImplementedException();
             }
 
-            public VisualTreeAsset GetDefaultUIAsset(string assetName)
+            public override VisualTreeAsset GetDefaultUIAsset(string assetName)
             {
                 throw new NotImplementedException();
             }
@@ -172,7 +172,7 @@ namespace MockApi
             //     throw new NotImplementedException();
             // }
 
-            public VisualElement GetRootVisualElement()
+            public override VisualElement GetRootVisualElement()
             {
                 throw new NotImplementedException();
             }
