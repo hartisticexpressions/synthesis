@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using SynthesisAPI.EnvironmentManager.Components;
 using SynthesisAPI.EnvironmentManager;
 using static Engine.ModuleLoader.Api;
@@ -10,31 +9,23 @@ namespace Engine.ModuleLoader.Adapters
     {
         private Parent instance;
 
-        // Use this for initialization
-        void Awake()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            if (instance.Changed)
-            {
-                GameObject parent = (Entity)instance == 0 ? ApiProviderData.EntityParent : ApiProviderData.GameObjects[instance];
-                gameObject.transform.SetParent(parent.transform);
-                instance.ProcessedChanges();
-            }
-        }
-
-        void OnDestroy()
-        {
-            instance.Entity.Value.RemoveEntity();
-        }
-
         public void SetInstance(Parent parent)
         {
             instance = parent;
+
+            instance.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == "ParentEntity")
+                {
+                    GameObject _parent = (Entity)instance == 0 ? ApiProviderData.EntityParent : ApiProviderData.GameObjects[instance];
+                    gameObject.transform.SetParent(_parent.transform);
+                }
+            };
+        }
+
+        public void OnDestroy()
+        {
+            instance.Entity.Value.RemoveEntity();
         }
 
         public static Parent NewInstance()

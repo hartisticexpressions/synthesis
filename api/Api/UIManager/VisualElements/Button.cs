@@ -3,22 +3,25 @@ using System;
 using System.Collections.Generic;
 using SynthesisAPI.EventBus;
 using _UnityButton = UnityEngine.UIElements.Button;
+using SynthesisAPI.Utilities;
 
 namespace SynthesisAPI.UIManager.VisualElements
 {
     public class Button : VisualElement
     {
         private EventBus.EventBus.EventCallback _callback;
-        
-        protected _UnityButton Element
+
+        internal _UnityButton Element
         {
             get => (_visualElement as _UnityButton)!;
             set => _visualElement = value;
         }
 
+        private const string EventTagPrefix = "button/";
+
         public string EventTag
         {
-            get => $"button/{Element.name}";
+            get => $"{EventTagPrefix}{Element.name}";
         }
 
         public string Text {
@@ -54,15 +57,11 @@ namespace SynthesisAPI.UIManager.VisualElements
 
         public void Subscribe(Action<IEvent> action)
         {
+            if (EventTag == EventTagPrefix)
+                Logger.Log("Subscribing to unnamed button, cannot differentiate click event", LogLevel.Warning);
             _callback = e => action(e);
             EventBus.EventBus.NewTagListener(EventTag, _callback);
             PostUxmlLoad();
-        }
-        
-        protected override dynamic DynamicVisualElement
-        {
-            get => Element;
-            set => Element = value is _UnityButton ? value : Element;
         }
     }
 }

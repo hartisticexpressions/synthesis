@@ -6,7 +6,7 @@ namespace SynthesisAPI.UIManager.VisualElements
 {
     public class Label : VisualElement
     {
-        private _UnityLabel Element
+        private protected _UnityLabel Element
         {
             get => (_visualElement as _UnityLabel)!;
             set => _visualElement = value;
@@ -32,12 +32,6 @@ namespace SynthesisAPI.UIManager.VisualElements
         internal Label(_UnityLabel element)
         {
             Element = element;
-        }
-        
-        protected override dynamic DynamicVisualElement
-        {
-            get => Element;
-            set => Element = value is _UnityLabel ? value : Element;
         }
     }
 }

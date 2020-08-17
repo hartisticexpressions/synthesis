@@ -1,23 +1,27 @@
 ﻿using System.Collections.Generic;
-using MathNet.Spatial.Euclidean;
+using System.Linq;
+using Engine.Util;
 using SynthesisAPI.Utilities;
+using UnityEditor;
 using UnityEngine;
+using Logger = UnityEngine.Logger;
 using Mesh = SynthesisAPI.EnvironmentManager.Components.Mesh;
 
 namespace Engine.ModuleLoader.Adapters
 {
 	public sealed class MeshAdapter : MonoBehaviour, IApiAdapter<Mesh>
 	{
-		private static Material _defaultMaterial = null;
+		private Material _defaultMaterial = null;
+		private MeshRenderer _renderer = null;
 
-		public void Awake()
+		public void SetInstance(Mesh mesh)
 		{
-			MeshRenderer renderer;
-
+			instance = mesh;
+			
 			if ((filter = gameObject.GetComponent<MeshFilter>()) == null)
 				filter = gameObject.AddComponent<MeshFilter>();
-			if ((renderer = gameObject.GetComponent<MeshRenderer>()) == null)
-				renderer = gameObject.AddComponent<MeshRenderer>();
+			if ((_renderer = gameObject.GetComponent<MeshRenderer>()) == null)
+				_renderer = gameObject.AddComponent<MeshRenderer>();
 
 			if (_defaultMaterial == null)
 			{
@@ -26,29 +30,34 @@ namespace Engine.ModuleLoader.Adapters
 				_defaultMaterial.color = new Color(0.2f, 0.2f, 0.2f);
 				_defaultMaterial.SetFloat("_Smoothness", 0.2f);
 			}
-			renderer.material = _defaultMaterial;
-		}
+			_renderer.material = _defaultMaterial;
 
-		public void Update()
-		{
-			if (instance.Changed)
-			{
-				ToUnity();
-				instance.ProcessedChanges();
-			}
-		}
-
-		private void ToUnity()
-        {
-			filter.mesh.vertices = Convert(instance.Vertices);
-			filter.mesh.uv = Convert(instance.UVs);
+			filter.mesh = new UnityEngine.Mesh();
+			filter.mesh.vertices = Misc.MapAll(instance._vertices, Misc.MapVector3D).ToArray();
+			filter.mesh.uv = Misc.MapAll(instance._uvs, x => new Vector2((float)x.X, (float)x.Y)).ToArray();
 			filter.mesh.triangles = instance.Triangles.ToArray();
-		}
-
-		public void SetInstance(Mesh mesh)
-		{
-			instance = mesh;
-			ToUnity();
+			
+			instance.PropertyChanged += (s, e) =>
+			{
+				switch (e.PropertyName.ToLower())
+				{
+					case "vertices":
+						filter.mesh.vertices = Misc.MapAll(instance._vertices, Misc.MapVector3D).ToArray();
+						break;
+					case "uvs":
+						filter.mesh.uv = Misc.MapAll(instance._uvs, x => new Vector2((float)x.X, (float)x.Y)).ToArray();
+						break;
+					case "triangles":
+						filter.mesh.triangles = instance._triangles.ToArray();
+						break;
+					case "color":
+						_renderer.material.color = new Color(instance._color.r, instance._color.g, instance._color.b, instance._color.a);
+						break;
+					default:
+						SynthesisAPI.Utilities.Logger.Log("Property not setup", LogLevel.Warning);
+						break;
+				}
+			};
 		}
 
 		public static Mesh NewInstance()
@@ -56,22 +65,8 @@ namespace Engine.ModuleLoader.Adapters
 			return new Mesh();
 		}
 
-		private Mesh instance;
-		private MeshFilter filter;
-
-		private Vector3[] Convert(List<Vector3D> vec)
-		{
-			Vector3[] vectors = new Vector3[vec.Count];
-			for (int i = 0; i < vec.Count; i++)
-				vectors[i] = MathUtil.MapVector3D(vec[i]);
-			return vectors;
-		}
-		private Vector2[] Convert(List<Vector2D> vec)
-		{
-			Vector2[] vectors = new Vector2[vec.Count];
-			for (int i = 0; i < vec.Count; i++)
-				vectors[i] = MathUtil.MapVector2D(vec[i]);
-			return vectors;
-		}
+		internal Mesh instance;
+		internal MeshFilter filter;
+		internal MeshRenderer renderer;
 	}
 }

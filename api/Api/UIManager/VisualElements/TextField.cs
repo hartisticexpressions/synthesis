@@ -19,9 +19,9 @@ namespace SynthesisAPI.UIManager.VisualElements
             }
         }
         */
-        
 
-        internal _UnityTextField Element
+
+        private protected _UnityTextField Element
         {
             get => (_visualElement as _UnityTextField)!;
             set => _visualElement = value;
@@ -77,12 +77,6 @@ namespace SynthesisAPI.UIManager.VisualElements
         internal TextField(_UnityTextField element)
         {
             Element = element;
-        }
-
-        protected override dynamic DynamicVisualElement
-        {
-            get => Element;
-            set => Element = value is _UnityTextField ? value : Element;
         }
     }
 }

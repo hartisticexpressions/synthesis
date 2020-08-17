@@ -26,13 +26,15 @@ namespace Engine.ModuleLoader.Adapters
 			{
 				if (defaultCamera == null)
 				{
-					defaultCamera = Util.Utilities.FindGameObject("Main Camera").GetComponent<UnityEngine.Camera>();
+					defaultCamera = Util.Misc.FindGameObject("Main Camera").GetComponent<UnityEngine.Camera>();
 					// TODO rename Main Camera in scene to something like Default Camera Settings
 				}
 				camera = gameObject.AddComponent<UnityEngine.Camera>();
 				camera.CopyFrom(defaultCamera);
 				gameObject.AddComponent<PhysicsRaycaster>();
 				camera.tag = "MainCamera"; // TODO manage which is main camera?
+
+				gameObject.AddComponent<UnityEngine.AudioListener>();
 			}
 		}
 	}

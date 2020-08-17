@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using SynthesisAPI.AssetManager;
-using VisualElement = SynthesisAPI.UIManager.VisualElements.VisualElement;
+using VisualElementAsset = SynthesisAPI.UIManager.VisualElements.VisualElement;
 using _UnityVisualElement = UnityEngine.UIElements.VisualElement;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,25 +17,21 @@ namespace SynthesisAPI.UIManager
     // ReSharper disable once InconsistentNaming
     public static class UIParser
     {
-        public static VisualElement CreateVisualElement(string name, XmlDocument doc)
+        public static VisualElementAsset CreateVisualElement(string name, XmlDocument doc)
         {
             return doc.FirstChild.Name.Replace("ui:", "") == "UXML" ?
                 CreateVisualElements(name, doc.FirstChild.ChildNodes) :
                 CreateVisualElements(name, doc.ChildNodes);
         }
 
-        public static VisualElement CreateVisualElements(string name, XmlNodeList nodes)
+        public static VisualElementAsset CreateVisualElements(string name, XmlNodeList nodes)
         {
+            SearchForStyleSheet(nodes);
             _UnityVisualElement root = new _UnityVisualElement() { name = name };
             foreach (XmlNode node in nodes)
             {
                 if (node.Name.Replace("ui:", "") != "Style") {
                     root.Add(CreateVisualElement(node).UnityVisualElement);
-                }
-                else
-                {
-                    var ussAsset = AssetManager.AssetManager.GetAsset<UssAsset>(node.Attributes["src"].Value);
-                    StyleSheetManager.AttemptRegistryOfNewStyleSheet(ussAsset);
                 }
             }
             return root.GetVisualElement();
@@ -47,7 +43,7 @@ namespace SynthesisAPI.UIManager
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public static VisualElement CreateVisualElement(XmlNode node)
+        public static VisualElementAsset CreateVisualElement(XmlNode node)
         {
             if (node == null)
                 throw new Exception("Node is null");
@@ -55,12 +51,6 @@ namespace SynthesisAPI.UIManager
             // Logger.Log($"Looking for type: {node.Name.Replace("ui:", "")}");
             Type elementType = Array.Find(typeof(_UnityVisualElement).Assembly.GetTypes(), x =>
                 x.Name.Equals(node.Name.Replace("ui:", "")));
-            if (node.Name.Replace("ui:", "").Equals("Style"))
-            {
-                // Logger.Log("[UI] Style w/ src location " + node.Attributes["src"].Value, LogLevel.Debug);
-                var ussAsset = AssetManager.AssetManager.GetAsset<UssAsset>(node.Attributes["src"].Value);
-                StyleSheetManager.AttemptRegistryOfNewStyleSheet(ussAsset);
-            }
             if (elementType == null)
             {
                 if (!node.Name.Replace("ui:", "").Equals("Style"))
@@ -69,7 +59,7 @@ namespace SynthesisAPI.UIManager
                 }
                 return null;
             }
-            dynamic element = typeof(ApiProvider).GetMethod("CreateUnityType").MakeGenericMethod(elementType)
+            _UnityVisualElement element = (_UnityVisualElement)typeof(ApiProvider).GetMethod("CreateUnityType").MakeGenericMethod(elementType)
                 .Invoke(null, new object[] { new object[] {} });
             if (element != null)
             {
@@ -84,6 +74,7 @@ namespace SynthesisAPI.UIManager
                     if (attr.Name.Equals("class"))
                     {
                         //Logger.Log("Class found with value: " + attr.Value);
+                        element.AddToClassList(attr.Value);
                         element = StyleSheetManager.ApplyClassFromStyleSheets(attr.Value, element);
                     }
 
@@ -148,7 +139,7 @@ namespace SynthesisAPI.UIManager
         /// </summary>
         /// <param name="data"></param>
         /// <param name="element">WARNING: Make sure this type is or inherits <see cref="UnityEngine.UIElements.VisualElement" /></param>
-        internal static dynamic ParseStyle(string data, dynamic element)
+        internal static _UnityVisualElement ParseStyle(string data, _UnityVisualElement element)
         {
             var list = data.Replace("&apos;", "\"").Split(';').ToList();
             foreach (string entry in list)
@@ -170,6 +161,7 @@ namespace SynthesisAPI.UIManager
         {
             string propertyName = MapCssName(propertyStr);
             if (propertyName == "unityFontStyle") propertyName = "unityFontStyleAndWeight";
+            if (propertyName == "textAlign") propertyName = "unityTextAlign";
             return typeof(IStyle).GetProperty(propertyName);
         }
 
@@ -209,7 +201,7 @@ namespace SynthesisAPI.UIManager
             return null;
         }
 
-        internal static dynamic ParseEntry(string entry, dynamic element)
+        internal static _UnityVisualElement ParseEntry(string entry, _UnityVisualElement element)
         { 
             if(element == null)
             {
@@ -276,13 +268,17 @@ namespace SynthesisAPI.UIManager
         internal static StyleBackground ToStyleBackground(string str)
         {
             string path = str.Replace(" ", "");
-            
+            if (path.StartsWith("url(\"") || path.StartsWith("url('"))
+                path = path.Remove(0, 5);
+            if (path.EndsWith("\")") || path.EndsWith("')"))
+                path = path.Remove(path.Length - 2, 2);
+
             try
             {
                 SpriteAsset? asset = AssetManager.AssetManager.GetAsset<SpriteAsset>(path);
                 if (asset == null)
                 {
-                    Logger.Log("Can't find asset", LogLevel.Warning);
+                    Logger.Log($"Can't find USS background image asset: {path}", LogLevel.Warning);
                     return new StyleBackground(StyleKeyword.Null);
                 }
                 else
@@ -293,7 +289,7 @@ namespace SynthesisAPI.UIManager
             catch (Exception e)
             {
                 // FAIL TO GET TEXTURE
-                Logger.Log($"Exception when parsing background texture", LogLevel.Warning);
+                Logger.Log($"Exception when parsing background texture\n{e}", LogLevel.Warning);
                 return new StyleBackground(StyleKeyword.Null);
             }
         }
@@ -353,7 +349,7 @@ namespace SynthesisAPI.UIManager
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        internal static VisualElement GetVisualElement(this _UnityVisualElement element)
+        internal static VisualElementAsset GetVisualElement(this _UnityVisualElement element)
         {
             if(element == null)
             {
@@ -363,7 +359,7 @@ namespace SynthesisAPI.UIManager
             Type t = default;
             try
             {
-                t = typeof(VisualElement).Assembly.GetTypes().First(t =>
+                t = typeof(VisualElementAsset).Assembly.GetTypes().First(t =>
                     t.Name == element.GetType().Name && t.FullName != element.GetType().FullName);
             }
             catch(Exception e)
@@ -373,11 +369,33 @@ namespace SynthesisAPI.UIManager
             try
             {
                 BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-                return (VisualElement)Activator.CreateInstance(t, flags, null, new object[] { element }, null);
+                return (VisualElementAsset)Activator.CreateInstance(t, flags, null, new object[] { element }, null);
             }
             catch(Exception e)
             {
                 throw new SynthesisException($"Failed to get visual element of {element.GetType().FullName}, attempted type {t.FullName}", e);
+            }
+        }
+
+        private static void SearchForStyleSheet(XmlNodeList nodeList)
+        {
+            foreach (XmlNode node in nodeList)
+            {
+                if (node.Name.Equals("Style"))
+                {
+                    var styleSheetPath = node.Attributes["src"].Value;
+                    var ussAsset = AssetManager.AssetManager.GetAsset<UssAsset>(styleSheetPath);
+                    if (ussAsset == null)
+                    {
+                        throw new SynthesisException($"Failed to find style sheet \n{styleSheetPath}\" when loading style sheets");
+                    }
+                    StyleSheetManager.AttemptRegistryOfNewStyleSheet(ussAsset);
+                }
+
+                if (node.HasChildNodes)
+                {
+                    SearchForStyleSheet(node.ChildNodes);
+                }
             }
         }
 

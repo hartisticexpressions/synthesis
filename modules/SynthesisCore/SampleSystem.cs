@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Diagnostics;
+using System.Linq;
+using System.Collections.Generic;
 using MathNet.Spatial.Euclidean;
 using SynthesisAPI.AssetManager;
 using SynthesisAPI.DevelopmentTools;
@@ -9,24 +11,33 @@ using SynthesisAPI.Modules.Attributes;
 using SynthesisAPI.Utilities;
 using SynthesisCore.Components;
 using SynthesisCore.Systems;
-
-#nullable enable
+using SynthesisAPI.InputManager;
+using SynthesisAPI.InputManager.Inputs;
+using SynthesisCore.Systems;
 
 namespace SynthesisCore
 {
-    [ModuleExport]
     public class SampleSystem : SystemBase
     {
+        private Entity testBody;
+
+        private MotorController frontLeft, frontRight, backLeft, backRight;
+        private MotorController arm;
+
+        public Mesh m;
+
         public override void OnPhysicsUpdate() { }
 
         public override void Setup()
         {
+            testBody = EnvironmentManager.AddEntity();
             
             Entity e = EnvironmentManager.AddEntity();
             
             
             GltfAsset g = AssetManager.GetAsset<GltfAsset>("/modules/synthesis_core/Test.glb");
             Bundle o = g.Parse();
+            testBody.AddBundle(o);
             e.AddBundle(o);
             List<Mesh> meshes = CollisionUtils.Cvt_BundleToMesh(o);
             
@@ -49,23 +60,39 @@ namespace SynthesisCore
 
         }
 
-        public override void OnUpdate() { }
+        public override void OnUpdate() {
+            float forward = InputManager.GetAxisValue("vert");
+            float turn = InputManager.GetAxisValue("hori");
+            
+            var moveArmForward = new Digital("t");
+            moveArmForward.Update();
+            if (moveArmForward.State == DigitalState.Down) {
+                arm.SetPercent(0.5f);
+            } else {
+                arm.SetPercent(0.0f);
+            }
 
-        private Mesh cube(Mesh? m)
+            frontLeft.SetPercent(forward + turn);
+            frontRight.SetPercent(forward - turn);
+            backLeft.SetPercent(forward + turn);
+            backRight.SetPercent(forward - turn);
+        }
+
+        private Mesh cube()
         {
             if (m == null)
                 m = new Mesh();
 
             m.Vertices = new List<Vector3D>()
             {
-                new Vector3D(0,0,0),
-                new Vector3D(1,0,0),
-                new Vector3D(1,1,0),
-                new Vector3D(0,1,0),
-                new Vector3D(0,1,1),
-                new Vector3D(1,1,1),
-                new Vector3D(1,0,1),
-                new Vector3D(0,0,1)
+                new Vector3D(-0.5,-0.5,-0.5),
+                new Vector3D(0.5,-0.5,-0.5),
+                new Vector3D(0.5,0.5,-0.5),
+                new Vector3D(-0.5,0.5,-0.5),
+                new Vector3D(-0.5,0.5,0.5),
+                new Vector3D(0.5,0.5,0.5),
+                new Vector3D(0.5,-0.5,0.5),
+                new Vector3D(-0.5,-0.5,0.5)
             };
             m.Triangles = new List<int>()
             {
