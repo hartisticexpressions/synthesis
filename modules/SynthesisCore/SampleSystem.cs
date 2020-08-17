@@ -1,9 +1,14 @@
 ﻿using System.Collections.Generic;
 using MathNet.Spatial.Euclidean;
+using SynthesisAPI.AssetManager;
+using SynthesisAPI.DevelopmentTools;
 using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EnvironmentManager.Components;
+using SynthesisAPI.EventBus;
 using SynthesisAPI.Modules.Attributes;
+using SynthesisAPI.Utilities;
 using SynthesisCore.Components;
+using SynthesisCore.Systems;
 
 #nullable enable
 
@@ -16,23 +21,32 @@ namespace SynthesisCore
 
         public override void Setup()
         {
+            
             Entity e = EnvironmentManager.AddEntity();
-
-            /*
+            
+            
             GltfAsset g = AssetManager.GetAsset<GltfAsset>("/modules/synthesis_core/Test.glb");
-            var _m1 = new ProfilerMarker();
             Bundle o = g.Parse();
-            Logger.Log($"Parse Time: {_m1.TimeSinceCreation.TotalMilliseconds}");
-            var _m2 = new ProfilerMarker();
             e.AddBundle(o);
-            Logger.Log($"Spawn Time: {_m2.TimeSinceCreation.TotalMilliseconds}");
-            */
+            List<Mesh> meshes = CollisionUtils.Cvt_BundleToMesh(o);
+            
+            foreach (Mesh mesh in meshes)
+            {
+                MeshDecompEvent evt = new MeshDecompEvent();
+                evt.inputMesh = mesh;
+                EventBus.Push("ProcessCollision", evt);
+            }
+            
 
-            e.AddComponent<Transform>();
-            e.AddComponent<Selectable>();
-            e.AddComponent<Moveable>().Channel = 5;
-            Mesh m = e.AddComponent<Mesh>();
-            cube(m);
+
+
+
+
+            // e.AddComponent<Transform>();
+            // e.AddComponent<Selectable>();
+            // e.AddComponent<Moveable>().Channel = 5;
+            // Mesh m = e.AddComponent<Mesh>();
+
         }
 
         public override void OnUpdate() { }
