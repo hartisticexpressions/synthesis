@@ -9,6 +9,8 @@ app_path = os.path.dirname(__file__)
 sys.path.insert(0, app_path)
 sys.path.insert(0, os.path.join(app_path, 'apper'))
 
+my_addin = None
+
 try:
     import config
     import apper
@@ -29,39 +31,55 @@ try:
         import pygltflib
         import numpy
         import google.protobuf
+
     except:
+        app = adsk.core.Application.get()
+        ui = app.userInterface
+        progressBar = ui.createProgressDialog()
+        progressBar.isCancelButtonShown = False
+        progressBar.reset()
+        progressBar.show("Synthesis glTF Exporter", f"Installing dependencies...", 0, 3, 0)
+        adsk.doEvents()
+
         try:
             from pathlib import Path
             p = Path(os.__file__).parents[1] # Assumes the location of the fusion python executable is two folders up from the os lib location
             with cd(p):
                 os.system("python -m pip install pygltflib")
+                progressBar.progressValue = 1
+                adsk.doEvents()
                 os.system("python -m pip install numpy")
+                progressBar.progressValue = 2
+                adsk.doEvents()
                 os.system("python -m pip install protobuf")
-            from pygltflib import *
-            import numpy as np
+                progressBar.progressValue = 3
+                adsk.doEvents()
+
+            progressBar.hide()
+
+            import pygltflib
+            import numpy
+            import google.protobuf
 
         except:
-            app = adsk.core.Application.get()
-            ui = app.userInterface
-            if ui:
-                ui.messageBox('Fatal Error: Unable to import libraries {}'.format(traceback.format_exc()))
+            raise ImportError(f'Unable to install python dependencies for the glTF Exporter for Synthesis addin!')
 
-    from .gltf.GLTFDesignExporter import exportDesign
-
-    from .commands.ExportCommand import ExportCommand
+    # from .commands.ExportCommand import ExportCommand
     from .commands.ExportPaletteCommand import ExportPaletteSendCommand, ExportPaletteShowCommand
     
     my_addin = apper.FusionApp(config.app_name, config.company_name, False)
     #watcher = FileWatcher("C:/Users/Victo/AppData/Local/Autodesk/Synthesis/watch.synth")
     
     # my_addin.add_command(
-    #     'Export Assembly',
+    #     'Quick export to glTF',
     #     ExportCommand,
     #     {
-    #         'cmd_description': 'Export your assembly to Synthesis.',
-    #         'cmd_id': 'sample_cmd_1',
+    #         'cmd_description': 'Exports the open design to a glTF file with default settings.',
+    #         'cmd_id': 'quick_export_gltf',
     #         'workspace': 'FusionSolidEnvironment',
-    #         'toolbar_panel_id': 'Commands',
+    #         'toolbar_panel_id': 'Export to glTF',
+    #         'toolbar_tab_id': 'export_gltf_tab',
+    #         'toolbar_tab_name': 'Synthesis glTF Exporter',
     #         'cmd_resources': 'command_icons',
     #         'command_visible': True,
     #         'command_promoted': True,
@@ -97,7 +115,8 @@ except:
     app = adsk.core.Application.get()
     ui = app.userInterface
     if ui:
-        ui.messageBox(f'Initialization: {traceback.format_exc()}')
+        ui.messageBox(f'Unable to start glTF Exporter for Synthesis!\nPlease contact frc@autodesk.com to report this bug.\n\n{traceback.format_exc()}')
+        # ui.messageBox(f'Initialization: {traceback.format_exc()}')
 
 # Set to True to display various useful messages when debugging your app
 debug = False
@@ -106,12 +125,21 @@ from .commands.FileExportCommand import FileManager
 fileCmd = None
 
 def run(context):
+    if my_addin is None:
+        return
+    try:
+        my_addin.run_app()
+    except:
+        app = adsk.core.Application.get()
+        ui = app.userInterface
+        if ui:
+            ui.messageBox(f'glTF Exporter for Synthesis has encountered an error!\nPlease contact frc@autodesk.com to report this bug.\n\n{traceback.format_exc()}')
     FileManager().start()
-    
-    my_addin.run_app()
 
 def stop(context):
-    FileManager().deleteMe()
-    my_addin.stop_app()
-    sys.path.pop(0)
-    sys.path.pop(0)
+    try:
+        my_addin.stop_app()
+        sys.path.pop(0)
+        sys.path.pop(0)
+    except:
+        pass

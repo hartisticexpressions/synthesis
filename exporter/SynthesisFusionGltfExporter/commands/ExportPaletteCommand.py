@@ -5,11 +5,18 @@ import adsk.cam
 import json
 
 import apper
-from ..gltf.GLTFDesignExporter import exportDesign
+from apper import AppObjects
+from ..gltf.FusionGltfExporter import FusionGltfExporter
+from ..gltf.utils.GltfConstants import FileType
 
 
 # Class for a Fusion 360 Palette Command
 class ExportPaletteShowCommand(apper.PaletteCommandBase):
+
+    def __init__(self, name: str, options: dict):
+        super().__init__(name, options)
+        self.ao = AppObjects()
+        self.exporter = FusionGltfExporter(self.ao)
 
     # Run when user executes command in UI, useful for handling extra tasks on palette like docking
     def on_palette_execute(self, palette: adsk.core.Palette):
@@ -20,9 +27,9 @@ class ExportPaletteShowCommand(apper.PaletteCommandBase):
         if palette.dockingState == adsk.core.PaletteDockingStates.PaletteDockStateFloating:
             palette.dockingState = adsk.core.PaletteDockingStates.PaletteDockStateRight
 
-        palette.setMaximumSize(250, 250)
-        palette.setMinimumSize(250, 250)
-        palette.setSize(250, 250)
+        palette.setMaximumSize(300, 300)
+        palette.setMinimumSize(300, 300)
+        palette.setSize(300, 300)
 
     # Run when ever a fusion event is fired from the corresponding web page
     def on_html_event(self, html_args: adsk.core.HTMLEventArgs):
@@ -35,7 +42,10 @@ class ExportPaletteShowCommand(apper.PaletteCommandBase):
             materials = settings['materials']
             faceMaterials = settings['faceMaterials']
             exportHidden = not settings['exportHidden']
-            exportDesign(showFileDialog=True, enableMaterials=materials, enableFaceMaterials=faceMaterials, exportVisibleBodiesOnly=exportHidden)
+            quality = int(settings['quality'])
+            includeSynthesis = settings['includeSynthesis']
+            useGlb = FileType.fromString(settings['useGlb'])
+            self.exporter.exportDesignUI(self.ao.app.activeDocument, showFileDialog=True, enableMaterials=materials, enableFaceMaterials=faceMaterials, exportVisibleBodiesOnly=exportHidden, fileType=useGlb, quality=quality, includeSynthesisData=includeSynthesis)
 
 
     # Handle any extra cleanup when user closes palette here
