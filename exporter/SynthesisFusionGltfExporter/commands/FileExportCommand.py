@@ -1,17 +1,42 @@
 import adsk.core, adsk.fusion, traceback
 import threading
 import ctypes
+import json
 import time
-
+import apper
+import pathlib
+import random
+from apper import AppObjects
+from ..gltf.FusionGltfExporter import FusionGltfExporter
+from ..gltf.utils.GltfConstants import FileType
 class FileExportHandler(adsk.core.CustomEventHandler):
-    def __init__(self):
+    def __init__(self, command, exporter):
+        self.command = command
+        self.exporter = exporter
         super().__init__()
     def notify(self, args):
         ui = adsk.core.Application.get().userInterface
         try:
-            from ..gltf.GLTFDesignExporter import exportDesign
-            ui.messageBox('Exporting')
-            exportDesign(True)
+            #eventArgs = json.loads(args.additionalInfo)
+ 
+            
+            #ui.messageBox(str(eventArgs['path']))
+            #self.ao = AppObjects() +
+            home = pathlib.Path.home()
+            path =  str(home) + "/AppData/Roaming/Autodesk/Synthesis/Robots/" + str(self.exporter.ao.app.activeDocument.name) + ".glb"
+            self.command.on_proccess()
+            self.exporter.saveGltf(
+                self.exporter.ao.app.activeDocument,
+                path,
+                FileType.GLB,
+                False,
+                False,
+                False,
+                True,
+                8,True
+            )
+            
+            #self.command.resume()
         except:
             if ui:
                 ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
@@ -24,12 +49,14 @@ class FileCommand:
 
     """
     handlers = []
-    connectID = 'SynthFileWatcher_export'
+    connectID = 'SynthFileWatcher_Export_'+str(random.randint(0,1000))
     def __init__(self):
         self.app = adsk.core.Application.get()
-      
+       
+        self.ao = AppObjects()
+        exporter = FusionGltfExporter(self.ao)
         self.fileExportEvent = self.app.registerCustomEvent(self.connectID)
-        onExportCommand = FileExportHandler()
+        onExportCommand = FileExportHandler(self, exporter)
         self.fileExportEvent.add(onExportCommand)
 
         # self.networkSendEvent = self.app.registerCustomEvent(self.sendID)
@@ -44,6 +71,12 @@ class FileCommand:
     def start(self):
         self.connectThread.start()
 
+    def on_proccess(self):
+        self.connectThread.clear()
+    def end(self):
+        self.connectThread.stopWatching()
+    def resume(self):
+        self.connectThread.resumeWatching()
     def deleteMe(self):
         # if (self.handlers.count):
         #    for handler in self.handlers:
@@ -59,7 +92,10 @@ class FileWatcher(threading.Thread):
     def __init__(self, event, fileExportCommand):
         threading.Thread.__init__(self)
         self.stopped = event
-        self.path = "C:/Users/Victo/AppData/Local/Autodesk/Synthesis/watch.synth"
+       
+        home = pathlib.Path.home()
+        self.path =  str(home) + "/AppData/Roaming/Autodesk/Synthesis/watch.synth"
+        # fileExportCommand.app.userInterface.messageBox(self.path)
         self.fileExportCommand = fileExportCommand
 
     def run(self ):
@@ -71,8 +107,10 @@ class FileWatcher(threading.Thread):
                 lines = f.readlines()
                 self.parseFile(lines)
             #print("Watching...")
-
-
+    def clear(self):
+        open(self.path, "w").close()
+    def resumeWatching(self ):
+        self.watching = True
 
     def stopWatching(self ):
         self.watching = False
@@ -84,7 +122,8 @@ class FileWatcher(threading.Thread):
             sections = line.split()
         
             command = sections[0]
-
+            #path = sections[1]
+            #args = {'path': path}
             if 'EXPORT' in command:
                 self.fileExportCommand.app.fireCustomEvent(self.fileExportCommand.connectID)
 

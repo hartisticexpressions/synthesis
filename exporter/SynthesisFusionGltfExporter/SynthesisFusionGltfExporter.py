@@ -125,19 +125,22 @@ from .commands.FileExportCommand import FileManager
 fileCmd = None
 
 def run(context):
+  
     if my_addin is None:
         return
     try:
+        FileManager().start()
         my_addin.run_app()
     except:
         app = adsk.core.Application.get()
         ui = app.userInterface
         if ui:
             ui.messageBox(f'glTF Exporter for Synthesis has encountered an error!\nPlease contact frc@autodesk.com to report this bug.\n\n{traceback.format_exc()}')
-    FileManager().start()
+    
 
 def stop(context):
     try:
+        FileManager.deleteMe()
         my_addin.stop_app()
         sys.path.pop(0)
         sys.path.pop(0)
