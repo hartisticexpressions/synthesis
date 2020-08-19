@@ -49,5 +49,7 @@ namespace SynthesisAPI.Runtime
 
 		public static UnityEngine.UIElements.VisualElement? GetRootVisualElement() =>
 			Instance?.GetRootVisualElement();
+
+		public static string[] GetFiles(string root, string regex) => Instance?.GetFiles(root, regex);
 	}
 }

@@ -324,6 +324,9 @@ namespace Engine.ModuleLoader
 				// TODO: Re-evaluate this
 				return PanelRenderer.visualTree;
 			}
+			public string[] GetFiles(string root, string regex) {
+				return FileBrowser.GetFiles(root,regex);
+			}
 		}
 	}
 }

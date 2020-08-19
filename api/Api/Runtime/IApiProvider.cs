@@ -27,6 +27,8 @@ namespace SynthesisAPI.Runtime
         // TUnityType InstantiateFocusable<TUnityType>() where TUnityType : UnityEngine.UIElements.Focusable;
 		UnityEngine.UIElements.VisualElement GetRootVisualElement();
 
-        #endregion
+		#endregion
+
+		string[] GetFiles(string root, string regex);
 	}
 }

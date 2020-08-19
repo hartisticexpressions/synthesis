@@ -176,6 +176,11 @@ namespace MockApi
             {
                 throw new NotImplementedException();
             }
+
+            public string[] GetFiles(string root, string regex)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
