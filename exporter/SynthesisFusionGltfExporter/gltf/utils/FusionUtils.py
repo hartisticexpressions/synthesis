@@ -9,44 +9,12 @@ import adsk
 import adsk.core
 import adsk.fusion
 
+import numpy as np
+
 from .MathUtils import forwardUpVectorsToRotation
 
 def calculateViewCubeRotation(app: adsk.core.Application):
-    viewport = app.activeViewport
-    initialCam = viewport.camera
-    initialCam.isSmoothTransition = False
-
-    forwardVector = getViewVector(viewport, adsk.core.ViewOrientations.FrontViewOrientation)
-    upVector = getViewVector(viewport, adsk.core.ViewOrientations.TopViewOrientation)
-
-    viewport.camera = initialCam
-    adsk.doEvents()
-    viewport.refresh()
-
-    print(forwardVector)
-    print(upVector)
-
-    return forwardUpVectorsToRotation(forwardVector, upVector).conjugate
-
-
-def getViewVector(viewport, orientation):
-    tempCam = viewport.camera
-    tempCam.isSmoothTransition = False
-    tempCam.viewOrientation = orientation  # TODO: Bug report: view orientation changes don't respect isSmoothTransition
-    viewport.camera = tempCam
-    for i in range(50):  # TODO: Please add view cube api so I don't have to do this
-        adsk.doEvents()
-        viewport.refresh()
-    tempCam = viewport.camera
-    forwardVector = tempCam.target.vectorTo(tempCam.eye).asArray()
-    return forwardVector
-
-
-def reportErrorToUser(message):
-    app = adsk.core.Application.get()
-    ui = app.userInterface
-    if ui:  # TODO: Automatic error reporting
-        ui.messageBox(f'{message}\nPlease screenshot and send this error report to frc@autodesk.com.\n\nReport:\n{traceback.format_exc()}')
+    return Quaternion(matrix=np.reshape(app.activeViewport.viewCubeTransform.asArray(), (4, 4)).transpose()).unit
 
 def calculateMeshForBRep(fusionBRep: Union[adsk.fusion.BRepBody, adsk.fusion.BRepFace], meshQuality) -> Tuple[adsk.fusion.TriangleMesh, Union[adsk.fusion.BRepFace, adsk.fusion.BRepBody]]:
     meshCalculator = fusionBRep.meshManager.createMeshCalculator()
