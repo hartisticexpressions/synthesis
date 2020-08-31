@@ -26,7 +26,7 @@ namespace SynthesisCore.EntityMovement
         public override void Update()
         {
             // Make arrow face camera
-            var forward = CameraController.Instance.cameraTransform.Position - MoveArrows.arrowsTransform.GlobalPosition;
+            var forward = CameraController.Instance.CameraTransform.Position - MoveArrows.arrowsTransform.GlobalPosition;
             Transform.GlobalRotation = MathUtil.LookAt(forward.Normalize());
         }
 

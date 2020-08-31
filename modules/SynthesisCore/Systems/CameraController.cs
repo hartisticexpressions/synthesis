@@ -28,11 +28,11 @@ namespace SynthesisCore.Systems
 
         private bool isMouseDragging = false;
 
-        private Vector3D focusPoint = new Vector3D(); // Default focus point
+        public Vector3D FocusPoint { get; private set; } = new Vector3D(); // Default focus point
         private Vector3D offset = new Vector3D();
 
         private Entity? cameraEntity = null;
-        public Transform cameraTransform { get; private set; }
+        public Transform CameraTransform { get; private set; }
 
         /// <summary>
         /// An optional target to focus on
@@ -62,6 +62,39 @@ namespace SynthesisCore.Systems
         private const double MinHeight = 0.25;
         private static double FreeRoamCameraMoveDelta => 0.03 * SpeedModifier;
 
+        public struct CameraState
+        {
+            private Vector3D position;
+            private Quaternion rotation;
+            private Selectable? selectedTarget;
+            private Selectable.SelectionType lastSelectedTargetType;
+            private Vector3D focusPoint;
+            private bool inFreeRoamMode;
+
+            public static CameraState Save()
+            {
+                return new CameraState
+                {
+                    position = Instance.CameraTransform.Position,
+                    rotation = Instance.CameraTransform.Rotation,
+                    selectedTarget = Instance.SelectedTarget,
+                    lastSelectedTargetType = Instance.LastSelectedTargetType,
+                    focusPoint = Instance.FocusPoint,
+                    inFreeRoamMode = Instance.inFreeRoamMode
+                };
+            }
+
+            public static void Restore(CameraState cameraState)
+            {
+                Instance.CameraTransform.Position = cameraState.position;
+                Instance.CameraTransform.Rotation = cameraState.rotation;
+                Instance.LastSelectedTargetType = cameraState.lastSelectedTargetType;
+                Instance.SelectedTarget = cameraState.selectedTarget;
+                Instance.SetNewFocus(cameraState.focusPoint, true);
+                Instance.inFreeRoamMode = cameraState.inFreeRoamMode;
+            }
+        }
+
         public override void Setup()
         {
             if(Instance == null)
@@ -73,11 +106,11 @@ namespace SynthesisCore.Systems
             {
                 cameraEntity = EnvironmentManager.AddEntity();
                 if (cameraEntity == null)
-                    throw new System.Exception();
+                    throw new SynthesisException("Failed to create camera");
                 cameraEntity.Value.AddComponent<Camera>();
                 var trans = cameraEntity.Value.AddComponent<Transform>();
-                cameraTransform = trans ?? throw new System.Exception();
-                cameraTransform.PositionValidator = (Vector3D position) =>
+                CameraTransform = trans ?? throw new SynthesisException("Failed to create camera transform");
+                CameraTransform.PositionValidator = (Vector3D position) =>
                 {
                     if (position.Y < MinHeight)
                     {
@@ -85,8 +118,8 @@ namespace SynthesisCore.Systems
                     }
                     return position;
                 };
-                cameraTransform.Position = StartPosition;
-                cameraTransform.LookAt(new Vector3D());
+                CameraTransform.Position = StartPosition;
+                CameraTransform.LookAt(new Vector3D());
             }
             // Bind controls for free roam
             InputManager.AssignDigitalInput("camera_forward", new Digital("w"));
@@ -109,58 +142,58 @@ namespace SynthesisCore.Systems
         [TaggedCallback("input/camera_forward")]
         public void CameraForward(DigitalEvent digitalEvent)
         {
-            if (inFreeRoamMode && cameraTransform != null && digitalEvent.State == DigitalState.Held)
+            if (inFreeRoamMode && CameraTransform != null && digitalEvent.State == DigitalState.Held)
             {
-                var forward = cameraTransform.Forward;
+                var forward = CameraTransform.Forward;
                 forward = new Vector3D(forward.X, 0, forward.Z).Normalize();
-                cameraTransform.Position += forward.ScaleBy(FreeRoamCameraMoveDelta);
+                CameraTransform.Position += forward.ScaleBy(FreeRoamCameraMoveDelta);
             }
         }
 
         [TaggedCallback("input/camera_backward")]
         public void CameraBackward(DigitalEvent digitalEvent)
         {
-            if (inFreeRoamMode && cameraTransform != null && digitalEvent.State == DigitalState.Held)
+            if (inFreeRoamMode && CameraTransform != null && digitalEvent.State == DigitalState.Held)
             {
-                var forward = cameraTransform.Forward;
+                var forward = CameraTransform.Forward;
                 forward = new Vector3D(forward.X, 0, forward.Z).Normalize();
-                cameraTransform.Position += forward.ScaleBy(-FreeRoamCameraMoveDelta);
+                CameraTransform.Position += forward.ScaleBy(-FreeRoamCameraMoveDelta);
             }
         }
 
         [TaggedCallback("input/camera_left")]
         public void CameraLeft(DigitalEvent digitalEvent)
         {
-            if (inFreeRoamMode && cameraTransform != null && digitalEvent.State == DigitalState.Held)
+            if (inFreeRoamMode && CameraTransform != null && digitalEvent.State == DigitalState.Held)
             {
-                cameraTransform.Position += cameraTransform.Forward.CrossProduct(UnitVector3D.YAxis).ScaleBy(FreeRoamCameraMoveDelta);
+                CameraTransform.Position += CameraTransform.Forward.CrossProduct(UnitVector3D.YAxis).ScaleBy(FreeRoamCameraMoveDelta);
             }
         }
 
         [TaggedCallback("input/camera_right")]
         public void CameraRight(DigitalEvent digitalEvent)
         {
-            if (inFreeRoamMode && cameraTransform != null && digitalEvent.State == DigitalState.Held)
+            if (inFreeRoamMode && CameraTransform != null && digitalEvent.State == DigitalState.Held)
             {
-                cameraTransform.Position += cameraTransform.Forward.CrossProduct(UnitVector3D.YAxis).ScaleBy(-FreeRoamCameraMoveDelta);
+                CameraTransform.Position += CameraTransform.Forward.CrossProduct(UnitVector3D.YAxis).ScaleBy(-FreeRoamCameraMoveDelta);
             }
         }
 
         [TaggedCallback("input/camera_up")]
         public void CameraUp(DigitalEvent digitalEvent)
         {
-            if (inFreeRoamMode && cameraTransform != null && digitalEvent.State == DigitalState.Held)
+            if (inFreeRoamMode && CameraTransform != null && digitalEvent.State == DigitalState.Held)
             {
-                cameraTransform.Position += UnitVector3D.YAxis.ScaleBy(FreeRoamCameraMoveDelta);
+                CameraTransform.Position += UnitVector3D.YAxis.ScaleBy(FreeRoamCameraMoveDelta);
             }
         }
 
         [TaggedCallback("input/camera_down")]
         public void CameraDown(DigitalEvent digitalEvent)
         {
-            if (inFreeRoamMode && cameraTransform != null && digitalEvent.State == DigitalState.Held)
+            if (inFreeRoamMode && CameraTransform != null && digitalEvent.State == DigitalState.Held)
             {
-                cameraTransform.Position += UnitVector3D.YAxis.ScaleBy(-FreeRoamCameraMoveDelta);
+                CameraTransform.Position += UnitVector3D.YAxis.ScaleBy(-FreeRoamCameraMoveDelta);
             }
         }
 
@@ -224,44 +257,44 @@ namespace SynthesisCore.Systems
 
         private void UpdateOrbitCameraPosition()
         {
-            if (cameraTransform != null)
+            if (CameraTransform != null)
             {
-                cameraTransform.Position = focusPoint + offset;
-                cameraTransform.LookAt(focusPoint);
+                CameraTransform.Position = FocusPoint + offset;
+                CameraTransform.LookAt(FocusPoint);
             }
         }
 
         private void ProcessFreeRoam()
         {
-            if (cameraTransform != null)
+            if (CameraTransform != null)
             {
                 if (isMouseDragging)
                 {
-                    var newRotation = MathUtil.Rotate(cameraTransform.Rotation, UnitVector3D.XAxis, yMod);
+                    var newRotation = MathUtil.Rotate(CameraTransform.Rotation, UnitVector3D.XAxis, yMod);
                     var newForward = MathUtil.QuaternionToForwardVector(newRotation);
 
                     // Stop from vertically rotating past looking directly up/down
-                    if (Math.SameSign(newForward.X, cameraTransform.Forward.X) && Math.SameSign(newForward.Z, cameraTransform.Forward.Z))
+                    if (Math.SameSign(newForward.X, CameraTransform.Forward.X) && Math.SameSign(newForward.Z, CameraTransform.Forward.Z))
                     {
-                        cameraTransform.Rotation = newRotation;
+                        CameraTransform.Rotation = newRotation;
                     }
-                    cameraTransform.Rotate(UnitVector3D.YAxis, xMod, true);
+                    CameraTransform.Rotate(UnitVector3D.YAxis, xMod, true);
                 }
-                cameraTransform.Position += zMod * cameraTransform.Forward;
+                CameraTransform.Position += zMod * CameraTransform.Forward;
             }
         }
 
         public void SetNewFocus(Vector3D newFocusPoint, bool moveToPoint)
         {
-            focusPoint = newFocusPoint;
+            FocusPoint = newFocusPoint;
             
             moveTime = 0;
-            cameraMoveStartPosition = cameraTransform.Position;
+            cameraMoveStartPosition = CameraTransform.Position;
 
             //startRotation = cameraTransform.Rotation;
             //targetRotation = MathUtil.LookAt((-offset).Normalize()).Normalized;
 
-            offset = cameraMoveStartPosition - focusPoint;
+            offset = cameraMoveStartPosition - FocusPoint;
             isCameraMovingToNewFocus = moveToPoint && offset.Length > MoveToFocusCameraMinDistance;
 
             timeToReachNewFocus = Math.Min(MoveCameraToFocusTime, offset.Length / MoveToFocusCameraMinSpeed);
@@ -323,7 +356,7 @@ namespace SynthesisCore.Systems
                     }
                     else // Update possibly moving focus point
                     {
-                        focusPoint = newFocusPoint.Value;
+                        FocusPoint = newFocusPoint.Value;
                     }
                 }
 
@@ -332,8 +365,8 @@ namespace SynthesisCore.Systems
                     moveTime += Time.TimeSinceLastFrameUpdate;
                     var lerpFactor = moveTime / timeToReachNewFocus;
 
-                    cameraTransform.Position = MathUtil.Lerp(cameraMoveStartPosition, focusPoint, lerpFactor);
-                    offset = cameraTransform.Position - focusPoint;
+                    CameraTransform.Position = MathUtil.Lerp(cameraMoveStartPosition, FocusPoint, lerpFactor);
+                    offset = CameraTransform.Position - FocusPoint;
 
                     // TODO fix lerp camera rotation
                     //cameraTransform.Rotation = MathUtil.Lerp(startRotation, targetRotation, lerpFactor).Normalized;

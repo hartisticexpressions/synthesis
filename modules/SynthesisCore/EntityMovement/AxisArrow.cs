@@ -71,14 +71,14 @@ namespace SynthesisCore.EntityMovement
         public override void Update()
         {
             // Make arrow face camera
-            var forward = CameraController.Instance.cameraTransform.Position - MoveArrows.arrowsTransform.GlobalPosition;
+            var forward = CameraController.Instance.CameraTransform.Position - MoveArrows.arrowsTransform.GlobalPosition;
             forward -= forward.ProjectOn(AxisDirection);
             Transform.GlobalRotation = MathUtil.LookAt(forward.Normalize(), AxisDirection);
         }
 
         public override void MoveEntityTransform(Transform targetTransform, float xMod, float yMod)
         {
-            var horizontalDir = UnitVector3D.YAxis.CrossProduct(CameraController.Instance.cameraTransform.Forward); // Side to side direction of mouse movement
+            var horizontalDir = UnitVector3D.YAxis.CrossProduct(CameraController.Instance.CameraTransform.Forward); // Side to side direction of mouse movement
             var mouseDir = new Vector3D(0, yMod, 0) + horizontalDir.ScaleBy(xMod); // yMod is always up and down, and xMod is side to side
             var deltaDir = mouseDir.ProjectOn(AxisDirection);
             if (deltaDir.Length > float.Epsilon)

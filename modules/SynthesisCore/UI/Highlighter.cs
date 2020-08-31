@@ -10,9 +10,15 @@ namespace SynthesisCore.UI
     public static class Highlighter
     {
         private static Entity jointHighlightEntity;
+        private static CameraController.CameraState? cameraState = null;
 
         public static void HighlightJoint(HingeJoint joint, Entity jointEntity)
         {
+            if (cameraState == null)
+            {
+                cameraState = CameraController.CameraState.Save();
+            }
+
             if (!jointHighlightEntity.EntityExists())
             {
                 jointHighlightEntity = EnvironmentManager.AddEntity();
@@ -41,16 +47,23 @@ namespace SynthesisCore.UI
             // Move camera to look at the joint
             var parentPosition = jointEntity.GetComponent<Parent>()?.ParentEntity.GetComponent<Transform>()?.GlobalPosition ?? new Vector3D();
             var cameraOffset = (jointHighlightTransform.GlobalPosition - parentPosition).Normalize().ScaleBy(3);
-            CameraController.Instance.cameraTransform.GlobalPosition = jointHighlightTransform.GlobalPosition + cameraOffset;
+            CameraController.Instance.CameraTransform.GlobalPosition = jointHighlightTransform.GlobalPosition + cameraOffset;
 
-            CameraController.Instance.cameraTransform.LookAt(jointHighlightTransform.GlobalPosition);
+            CameraController.Instance.CameraTransform.LookAt(jointHighlightTransform.GlobalPosition);
             CameraController.Instance.SetNewFocus(jointHighlightTransform.GlobalPosition, false);
         }
 
         public static void UnhighlightJoint()
         {
             if (jointHighlightEntity.EntityExists())
+            {
                 jointHighlightEntity.RemoveEntity();
+                if(cameraState != null)
+                {
+                    CameraController.CameraState.Restore(cameraState.Value);
+                    cameraState = null;
+                }
+            }
         }
     }
 }

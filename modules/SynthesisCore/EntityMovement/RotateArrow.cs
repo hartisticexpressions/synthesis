@@ -76,7 +76,7 @@ namespace SynthesisCore.EntityMovement
         public override void MoveEntityTransform(Transform targetTransform, float xMod, float yMod)
         {
             
-            var horizontalDir = UnitVector3D.YAxis.CrossProduct(CameraController.Instance.cameraTransform.Forward); // Side to side direction of mouse movement
+            var horizontalDir = UnitVector3D.YAxis.CrossProduct(CameraController.Instance.CameraTransform.Forward); // Side to side direction of mouse movement
             var mouseDir = new Vector3D(0, yMod, 0) + horizontalDir.ScaleBy(xMod); // yMod is always up and down, and xMod is side to side
 
             var rotateDirVector = RotationAxisDirection.CrossProduct(SpriteUpDirection); // Get vector perpendicular to forward and sprite up

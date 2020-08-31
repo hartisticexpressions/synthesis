@@ -35,7 +35,7 @@ namespace SynthesisCore.EntityMovement
                 arrowsTransform.Position = targetTransform.GlobalPosition;
 
                 // Update size of arrows so they always look the same size as they move
-                var vectorToCamera = CameraController.Instance.cameraTransform.GlobalPosition - arrowsTransform.GlobalPosition;
+                var vectorToCamera = CameraController.Instance.CameraTransform.GlobalPosition - arrowsTransform.GlobalPosition;
                 var size = vectorToCamera.Length * 0.01;
                 arrowsTransform.Scale = new Vector3D(size, size, size);
 
