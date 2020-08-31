@@ -2,45 +2,61 @@
 using System.Collections.Generic;
 using SynthesisAPI.InputManager.InputEvents;
 using SynthesisAPI.InputManager.Inputs;
-using Input = SynthesisAPI.InputManager.Inputs.Input;
 
 namespace SynthesisAPI.InputManager
 {
     public static class InputManager
     {
-        internal static Dictionary<string, Digital[]> _mappedDigitalInputs = new Dictionary<string, Digital[]>();
+        internal static Dictionary<string, List<Digital>> _mappedDigitalInputs = new Dictionary<string, List<Digital>>();
         private static Dictionary<string, Analog> _mappedAxisInputs = new Dictionary<string, Analog>();
 
-        public static void AssignDigitalInput(string name, Digital input, EventBus.EventBus.EventCallback callback = null) // TODO remove callback argument?
+        public static void AssignDigitalInput(string controlName, Digital input, EventBus.EventBus.EventCallback callback = null) // TODO remove callback argument?
         {
-            _mappedDigitalInputs[name] = new Digital[] { input };
+            _mappedDigitalInputs[controlName] = new List<Digital> { input };
             if (callback != null)
-                EventBus.EventBus.NewTagListener($"input/{name}", callback);
+                EventBus.EventBus.NewTagListener($"input/{controlName}", callback);
         }
 
-        public static void UnassignDigitalInput(string name)
+        public static void UnassignDigitalInput(string controlName, Digital input)
         {
-            _mappedDigitalInputs.Remove(name);
-            EventBus.EventBus.RemoveAllTagListeners($"input/{name}");
+            if (_mappedDigitalInputs.ContainsKey(controlName))
+            {
+                _mappedDigitalInputs[controlName].Remove(input);
+                if (_mappedDigitalInputs[controlName].Count == 0)
+                {
+                    UnassignDigitalInput(controlName);
+                }
+            }
         }
 
-        public static void AssignDigitalInputs(string name, Digital[] input, EventBus.EventBus.EventCallback callback = null)
+        public static void UnassignDigitalInput(string controlName)
         {
-            _mappedDigitalInputs[name] = input;
-            if(callback != null)
-                EventBus.EventBus.NewTagListener($"input/{name}", callback);
+            _mappedDigitalInputs.Remove(controlName);
+            EventBus.EventBus.RemoveAllTagListeners($"input/{controlName}");
         }
 
-        public static void AssignAxis(string name, Analog axis)
+        public static void AssignDigitalInputs(string controlName, List<Digital> input, EventBus.EventBus.EventCallback callback = null)
         {
-            _mappedAxisInputs[name] = axis;
+            _mappedDigitalInputs[controlName] = input;
+            if (callback != null)
+                EventBus.EventBus.NewTagListener($"input/{controlName}", callback);
+        }
+
+        public static void AssignAxis(string controlName, Analog axis)
+        {
+            _mappedAxisInputs[controlName] = axis;
+        }
+
+        public static void UnassignAxis(string controlName)
+        {
+            _mappedAxisInputs.Remove(controlName);
         }
 
         public static void UpdateInputs()
         {
-            foreach(string name in _mappedDigitalInputs.Keys)
+            foreach (string name in _mappedDigitalInputs.Keys)
             {
-                foreach(Input input in _mappedDigitalInputs[name])
+                foreach (Input input in _mappedDigitalInputs[name])
                 {
                     if (!input.Name.EndsWith("non-ui") && input.Update())
                     {
@@ -67,12 +83,12 @@ namespace SynthesisAPI.InputManager
             throw new Exception($"Axis value is not mapped with name \"{name}\"");
         }
 
-        public static void SetAllInputs(Dictionary<string, Digital[]> input)
+        public static void SetAllInputs(Dictionary<string, List<Digital>> input)
         {
             _mappedDigitalInputs = input;
         }
 
-        public static Dictionary<string, Digital[]> GetAllInputs()
+        public static Dictionary<string, List<Digital>> GetAllInputs()
         {
             return _mappedDigitalInputs;
         }
