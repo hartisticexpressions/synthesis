@@ -16,8 +16,6 @@ namespace SynthesisCore.UI
         private static VisualElementAsset JointAsset = null;
         private static ListView JointList;
 
-        internal static Entity? jointHighlightEntity = null;
-
         public static void CreateWindow()
         {
             if (JointAsset == null)
@@ -46,8 +44,7 @@ namespace SynthesisCore.UI
         public static void OnWindowClose()
         {
             JointItem.UnHighlightAllButtons();
-            if (jointHighlightEntity?.RemoveEntity() ?? false)
-                jointHighlightEntity = null;
+            Highlighter.UnhighlightJoint();
             UIManager.ClosePanel(Panel.Name);
             RemoveWindowsContents();
         }
