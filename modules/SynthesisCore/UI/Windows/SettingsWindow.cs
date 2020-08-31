@@ -4,6 +4,7 @@ using SynthesisAPI.PreferenceManager;
 using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.UIComponents;
 using SynthesisAPI.UIManager.VisualElements;
+using SynthesisCore.UI.Windows;
 
 namespace SynthesisCore.UI
 {
@@ -13,6 +14,7 @@ namespace SynthesisCore.UI
         private VisualElement Window;
         private GeneralPage GeneralPage;
         private ControlsPage ControlsPage;
+        private RobotControlsPage RobotControlsPage;
 
         private static Dictionary<string, object> PendingChanges = new Dictionary<string, object>();
         
@@ -20,10 +22,12 @@ namespace SynthesisCore.UI
         {
             var generalAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/General.uxml");
             var controlsAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Controls.uxml");
-            
+            var robotControlsAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/RobotControls.uxml");
+
             GeneralPage = new GeneralPage(generalAsset);
             ControlsPage = new ControlsPage(controlsAsset);
-            
+            RobotControlsPage = new RobotControlsPage(robotControlsAsset);
+
             var settingsAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Settings.uxml");
             Panel = new Panel("Settings", settingsAsset, OnWindowOpen);
             
@@ -34,6 +38,8 @@ namespace SynthesisCore.UI
         private void OnWindowOpen(VisualElement settingsWindow)
         {
             Window = settingsWindow;
+            Window.SetStyleProperty("position", "absolute");
+            Window.IsDraggable = true;
 
             RegisterButtons();
             LoadWindowContent();
@@ -56,6 +62,12 @@ namespace SynthesisCore.UI
             controlsSettingsButton?.Subscribe(x =>
             {
                 SetPageContent(ControlsPage.Page);
+            });
+
+            Button robotControlsSettingsButton = (Button)Window.Get("robot-controls-settings-button");
+            robotControlsSettingsButton?.Subscribe(x =>
+            {
+                SetPageContent(RobotControlsPage.Page);
             });
 
             Button okButton = (Button) Window.Get("ok-button");

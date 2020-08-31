@@ -1,15 +1,18 @@
 ﻿using _UnityVisualElement = UnityEngine.UIElements.VisualElement;
 using System.Collections.Generic;
 using SynthesisAPI.Utilities;
+using System.Linq;
 
 namespace SynthesisAPI.UIManager
 {
     public class StyleSheet
     {
+        public readonly string Name;
         private Dictionary<string, UssClass> classes = new Dictionary<string, UssClass>();
 
-        public StyleSheet(string[] contents)
+        public StyleSheet(string name, string[] contents)
         {
+            Name = name;
             ParseLines(contents);
         }
 
@@ -23,6 +26,11 @@ namespace SynthesisAPI.UIManager
                 
                 if (line.StartsWith("."))
                 {
+                    if (line.Count(c => c == '.') != 1)
+                    {
+                        Logger.Log($"Stylesheet {Name} defines styling for more than one class in the same block, which is not currently supported", LogLevel.Error);
+                        continue;
+                    }
                     if(line[line.Length - 1] == '{')
                     {
                         line = line.Substring(0, line.Length - 1).Trim(); // remove " {" from line
@@ -39,7 +47,7 @@ namespace SynthesisAPI.UIManager
                     {
                         if (HasClass(currentClass.ClassName))
                         {
-                            Logger.Log($"Stylesheet defines class with duplicate name: {currentClass.ClassName}", LogLevel.Warning);
+                            Logger.Log($"Stylesheet {Name} defines class with duplicate name {currentClass.ClassName}, which has been skipped", LogLevel.Error);
                         }
                         else
                         {
@@ -49,7 +57,7 @@ namespace SynthesisAPI.UIManager
                 }
                 else if (line.StartsWith("#"))
                 {
-                    Logger.Log("Stylesheet contains ID identifier '#' which is not currently supported", LogLevel.Error);
+                    Logger.Log($"Stylesheet {Name} contains ID identifier '#' which is not currently supported", LogLevel.Error);
                 }
                 else
                 {
@@ -75,7 +83,6 @@ namespace SynthesisAPI.UIManager
 
         internal _UnityVisualElement ApplyClassToVisualElement(string className, _UnityVisualElement visualElement)
         {
-            //Logger.Log("[UI] Attempting to apply class [" + className + "] to [" + visualElement.name + "]");
             UssClass ussClass = classes[className];
 
             foreach (string line in ussClass.Lines)

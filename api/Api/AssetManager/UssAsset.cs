@@ -23,7 +23,7 @@ namespace SynthesisAPI.AssetManager
             string[] contents = Encoding.UTF8.GetString(data).Split('\n');
             try
             {
-                StyleSheet = new StyleSheet(contents);
+                StyleSheet = new StyleSheet(Name, contents);
             }
             catch(Exception e)
             {

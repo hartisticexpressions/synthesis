@@ -37,6 +37,7 @@ namespace SynthesisCore
             cube.AddComponent<Rigidbody>();
             var cubeSelectable = cube.AddComponent<Selectable>();
             //e.AddComponent<Moveable>().Channel = 5;
+            SynthesisCoreData.ModelsDict.Add("Cube", cube);
 
             powerSupply = new PowerSupply(12); // V
             

@@ -16,6 +16,10 @@
                     <ui:VisualElement name="icon" class="category-icon" style="background-image: url(&apos;/modules/synthesis_core/UI/images/controls-icon.png&apos;);" />
                     <ui:Label text="Controls" name="name" />
                 </ui:Button>
+				<ui:Button name="robot-controls-settings-button" class="category-button">
+                    <ui:VisualElement name="icon" class="category-icon" style="background-image: url(&apos;/modules/synthesis_core/UI/images/controls-icon.png&apos;);" />
+                    <ui:Label text="Robot Controls" name="name" />
+                </ui:Button>
             </ui:VisualElement>
             <ui:VisualElement name="page-container" class="page-container" />
         </ui:VisualElement>

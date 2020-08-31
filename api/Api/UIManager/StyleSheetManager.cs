@@ -29,7 +29,7 @@ namespace SynthesisAPI.UIManager
                 }
             }
 
-            Logger.Log("Could not apply class [" + className + "] to [" + visualElement.name + "] with [" + styleSheets.Count + "] stylesheets currently loaded", LogLevel.Warning);
+            Logger.Log($"Could not apply class \"{className}\" to VisualElement {visualElement.name} from currently loaded stylesheets", LogLevel.Warning);
 
             return visualElement;
         }

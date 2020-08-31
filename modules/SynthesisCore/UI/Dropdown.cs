@@ -90,6 +90,20 @@ namespace SynthesisCore.UI
             Init(name);
         }
 
+        public Dropdown(string name, int defaultValueIndex, IEnumerable<string> options)
+        {
+            int i = 0;
+            foreach(var option in options)
+            {
+                if (i == defaultValueIndex)
+                    _selected = option;
+                else
+                    _options.Add(option);
+                i++;
+            }
+            Init(name);
+        }
+
         public Dropdown(string name, int defaultValueIndex, List<string> options)
         {
             for (int i = 0; i < options.Count; i++)

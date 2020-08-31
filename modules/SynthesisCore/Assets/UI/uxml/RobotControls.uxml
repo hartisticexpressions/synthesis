@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="page" style="flex-grow: 1;" >
+        <Style src="/modules/synthesis_core/UI/uss/Page.uss" />
+		<Style src="/modules/synthesis_core/UI/uss/RobotControls.uss" />
+        <ui:ListView focusable="True" name="robot-controls" style="height: 100%;">
+			<ui:VisualElement class="entity-selector" >
+				<ui:Label text="Select Entity" class="robot-control-label" />
+				<ui:VisualElement name="entity-selector-dropdown-container" class="entity-selector-dropdown-container" />
+			</ui:VisualElement>
+			<ui:VisualElement class="vertical-divider" />
+        </ui:ListView>
+    </ui:VisualElement>
+</ui:UXML>
