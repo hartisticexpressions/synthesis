@@ -1,4 +1,4 @@
-﻿using MathNet.Numerics;
+﻿using SynthesisAPI.PreferenceManager;
 
 namespace SynthesisCore.UI
 {
@@ -11,6 +11,22 @@ namespace SynthesisCore.UI
         {
             Name = name;
             Key = key;
+        }
+
+        public ControlInfo(string name)
+        {
+            Name = name;
+            Key = GetFormattedPreference(Name);
+        }
+
+        private static string GetFormattedPreference(string controlName)
+        {
+            var controlKey = PreferenceManager.GetPreference("SynthesisCore", controlName);
+            if (controlKey is string)
+            {
+                return Utilities.ReformatCondensedString((string)controlKey);
+            }
+            return "Unassigned";
         }
     }
 }

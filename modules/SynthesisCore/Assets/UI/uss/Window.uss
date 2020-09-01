@@ -84,6 +84,7 @@
     padding-bottom: 4px;
     flex-direction: row;
 	background-color: rgb(210, 210, 210);
+	flex-shrink: 0;
 }
 
 .window-header-title {
@@ -119,6 +120,7 @@
     flex-direction: row;
     align-items: auto;
     justify-content: flex-start;
+	flex-shrink: 0;
 }
 
 .window {

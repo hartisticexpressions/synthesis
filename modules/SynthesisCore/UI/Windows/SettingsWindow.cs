@@ -14,7 +14,6 @@ namespace SynthesisCore.UI
         private VisualElement Window;
         private GeneralPage GeneralPage;
         private ControlsPage ControlsPage;
-        private RobotControlsPage RobotControlsPage;
 
         private static Dictionary<string, object> PendingChanges = new Dictionary<string, object>();
         
@@ -26,7 +25,7 @@ namespace SynthesisCore.UI
 
             GeneralPage = new GeneralPage(generalAsset);
             ControlsPage = new ControlsPage(controlsAsset);
-            RobotControlsPage = new RobotControlsPage(robotControlsAsset);
+            RobotControlsPage.Create(robotControlsAsset);
 
             var settingsAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Settings.uxml");
             Panel = new Panel("Settings", settingsAsset, OnWindowOpen);
@@ -68,6 +67,7 @@ namespace SynthesisCore.UI
             robotControlsSettingsButton?.Subscribe(x =>
             {
                 SetPageContent(RobotControlsPage.Page);
+                RobotControlsPage.LookAtEntity();
             });
 
             Button okButton = (Button) Window.Get("ok-button");
@@ -81,7 +81,8 @@ namespace SynthesisCore.UI
                     }
                 }
                 PreferenceManager.Save();
-                
+
+                OnPageChange();
                 UIManager.ClosePanel(Panel.Name);
             });
 
@@ -89,7 +90,8 @@ namespace SynthesisCore.UI
             closeButton?.Subscribe(x =>
             {
                 PendingChanges.Clear();
-                
+
+                OnPageChange();
                 UIManager.ClosePanel(Panel.Name);
             });
         }
@@ -102,6 +104,7 @@ namespace SynthesisCore.UI
                 child.RemoveFromHierarchy();
             }
             pageContainer.Add(newContent);
+            OnPageChange();
         }
 
         public static void AddPendingChange(string key, object value)
@@ -109,5 +112,9 @@ namespace SynthesisCore.UI
             PendingChanges[key] = value;
         }
 
+        private void OnPageChange()
+        {
+            RobotControlsPage.StopLookAtEntity();
+        }
     }
 }

@@ -1,12 +1,6 @@
-﻿using MathNet.Spatial.Euclidean;
-using SynthesisAPI.AssetManager;
-using SynthesisAPI.EnvironmentManager;
-using SynthesisAPI.EnvironmentManager.Components;
+﻿using SynthesisAPI.AssetManager;
 using SynthesisAPI.UIManager.VisualElements;
-using SynthesisAPI.Utilities;
-using SynthesisCore.Meshes;
 using SynthesisCore.Simulation;
-using SynthesisCore.Systems;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 

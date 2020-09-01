@@ -11,7 +11,7 @@ using SynthesisAPI.UIManager;
 
 #nullable enable
 
-namespace SynthesisCore.Systems
+namespace SynthesisCore.EntityControl
 {
     [InitializationPriority(2)]
     public class CameraController : SystemBase

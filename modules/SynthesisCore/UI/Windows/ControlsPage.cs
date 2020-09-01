@@ -1,5 +1,4 @@
 ﻿using SynthesisAPI.AssetManager;
-using SynthesisAPI.PreferenceManager;
 using SynthesisAPI.UIManager.VisualElements;
 
 namespace SynthesisCore.UI
@@ -37,18 +36,7 @@ namespace SynthesisCore.UI
 
         private void AddControl(string controlName)
         {
-            string key = GetFormattedPreference(controlName);
-            ControlList.Add(new ControlItem(ControlAsset, new ControlInfo(controlName, key)).Element);
-        }
-
-        private string GetFormattedPreference(string controlName)
-        {
-            var controlKey = PreferenceManager.GetPreference("SynthesisCore", controlName);
-            if (controlKey is string)
-            {
-                return Utilities.ReformatCondensedString((string) controlKey);
-            }
-            return "Unassigned";
+            ControlList.Add(new ControlItem(ControlAsset, new ControlInfo(controlName)).Element);
         }
     }
 }

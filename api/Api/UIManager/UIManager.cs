@@ -193,9 +193,9 @@ namespace SynthesisAPI.UIManager
             if (existingPanel == null)
             {
                 Instance.PanelContainer.Enabled = true;
-                var elm = LoadedPanels[panelName].Ui.GetElement($"panel-{panelName}");
                 if (!LoadedPanels[panelName].CachePanel || LoadedPanels[panelName].PanelElement == null)
                 {
+                    var elm = LoadedPanels[panelName].Ui.GetElement($"panel-{panelName}");
                     LoadedPanels[panelName].BindPanel(elm);
                     var x = LoadedPanels[panelName];
                     x.PanelElement = elm;

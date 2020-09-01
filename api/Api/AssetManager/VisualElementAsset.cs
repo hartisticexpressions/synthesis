@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml;
 using SynthesisAPI.AssetManager;
 using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.VisualElements;
+using SynthesisAPI.Utilities;
 using SynthesisAPI.VirtualFileSystem;
 
 namespace SynthesisAPI.AssetManager
@@ -20,11 +22,18 @@ namespace SynthesisAPI.AssetManager
 
         public override IEntry Load(byte[] data)
         {
-            _document = new XmlDocument();
             MemoryStream stream = new MemoryStream();
             stream.Write(data, 0, data.Length);
             stream.Position = 0;
-            _document.Load(stream);
+            _document = new XmlDocument();
+            try
+            {
+                _document.Load(stream);
+            }
+            catch(Exception e)
+            {
+                throw new SynthesisException($"Failed to load VisualElementAsset {Name}", e);
+            }
             return this;
         }
     }

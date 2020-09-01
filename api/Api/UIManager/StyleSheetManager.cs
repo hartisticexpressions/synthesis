@@ -17,6 +17,11 @@ namespace SynthesisAPI.UIManager
             }
         }
 
+        public static VisualElements.VisualElement ApplyClassFromStyleSheets(string className, VisualElements.VisualElement visualElement)
+        {
+            return ApplyClassFromStyleSheets(className, visualElement.UnityVisualElement).GetVisualElement();
+        }
+
         internal static UnityEngine.UIElements.VisualElement ApplyClassFromStyleSheets(string className, UnityEngine.UIElements.VisualElement visualElement)
         {
             // Logger.Log("[UI] ApplyClassFromStyleSheets called with [" + styleSheets.Count + "] stylesheets loaded");

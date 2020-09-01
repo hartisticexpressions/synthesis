@@ -30,6 +30,7 @@
     <string>UI/uxml/Joints.uxml</string> 
     <string>UI/uxml/Joint.uxml</string>
     <string>UI/uxml/RobotControls.uxml</string>
+    <string>UI/uxml/DrivetrainConfiguration.uxml</string>
     <string>UI/uxml/Controls.uxml</string>
     <string>UI/uxml/Control.uxml</string>
     <string>UI/uxml/Dropdown.uxml</string>

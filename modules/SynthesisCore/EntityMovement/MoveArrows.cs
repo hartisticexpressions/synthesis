@@ -3,7 +3,7 @@ using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EnvironmentManager.Components;
 using SynthesisAPI.InputManager;
 using SynthesisAPI.Utilities;
-using SynthesisCore.Systems;
+using SynthesisCore.EntityControl;
 
 namespace SynthesisCore.EntityMovement
 {

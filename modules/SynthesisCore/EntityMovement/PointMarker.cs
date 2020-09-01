@@ -2,7 +2,7 @@
 using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EnvironmentManager.Components;
 using SynthesisAPI.Utilities;
-using SynthesisCore.Systems;
+using SynthesisCore.EntityControl;
 
 namespace SynthesisCore.EntityMovement
 {

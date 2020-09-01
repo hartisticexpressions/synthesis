@@ -1,13 +1,9 @@
 ﻿using System.Collections.Generic;
 using SynthesisAPI.AssetManager;
 using SynthesisAPI.EnvironmentManager;
-using SynthesisAPI.EventBus;
-using SynthesisAPI.InputManager.InputEvents;
 using SynthesisAPI.PreferenceManager;
 using SynthesisAPI.UIManager;
-using SynthesisAPI.UIManager.UIComponents;
 using SynthesisAPI.UIManager.VisualElements;
-using SynthesisAPI.Utilities;
 using SynthesisCore.UI.Windows;
 
 namespace SynthesisCore.UI
@@ -66,6 +62,7 @@ namespace SynthesisCore.UI
             EntityToolbar.CreateToolbar();
             
             UIManager.AddPanel(new SettingsWindow().Panel);
+            UIManager.AddPanel(new DrivetrainConfigurationWindow().Panel);
             UIManager.AddPanel(new ModuleWindow().Panel);
             UIManager.AddPanel(new HelpWindow().Panel);
 
