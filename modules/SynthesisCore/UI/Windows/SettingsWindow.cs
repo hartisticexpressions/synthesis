@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SynthesisAPI.AssetManager;
+using SynthesisAPI.EventBus;
 using SynthesisAPI.PreferenceManager;
 using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.UIComponents;
@@ -28,13 +29,15 @@ namespace SynthesisCore.UI
             RobotControlsPage.Create(robotControlsAsset);
 
             var settingsAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Settings.uxml");
-            Panel = new Panel("Settings", settingsAsset, OnWindowOpen);
+            Panel = new Panel("Settings", settingsAsset, OnWindowCreate);
             
             Button settingsButton = (Button) UIManager.RootElement.Get("settings-button");
             settingsButton.Subscribe(x => UIManager.TogglePanel("Settings"));
+            
+            OnWindowClose();
         }
 
-        private void OnWindowOpen(VisualElement settingsWindow)
+        private void OnWindowCreate(VisualElement settingsWindow)
         {
             Window = settingsWindow;
             Window.SetStyleProperty("position", "absolute");
@@ -44,6 +47,18 @@ namespace SynthesisCore.UI
             LoadWindowContent();
         }
 
+        private void OnWindowClose()
+        {
+            EventBus.NewTypeListener<ClosePanelEvent>(info =>
+            {
+                if (info != null && ((ClosePanelEvent) info).Panel.Name.Equals("Settings"))
+                {
+                    GeneralPage.RefreshPreferences();
+                    ControlsPage.RefreshPreferences();
+                }
+            });
+        }
+        
         private void LoadWindowContent()
         {
             SetPageContent(GeneralPage.Page);

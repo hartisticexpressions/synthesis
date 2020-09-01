@@ -13,7 +13,7 @@ namespace SynthesisCore.UI.Windows
         private VisualElement ModifierContainer;
         private string PreferenceName;
 
-        public DropdownItem(VisualElementAsset optionAsset, Dropdown dropdown, string preferenceName)
+        public DropdownItem(VisualElementAsset optionAsset, string preferenceName, Dropdown dropdown)
         {
             Element = optionAsset.GetElement("option");
             Dropdown = dropdown;
@@ -39,8 +39,7 @@ namespace SynthesisCore.UI.Windows
             {
                 if (e is Dropdown.SelectionEvent selectionEvent)
                 {
-                    PreferenceManager.SetPreference("SynthesisCore", PreferenceName, selectionEvent.SelectionName);
-                    PreferenceManager.Save();
+                    SettingsWindow.AddPendingChange(PreferenceName, selectionEvent.SelectionName);
                 }
             });
         }
@@ -48,6 +47,11 @@ namespace SynthesisCore.UI.Windows
         private string GetPreference()
         {
             return PreferenceManager.GetPreference<string>("SynthesisCore", PreferenceName);
+        }
+        
+        public void UpdateInformation()
+        {
+            SetInformation();
         }
     }
 }
