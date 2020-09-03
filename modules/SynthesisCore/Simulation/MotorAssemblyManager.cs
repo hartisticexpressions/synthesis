@@ -27,32 +27,30 @@ namespace SynthesisCore.Simulation
             {
                 if (_allMotorAssemblies == null)
                 {
-                    _allMotorAssemblies = new List<MotorAssembly>();
-
-                    foreach (var entity in EnvironmentManager.GetEntitiesWhere(
-                        e => IsDescendant(Entity.Value, e) &&
-                        e.GetComponent<Joints>() != null))
-                    {
-                        foreach (var j in entity.GetComponent<Joints>().AllJoints)
-                        {
-                            if (j is HingeJoint hingeJoint)
-                            {
-                                _allMotorAssemblies.Add(new MotorAssembly(entity, hingeJoint));
-                            }
-                        }
-                    }
+                    _allMotorAssemblies = Setup(Entity.Value);
                 }
                 return _allMotorAssemblies;
             }
             set => _allMotorAssemblies = value;
         }
 
-        public static bool IsDescendant(Entity ancestor, Entity test)
+        private static List<MotorAssembly> Setup(Entity thisEntity)
         {
-            if (test == ancestor)
-                return true;
-            var parent = test.GetComponent<Parent>()?.ParentEntity;
-            return parent != null && IsDescendant(ancestor, parent.Value);
+            var allMotorAssemblies = new List<MotorAssembly>();
+
+            foreach (var entity in EnvironmentManager.GetEntitiesWhere(
+                e => Parent.IsDescendant(thisEntity, e) &&
+                e.GetComponent<Joints>() != null))
+            {
+                foreach (var j in entity.GetComponent<Joints>().AllJoints)
+                {
+                    if (j is HingeJoint hingeJoint)
+                    {
+                        allMotorAssemblies.Add(new MotorAssembly(entity, hingeJoint));
+                    }
+                }
+            }
+            return allMotorAssemblies;
         }
 
         public MotorAssemblyManager()

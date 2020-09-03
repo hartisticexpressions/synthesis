@@ -20,7 +20,20 @@ namespace SynthesisAPI.EnvironmentManager.Components
             }
         }
 
-        public bool Changed { get; private set; }
+        public bool IsDescendant(Entity ancestor)
+        {
+            return IsDescendant(ancestor, Entity.Value);
+        }
+
+        public static bool IsDescendant(Entity ancestor, Entity test)
+        {
+            if (test == ancestor)
+                return true;
+            var parent = test.GetComponent<Parent>()?.ParentEntity;
+            return parent != null && IsDescendant(ancestor, parent.Value);
+        }
+
+        internal bool Changed { get; private set; }
         internal void ProcessedChanges() => Changed = false;
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

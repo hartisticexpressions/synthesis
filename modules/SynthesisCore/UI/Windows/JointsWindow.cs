@@ -55,9 +55,9 @@ namespace SynthesisCore.UI
             {
                 foreach (var entity in SynthesisCoreData.ModelsDict.Values)
                 {
-                    var motorAssemblyManager = entity.GetComponent<MotorAssemblyManager>();
-                    if (MotorAssemblyManager.IsDescendant(Selectable.Selected.Entity.Value, entity))
+                    if (Parent.IsDescendant(Selectable.Selected.Entity.Value, entity))
                     {
+                        var motorAssemblyManager = entity.GetComponent<MotorAssemblyManager>();
                         if (motorAssemblyManager != null)
                         {
                             foreach (var assembly in motorAssemblyManager.AllMotorAssemblies)
