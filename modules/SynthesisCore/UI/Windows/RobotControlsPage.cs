@@ -14,7 +14,7 @@ namespace SynthesisCore.UI.Windows
     public static class RobotControlsPage
     {
         public static VisualElement Page { get; private set; } = null;
-        private static ListView controlList;
+        private static ListView controlListView;
         private static Dropdown entityDropdown;
         private static Dropdown driveSchemeDropdown;
 
@@ -25,14 +25,18 @@ namespace SynthesisCore.UI.Windows
         private static List<VisualElement> driveSchemeSection = new List<VisualElement>();
         private static List<VisualElement> motorControlsSection = new List<VisualElement>();
 
+        private static VisualElementAsset controlAsset;
+        private static List<ControlItem> controlsList = new List<ControlItem>();
+
         public static void Create(VisualElementAsset controlsAsset)
         {
             if (Page == null)
             {
-                Page = controlsAsset.GetElement("page");
+                Page = controlsAsset.GetElement("robot-controls-page");
                 Page.SetStyleProperty("height", "100%");
 
-                controlList = (ListView)Page.Get("robot-controls");
+                controlListView = (ListView)Page.Get("robot-controls");
+                controlAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Control.uxml");
 
                 LoadPageContent();
             }
@@ -197,23 +201,30 @@ namespace SynthesisCore.UI.Windows
             divider.Name = "motor-controls-divider";
             motorControlsSection.Add(divider);
 
-            switch (selectedEntity?.GetComponent<RobotController>().SelectedDriveScheme)
+            var robotController = selectedEntity?.GetComponent<RobotController>();
+
+            // TODO try load from preferences? Will need to save RobotController configuration to preferences as well
+            robotController.ResetControls();
+
+            foreach(var (controlName, _) in robotController.Inputs)
             {
-                case RobotController.DriveScheme.Arcade:
-                    // TODO
-                    break;
-                case RobotController.DriveScheme.Tank:
-                    // TODO
-                    break;
-                case RobotController.DriveScheme.None:
-                default:
-                    break;
+                AddControl(controlName);
             }
 
-            // TODO
-            Logger.Log("TODO UpdateMotorControlsSection");
-
             driveSchemeSection.AddRange(motorControlsSection);
+        }
+
+        private static void AddControl(string controlName)
+        {
+            var item = new ControlItem(controlAsset, controlName);
+            controlsList.Add(item);
+            motorControlsSection.Add(item.Element);
+            controlListView.Add(item.Element);
+        }
+
+        public static void RefreshPreferences()
+        {
+            controlsList.ForEach(control => control.UpdateInformation());
         }
 
         private static VisualElement AddRow(string labelText, VisualElement button)
@@ -236,7 +247,7 @@ namespace SynthesisCore.UI.Windows
             row.Add(label);
             row.Add(button);
 
-            controlList.Add(row);
+            controlListView.Add(row);
 
             return row;
         }
@@ -247,7 +258,7 @@ namespace SynthesisCore.UI.Windows
             divider.AddToClassList("vertical-divider");
             StyleSheetManager.ApplyClassFromStyleSheets("vertical-divider", divider);
 
-            controlList.Add(divider);
+            controlListView.Add(divider);
             
             return divider;
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SynthesisAPI.AssetManager;
 using SynthesisAPI.EventBus;
 using SynthesisAPI.PreferenceManager;
@@ -13,6 +14,7 @@ namespace SynthesisCore.UI
     {
         public Panel Panel { get; }
         private VisualElement Window;
+        private VisualElement pageContainer;
         private GeneralPage GeneralPage;
         private ControlsPage ControlsPage;
 
@@ -34,7 +36,7 @@ namespace SynthesisCore.UI
             Button settingsButton = (Button) UIManager.RootElement.Get("settings-button");
             settingsButton.Subscribe(x => UIManager.TogglePanel("Settings"));
             
-            OnWindowClose();
+            SetupWindowToggleCallbacks();
         }
 
         private void OnWindowCreate(VisualElement settingsWindow)
@@ -43,18 +45,31 @@ namespace SynthesisCore.UI
             Window.SetStyleProperty("position", "absolute");
             Window.IsDraggable = true;
 
+            pageContainer = Window.Get("page-container");
+
             RegisterButtons();
             LoadWindowContent();
         }
 
-        private void OnWindowClose()
+        private void SetupWindowToggleCallbacks()
         {
+            EventBus.NewTypeListener<ShowPanelEvent>(info =>
+            {
+                if (info != null && ((ShowPanelEvent)info).Panel.Name.Equals("Settings"))
+                {
+                    if(pageContainer.GetChildren().Any(e => e.Name == "robot-controls-page"))
+                        RobotControlsPage.LookAtEntity();
+                }
+            });
+
             EventBus.NewTypeListener<ClosePanelEvent>(info =>
             {
                 if (info != null && ((ClosePanelEvent) info).Panel.Name.Equals("Settings"))
                 {
                     GeneralPage.RefreshPreferences();
                     ControlsPage.RefreshPreferences();
+                    RobotControlsPage.RefreshPreferences();
+                    RobotControlsPage.StopLookAtEntity();
                 }
             });
         }
@@ -113,7 +128,6 @@ namespace SynthesisCore.UI
 
         private void SetPageContent(VisualElement newContent)
         {
-            VisualElement pageContainer = Window.Get("page-container");
             foreach (VisualElement child in pageContainer.GetChildren())
             {
                 child.RemoveFromHierarchy();

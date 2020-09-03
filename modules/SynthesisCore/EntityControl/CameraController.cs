@@ -86,12 +86,12 @@ namespace SynthesisCore.EntityControl
 
             public static void Restore(CameraState cameraState)
             {
-                Instance.CameraTransform.Position = cameraState.position;
-                Instance.CameraTransform.Rotation = cameraState.rotation;
                 Instance.LastSelectedTargetType = cameraState.lastSelectedTargetType;
                 Instance.SelectedTarget = cameraState.selectedTarget;
                 Instance.SetNewFocus(cameraState.focusPoint, true);
                 Instance.inFreeRoamMode = cameraState.inFreeRoamMode;
+                Instance.CameraTransform.Position = cameraState.position;
+                Instance.CameraTransform.Rotation = cameraState.rotation;
             }
         }
 

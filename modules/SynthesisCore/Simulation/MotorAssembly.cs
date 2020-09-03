@@ -43,7 +43,7 @@ namespace SynthesisCore.Simulation
         public double Torque => Motor.Torque * GearReduction * MotorCount;
 
 
-        private double voltage;
+        public double Voltage { get; private set; }
 
         public bool FreeSpin
         {
@@ -71,7 +71,7 @@ namespace SynthesisCore.Simulation
 
         public void SetVoltage(double sourceVoltage)
         {
-            voltage = sourceVoltage;
+            Voltage = sourceVoltage;
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace SynthesisCore.Simulation
         /// <param name="loadTorque">The load on the motor in N m</param>
         public void Update(double loadTorque)
         {
-            Motor.Update(voltage, CalculatePerMotorTorque(loadTorque));
+            Motor.Update(Voltage, CalculatePerMotorTorque(loadTorque));
             var motor = Joint.Motor;
             motor.TargetVelocity = (float)(Motor.AngularSpeed.DegreesPerSec / GearReduction);
             motor.Force = float.PositiveInfinity;

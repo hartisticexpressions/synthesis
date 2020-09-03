@@ -32,5 +32,7 @@ namespace SynthesisCore.Simulation
         {
             Voltage = startingVoltage;
         }
+
+        public static PowerSupply Default12V = new PowerSupply(12);
     }
 }

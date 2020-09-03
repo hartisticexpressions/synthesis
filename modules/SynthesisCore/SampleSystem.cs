@@ -93,6 +93,7 @@ namespace SynthesisCore
 
         public override void OnUpdate()
         {
+            /*
             float forward = InputManager.GetAxisValue("vert");
             float turn = InputManager.GetAxisValue("hori");
 
@@ -104,12 +105,15 @@ namespace SynthesisCore
             backLeft.SetVoltage(powerSupply.VoltagePercent(percent));
             percent = forward - turn;
             backRight.SetVoltage(powerSupply.VoltagePercent(percent));
-            
-            frontLeft.Update();
-            frontRight.Update();
-            backLeft.Update();
-            backRight.Update();
-            arm.Update();
+            */
+
+            foreach(var i in EnvironmentManager.GetComponentsWhere<MotorAssemblyManager>(_ => true))
+            {
+                foreach(var j in i.AllMotorAssemblies)
+                {
+                    j.Update();
+                }
+            }
         }
 
         [TaggedCallback("input/move_arm_up")]
