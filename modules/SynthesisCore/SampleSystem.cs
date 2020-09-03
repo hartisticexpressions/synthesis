@@ -12,26 +12,19 @@ namespace SynthesisCore
     {
         public override void Setup()
         {
-            Entity cube = SimulationManager.SpawnEntity();
+            Entity cube = SimulationManager.SpawnEntity(name: "Cube");
 
             cube.GetComponent<Transform>().Position = new Vector3D(0, 5, 5);
             Mesh m = cube.GetComponent<Mesh>();
             Cube.Make(m);
-            SynthesisCoreData.ModelsDict.Add("Cube", cube);
             
             // cube.AddComponent<Moveable>().Channel = 5;
 
-            GltfAsset g = AssetManager.GetAsset<GltfAsset>("/modules/synthesis_core/Test.glb");
-            var testBody = SimulationManager.SpawnEntity(g);
-
-            SynthesisCoreData.ModelsDict.Add("TestBody", testBody);
+            var testBody = SimulationManager.SpawnEntity(
+                AssetManager.GetAsset<GltfAsset>("/modules/synthesis_core/Test.glb"),
+                "TestBody");
 
             testBody.AddComponent<Moveable>().Channel = 5;
-
-            foreach (var i in EnvironmentManager.GetComponentsWhere<Rigidbody>(_ => true))
-            {
-                i.AngularDrag = 0;
-            }
         }
 
         public override void OnUpdate() { }

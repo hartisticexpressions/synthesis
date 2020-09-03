@@ -51,10 +51,10 @@ namespace SynthesisCore.UI.Windows
             var a = new Dictionary<string, Entity>();
             foreach(var i in SynthesisCoreData.ModelsDict)
             {
-                if (i.Value.GetComponent<MotorAssemblyManager>() != null &&
-                    i.Value.GetComponent<MotorAssemblyManager>().AllMotorAssemblies.Count > 0)
+                if (i.Entity?.GetComponent<MotorAssemblyManager>() != null &&
+                    i.Entity?.GetComponent<MotorAssemblyManager>().AllMotorAssemblies.Count > 0)
                 {
-                    a.Add(i.Key, i.Value);
+                    a.Add(i.Value, i.Entity.Value);
                 }
             }
             return a;

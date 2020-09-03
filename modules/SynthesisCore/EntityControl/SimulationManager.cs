@@ -1,6 +1,7 @@
 ﻿using SynthesisAPI.AssetManager;
 using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EnvironmentManager.Components;
+using SynthesisCore.Components;
 using SynthesisCore.Simulation;
 using System.Linq;
 
@@ -10,7 +11,7 @@ namespace SynthesisCore.EntityControl
     {
         public static Entity? ActiveEnvironment { get; private set; } = null;
 
-        public static Entity SpawnEntity(GltfAsset modelAsset = null)
+        public static Entity SpawnEntity(GltfAsset modelAsset = null, string name = null)
         {
             var entity = EnvironmentManager.AddEntity();
 
@@ -27,6 +28,15 @@ namespace SynthesisCore.EntityControl
             }
 
             entity.AddComponent<Selectable>();
+            if(name != null)
+            {
+                entity.AddComponent<Name>().Value = name;
+            }
+
+            foreach (var i in EnvironmentManager.GetComponentsWhere<Rigidbody>(c => Parent.IsDescendant(entity, c.Entity.Value)))
+            {
+                i.AngularDrag = 0;
+            }
 
             if (entity.GetComponent<Joints>() != null &&
                 entity.GetComponent<Joints>().AllJoints.Count > 0 &&
