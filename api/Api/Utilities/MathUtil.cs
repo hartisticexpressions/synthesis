@@ -169,11 +169,11 @@ namespace SynthesisAPI.Utilities
 			return start;
 		}
 
-		public static Vector2D Map(this UnityEngine.Vector2 vec) => new Vector2D(vec.x, vec.y);
-		public static Vector3D Map(this UnityEngine.Vector3 vec) => new Vector3D(vec.x, vec.y, vec.z);
-		public static Quaternion Map(this UnityEngine.Quaternion quat) => MapUnityQuaternion(quat);
-		public static UnityEngine.Vector2 Map(this Vector2D vec) => MapVector2D(vec);
-		public static UnityEngine.Vector3 Map(this Vector3D vec) => MapVector3D(vec);
-		public static UnityEngine.Quaternion Map(this Quaternion quat) => MapQuaternion(quat);
+		internal static Vector2D Map(this UnityEngine.Vector2 vec) => new Vector2D(vec.x, vec.y);
+		internal static Vector3D Map(this UnityEngine.Vector3 vec) => new Vector3D(vec.x, vec.y, vec.z);
+		internal static Quaternion Map(this UnityEngine.Quaternion quat) => MapUnityQuaternion(quat);
+		internal static UnityEngine.Vector2 Map(this Vector2D vec) => MapVector2D(vec);
+		internal static UnityEngine.Vector3 Map(this Vector3D vec) => MapVector3D(vec);
+		internal static UnityEngine.Quaternion Map(this Quaternion quat) => MapQuaternion(quat);
 	}
 }

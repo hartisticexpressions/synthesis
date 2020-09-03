@@ -75,7 +75,6 @@ namespace SynthesisCore.EntityMovement
 
         public override void MoveEntityTransform(Transform targetTransform, float xMod, float yMod)
         {
-            
             var horizontalDir = UnitVector3D.YAxis.CrossProduct(CameraController.Instance.CameraTransform.Forward); // Side to side direction of mouse movement
             var mouseDir = new Vector3D(0, yMod, 0) + horizontalDir.ScaleBy(xMod); // yMod is always up and down, and xMod is side to side
 
@@ -88,8 +87,9 @@ namespace SynthesisCore.EntityMovement
 
                 var sign = deltaDir.AngleTo(rotateDirVector).Degrees < 180 ? 1 : -1; // Get rotation direction
 
-                targetTransform.Rotate(RotationAxisDirection, sign* magnitude, true);
-                Transform.Rotate(RotationAxisDirection, sign * magnitude, true);
+                var addDegress = sign * magnitude;
+                targetTransform.Rotate(RotationAxisDirection, addDegress, true);
+                Transform.Rotate(RotationAxisDirection, addDegress, true);
             }
         }
     }
