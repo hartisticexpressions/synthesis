@@ -70,7 +70,7 @@ namespace SynthesisAPI.EnvironmentManager.Components
 		public int Width => _sprite.texture.width;
 		public int Height => _sprite.texture.height;
 
-		public bool Changed { get; private set; } = true;
+		internal bool Changed { get; private set; } = true;
 		internal void ProcessedChanges() => Changed = false;
 	}
 }

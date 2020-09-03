@@ -66,6 +66,11 @@ namespace SynthesisAPI.EnvironmentManager.Components
 
         #endregion
 
+        internal void UpdateSharedMesh()
+        {
+            OnPropertyChanged("sharedMesh");
+        }
+
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

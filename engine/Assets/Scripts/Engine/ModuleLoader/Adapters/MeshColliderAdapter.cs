@@ -34,7 +34,8 @@ namespace Engine.ModuleLoader.Adapters
             {
                 instance.sharedMesh = instance.Entity?.GetComponent<Mesh>();
                 unityCollider.sharedMesh = instance.sharedMesh.ToUnity();
-            } else
+            }
+            else
             {
                 unityCollider.sharedMesh = instance.sharedMesh.ToUnity();
             }
@@ -45,7 +46,7 @@ namespace Engine.ModuleLoader.Adapters
             }
 
             unityCollider.cookingOptions = instance.cookingOptions.Convert<UnityEngine.MeshColliderCookingOptions>();
-            
+
         }
 
         private void UnityProperty(object sender, PropertyChangedEventArgs args)
@@ -62,7 +63,8 @@ namespace Engine.ModuleLoader.Adapters
                     unityCollider.material = instance.material.GetUnity();
                     break;
                 default:
-                    throw new Exception($"Property {args.PropertyName} is not setup");
+                    SynthesisAPI.Utilities.Logger.Log($"Unsupported property {args.PropertyName}", LogLevel.Error);
+                    break;
             }
         }
 
@@ -88,7 +90,7 @@ namespace Engine.ModuleLoader.Adapters
 
         public void OnCollisionEnter(Collision collision)
         {
-            if(instance != null && instance.OnCollisionEnter != null)
+            if (instance != null && instance.OnCollisionEnter != null)
             {
                 instance.OnCollisionEnter(MapCollision(collision));
             }

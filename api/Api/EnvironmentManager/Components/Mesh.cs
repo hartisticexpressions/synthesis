@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using MathNet.Spatial.Euclidean;
-using SynthesisAPI.Modules.Attributes;
 using SynthesisAPI.Utilities;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace SynthesisAPI.EnvironmentManager.Components
 {
-	public class Mesh : Component
+    public class Mesh : Component
 	{
 		public Mesh() { }
 
@@ -81,9 +80,6 @@ namespace SynthesisAPI.EnvironmentManager.Components
 
 			return m;
 		}
-
-		public bool Changed { get; private set; }
-		internal void ProcessedChanges() => Changed = false;
 
 		public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)

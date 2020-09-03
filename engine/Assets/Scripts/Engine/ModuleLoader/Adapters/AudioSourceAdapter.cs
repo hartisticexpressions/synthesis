@@ -1,6 +1,7 @@
 ﻿using System;
 using SynthesisAPI.AssetManager;
 using SynthesisAPI.EnvironmentManager.Components;
+using SynthesisAPI.Utilities;
 using UnityEngine;
 
 using AudioSource = SynthesisAPI.EnvironmentManager.Components.AudioSource;
@@ -61,7 +62,8 @@ namespace Engine.ModuleLoader.Adapters
                     unitySource.volume = (float)o;
                     break;
                 default:
-                    throw new Exception();
+                    SynthesisAPI.Utilities.Logger.Log($"Unsupported property {n.ToLower()}", LogLevel.Error);
+                    break;
             }
         }
 

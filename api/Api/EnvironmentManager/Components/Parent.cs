@@ -33,9 +33,6 @@ namespace SynthesisAPI.EnvironmentManager.Components
             return parent != null && IsDescendant(ancestor, parent.Value);
         }
 
-        internal bool Changed { get; private set; }
-        internal void ProcessedChanges() => Changed = false;
-
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

@@ -120,8 +120,5 @@ namespace SynthesisAPI.EnvironmentManager.Components
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 		}
-
-		internal bool Changed { get; private set; } = true;
-		internal void ProcessedChanges() => Changed = false;
 	}
 }

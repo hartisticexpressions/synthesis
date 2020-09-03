@@ -85,7 +85,8 @@ namespace Engine.ModuleLoader.Adapters
                     unityRigidbody.constraints = ConvertEnum<UnityEngine.RigidbodyConstraints>(instance.constraints);
                     break;
                 default:
-                    throw new Exception($"Property {args.PropertyName} is not setup");
+                    SynthesisAPI.Utilities.Logger.Log($"Unsupported property {args.PropertyName}", LogLevel.Error);
+                    break;
             }
         }
 

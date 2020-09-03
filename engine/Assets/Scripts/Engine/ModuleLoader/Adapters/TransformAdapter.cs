@@ -54,7 +54,8 @@ namespace Engine.ModuleLoader.Adapters
 					unityTransform.localScale = instance.Scale.Map();
 					break;
 				default:
-					throw new Exception($"Property {args.PropertyName} is not setup");
+					SynthesisAPI.Utilities.Logger.Log($"Unsupported property {args.PropertyName}", LogLevel.Error);
+					break;
 			}
 		}
 

@@ -124,7 +124,8 @@ namespace Engine.ModuleLoader.Adapters
                         _unityJoint.enableCollision = _joint.enableCollision;
                         break;
                     default:
-                        throw new Exception($"Property {args.PropertyName} not supported");
+                        SynthesisAPI.Utilities.Logger.Log($"Unsupported property {args.PropertyName}", LogLevel.Error);
+                        break;
                 }
             }
         }
