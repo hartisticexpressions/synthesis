@@ -12,6 +12,7 @@ namespace TestApi
         [Test]
         public static void TestTraverse()
         {
+            Assert.AreEqual("", FileSystem.Traverse<Directory>("/")?.Name);
             Assert.AreEqual("temp", FileSystem.Traverse<Directory>("/temp")?.Name);
             try
             {

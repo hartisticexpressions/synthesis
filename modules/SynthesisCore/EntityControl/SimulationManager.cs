@@ -17,7 +17,7 @@ namespace SynthesisCore.EntityControl
 
             if (modelAsset != null)
             {
-                entity.AddBundle(modelAsset?.Parse());
+                entity.AddBundle(modelAsset?.Bundle);
             }
             else
             {

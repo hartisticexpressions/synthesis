@@ -1,7 +1,6 @@
 ﻿using SynthesisAPI.AssetManager;
 using SynthesisAPI.PreferenceManager;
 using SynthesisAPI.UIManager.VisualElements;
-using SynthesisAPI.Utilities;
 
 namespace SynthesisCore.UI.Windows
 {

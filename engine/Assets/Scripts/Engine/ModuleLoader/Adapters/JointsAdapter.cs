@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using SynthesisAPI.EnvironmentManager.Components;
 using System.Collections.Generic;
 using FixedJoint = SynthesisAPI.EnvironmentManager.Components.FixedJoint;
@@ -38,6 +37,11 @@ namespace Engine.ModuleLoader.Adapters
                 else
                     jointAdapter.Update();
             }
+        }
+
+        public void OnDestroy()
+        {
+            _jointAdapters.Clear();
         }
 
         void Add(IJoint joint)

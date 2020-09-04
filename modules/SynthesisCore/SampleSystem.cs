@@ -17,14 +17,9 @@ namespace SynthesisCore
             cube.GetComponent<Transform>().Position = new Vector3D(0, 5, 5);
             Mesh m = cube.GetComponent<Mesh>();
             Cube.Make(m);
-            
-            // cube.AddComponent<Moveable>().Channel = 5;
 
-            var testBody = SimulationManager.SpawnEntity(
-                AssetManager.GetAsset<GltfAsset>("/modules/synthesis_core/Test.glb"),
-                "TestBody");
-
-            testBody.AddComponent<Moveable>().Channel = 5;
+            // ConfigManager.Test("test.json");
+            EntityImportManager.RefreshModelList();
         }
 
         public override void OnUpdate() { }

@@ -1,7 +1,6 @@
 ﻿using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EnvironmentManager.Components;
 using SynthesisAPI.EventBus;
-using SynthesisAPI.Modules.Attributes;
 using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.UIComponents;
 using SynthesisAPI.UIManager.VisualElements;
@@ -17,7 +16,6 @@ namespace SynthesisCore.UI
         private static bool toolbarCreated = false;
         private static bool isToolbarBound = false;
 
-        private static bool openedMoveArrows = false;
         private static bool openedJointEditor = false;
 
         private static bool isEntitySelected => Selectable.Selected != null;
@@ -47,9 +45,13 @@ namespace SynthesisCore.UI
                         if (isEntitySelected)
                         {
                             if (!MoveArrows.IsMovingEntity)
+                            {
                                 MoveArrows.MoveEntity(Selectable.Selected.Entity.Value);
+                            }
                             else
+                            {
                                 MoveArrows.StopMovingEntity();
+                            }
                         }
                     });
                 deleteEntityButton = ToolbarTools.AddButton(modifyCategory, "delete-entity-button", "Delete Entity", DeleteEntityButtonIconDisabled,
@@ -134,10 +136,9 @@ namespace SynthesisCore.UI
                     UIManager.ClosePanel("Joints");
                     openedJointEditor = false;
                 }
-                if (openedMoveArrows)
+                if (MoveArrows.IsMovingEntity)
                 {
                     MoveArrows.StopMovingEntity();
-                    openedMoveArrows = false;
                 }
             }
         }

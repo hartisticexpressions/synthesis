@@ -45,15 +45,27 @@ namespace SynthesisAPI.AssetManager
             }
         }
 
-        #region Object Bundle
+        private Bundle bundle = null;
 
-        public static implicit operator Bundle(GltfAsset gltfAsset) => gltfAsset.Parse();
+        public Bundle Bundle
+        {
+            get
+            {
+                if (bundle == null)
+                {
+                    bundle = ParseBundle();
+                }
+                return bundle;
+            }
+        }
+
+        #region Object Bundle
 
         private Dictionary<string, List<string>> preprocessedJoints;
         private Dictionary<string, EnvironmentManager.Components.Rigidbody> rigidbodies;
         private List<(EnvironmentManager.Components.Rigidbody, EnvironmentManager.Components.Rigidbody)> defaultRigidjoints;
         private bool rigidbodyPresent;
-        public Bundle Parse()
+        private Bundle ParseBundle()
         {
             if (model == null) return null;
 
@@ -71,24 +83,28 @@ namespace SynthesisAPI.AssetManager
             return bundle;
         }
 
-        private void PreprocessJoints() {
+        private void PreprocessJoints()
+        {
             RecursiveUuidGathering(model.DefaultScene.VisualChildren.First());
             var joints = (model.Extras as JsonDictionary)["joints"] as JsonList;
-            foreach (var j in joints) {
+            foreach (var j in joints)
+            {
                 preprocessedJoints[(j as JsonDictionary).Get<string>("occurrenceOneUUID")].Add((j as JsonDictionary).Get<string>("occurrenceTwoUUID"));
                 preprocessedJoints[(j as JsonDictionary).Get<string>("occurrenceTwoUUID")].Add((j as JsonDictionary).Get<string>("occurrenceOneUUID"));
             }
         }
 
-        private void RecursiveUuidGathering(Node root) {
-            if ((root.Extras as JsonDictionary)?.ContainsKey("uuid") ?? false) {
+        private void RecursiveUuidGathering(Node root)
+        {
+            if ((root.Extras as JsonDictionary)?.ContainsKey("uuid") ?? false)
+            {
                 preprocessedJoints.Add((string)(root.Extras as JsonDictionary)!["uuid"], new List<string>());
             }
             foreach (Node child in root.VisualChildren)
                 RecursiveUuidGathering(child);
         }
 
-        
+
 
         private Bundle CreateBundle(Node node, Node parentNode = null, Bundle parentBundle = null)
         {
@@ -96,7 +112,8 @@ namespace SynthesisAPI.AssetManager
 
             AddComponents(bundle, node, parentNode);
 
-            foreach (Node child in node.VisualChildren) {
+            foreach (Node child in node.VisualChildren)
+            {
                 bundle.ChildBundles.Add(CreateBundle(child, node, bundle));
             }
 
@@ -105,7 +122,8 @@ namespace SynthesisAPI.AssetManager
 
         private void AddComponents(Bundle bundle, Node node, Node parent = null)
         {
-            if (parent != null) {
+            if (parent != null)
+            {
                 var scale = node.LocalTransform.Scale;
                 var parentScale = parent.LocalTransform.Scale;
                 scale = new System.Numerics.Vector3(scale.X * parentScale.X, scale.Y * parentScale.Y, scale.Z * parentScale.Z);
@@ -114,8 +132,6 @@ namespace SynthesisAPI.AssetManager
                 node.LocalTransform = localTransform;
             }
 
-            
-
             bundle.Components.Add(ParseTransform(node.LocalTransform, node.Name));
             if (node.Mesh != null)
             {
@@ -123,7 +139,8 @@ namespace SynthesisAPI.AssetManager
                 bundle.Components.Add(ParseMesh(node.Mesh, new Vector3D(sc.X, sc.Y, sc.Z)));
                 bundle.Components.Add(ParseMeshCollider(node.Mesh));
 
-                if ((node.Extras as JsonDictionary)?.ContainsKey("uuid") ?? false) {
+                if ((node.Extras as JsonDictionary)?.ContainsKey("uuid") ?? false)
+                {
                     var rigid = ParseRigidbody(node.Mesh);
                     bundle.Components.Add(rigid);
                     var uuid = (node.Extras as JsonDictionary)?.Get<string>("uuid");
@@ -132,18 +149,27 @@ namespace SynthesisAPI.AssetManager
 
                     // Identify parent physics body (if any)
                     var seniorRB = GetSeniorRigidbody(bundle.ParentBundle);
-                    if (seniorRB != null) {
-                        if (seniorRB.ExportedJointUuid == string.Empty) {
+                    if (seniorRB != null)
+                    {
+                        if (seniorRB.ExportedJointUuid == string.Empty)
+                        {
                             defaultRigidjoints.Add((seniorRB, rigid));
-                        } else {
-                            if (!preprocessedJoints[uuid].Contains(seniorRB.ExportedJointUuid)) {
+                        }
+                        else
+                        {
+                            if (!preprocessedJoints[uuid].Contains(seniorRB.ExportedJointUuid))
+                            {
                                 defaultRigidjoints.Add((seniorRB, rigid));
                             }
                         }
-                    } else {
+                    }
+                    else
+                    {
                         Logger.Log("Not rigidbody???", LogLevel.Warning);
                     }
-                } else if (parent == null) {
+                }
+                else if (parent == null)
+                {
                     var rigid = ParseRigidbody(node.Mesh);
                     bundle.Components.Add(rigid);
                     return;
@@ -152,18 +178,21 @@ namespace SynthesisAPI.AssetManager
                 {
 
                     var seniorRB = GetSeniorRigidbody(bundle.ParentBundle);
-                    if(seniorRB != null)
+                    if (seniorRB != null)
                     {
                         seniorRB.mass += ParseMass(node.Mesh) ?? 0;
                     }
                 }
-            } else if (parent == null) {
+            }
+            else if (parent == null)
+            {
                 var rigid = ParseRigidbody(null);
                 bundle.Components.Add(rigid);
             }
         }
 
-        private EnvironmentManager.Components.Rigidbody? GetSeniorRigidbody(Bundle? b) {
+        private EnvironmentManager.Components.Rigidbody? GetSeniorRigidbody(Bundle? b)
+        {
             if (b == null)
                 return null;
             else if (b.Components.HasType<EnvironmentManager.Components.Rigidbody>())
@@ -246,14 +275,16 @@ namespace SynthesisAPI.AssetManager
 
             var allJoints = new EnvironmentManager.Components.Joints();
 
-            foreach (var jointObj in joints) {
+            foreach (var jointObj in joints)
+            {
                 var joint = jointObj as JsonDictionary;
                 string name = joint.Get("header").Get<string>("name"); // Probably not gonna be used
                 Vector3D anchor = ParseJointVector3D(joint.Get("origin"));
                 EnvironmentManager.Components.Rigidbody parent = rigidbodies[joint.Get<string>("occurrenceOneUUID")];
                 EnvironmentManager.Components.Rigidbody child = rigidbodies[joint.Get<string>("occurrenceTwoUUID")];
 
-                if (joint.ContainsKey("revoluteJointMotion")) {
+                if (joint.ContainsKey("revoluteJointMotion"))
+                {
                     var revoluteData = joint.Get("revoluteJointMotion");
                     Vector3D axis = ParseJointVector3D(revoluteData.Get("rotationAxisVector"));
                     // TODO: Support limits
@@ -263,7 +294,9 @@ namespace SynthesisAPI.AssetManager
                     result.ConnectedParent = parent;
                     result.ConnectedChild = child;
                     allJoints.Add(result);
-                } else { // For yet to be supported and fixed motion joints
+                }
+                else
+                { // For yet to be supported and fixed motion joints
                     var result = new EnvironmentManager.Components.FixedJoint();
                     result.Anchor = anchor;
                     result.ConnectedParent = parent;
@@ -273,7 +306,8 @@ namespace SynthesisAPI.AssetManager
             }
 
             // Add the remaining potential joints
-            foreach (var x in defaultRigidjoints) {
+            foreach (var x in defaultRigidjoints)
+            {
                 var j = new EnvironmentManager.Components.FixedJoint();
                 j.Anchor = new Vector3D(0, 0, 0); // Pretty sure this doesn't matter. From what I can tell, Unity FixedJoints only really care about the bodies
                 j.ConnectedParent = x.Item1;
@@ -289,9 +323,11 @@ namespace SynthesisAPI.AssetManager
                     (double)dict.TryGet<decimal>("y", 0), (double)dict.TryGet<decimal>("z", 0));
     }
 
-    public static class GltfAssetExtensions {
+    public static class GltfAssetExtensions
+    {
         public static T Get<T>(this JsonDictionary dict, string key) => (T)dict[key];
-        public static T TryGet<T>(this JsonDictionary dict, string key, T defaultObj) {
+        public static T TryGet<T>(this JsonDictionary dict, string key, T defaultObj)
+        {
             if (dict.ContainsKey(key))
                 return (T)dict[key];
             else
@@ -299,7 +335,8 @@ namespace SynthesisAPI.AssetManager
         }
         public static JsonDictionary Get(this JsonDictionary dict, string key) => (JsonDictionary)dict[key];
 
-        public static void ForEach<T>(this IEnumerable<T> e, Action<int, T> method) {
+        public static void ForEach<T>(this IEnumerable<T> e, Action<int, T> method)
+        {
             for (int i = 0; i < e.Count(); ++i)
                 method(i, e.ElementAt(i)); // I really hope this holds reference
         }

@@ -1,17 +1,25 @@
 ﻿using SynthesisAPI.AssetManager;
 using SynthesisAPI.UIManager.VisualElements;
 using SynthesisAPI.Utilities;
+using SynthesisCore.EntityControl;
+using SynthesisCore.EntityMovement;
+using System.IO;
 
 namespace SynthesisCore.UI.Windows
 {
     public class EntityItem
     {
         public VisualElement EntityElement { get; }
+        private GltfAsset ModelAsset { get; }
 
-        public EntityItem(VisualElementAsset entityAsset, FileInfo fileInfo)
+        private static bool firstSpawn = true;
+
+        public EntityItem(VisualElementAsset entityAsset, GltfAsset modelAsset, FileInfo fileInfo)
         {
             EntityElement = entityAsset.GetElement("entity");
-            
+
+            ModelAsset = modelAsset;
+
             SetInformation(fileInfo);
             RegisterButtons();
         }
@@ -30,18 +38,21 @@ namespace SynthesisCore.UI.Windows
             Button deleteButton = (Button) EntityElement.Get("delete-button");
             Button spawnButton = (Button) EntityElement.Get("spawn-button");
             
-            // trash can button to delete Environment from imported list
             deleteButton.Subscribe(x =>
             {
                 EntityElement.RemoveFromHierarchy();
-                // delete from registered entities (to come)
+                // TODO delete from registered entities (to come)
             });
             
-            // check mark button to set Environment
             spawnButton.Subscribe(x =>
             {
-                Logger.Log("Spawn entity");
-                // implementation to add entity from file reference (to come)
+                var e = SimulationManager.SpawnEntity(ModelAsset, Path.GetFileNameWithoutExtension(ModelAsset.Name));
+                MoveArrows.MoveEntity(e);
+                if (firstSpawn)
+                {
+                    Logger.Log("Press Return or Escape to stop moving entity");
+                    firstSpawn = false; // TODO put this in preferences so it's tracked through application launches
+                }
             });
         }
 

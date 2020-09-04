@@ -3,6 +3,7 @@ using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.UIComponents;
 using SynthesisAPI.UIManager.VisualElements;
 using SynthesisAPI.Utilities;
+using SynthesisCore.EntityControl;
 
 namespace SynthesisCore.UI.Windows
 {
@@ -24,6 +25,8 @@ namespace SynthesisCore.UI.Windows
         private void OnWindowOpen(VisualElement entitiesWindow)
         {
             Window = entitiesWindow;
+            Window.SetStyleProperty("position", "absolute");
+            Window.IsDraggable = true;
             EntityList = (ListView) Window.Get("entity-list");
             
             LoadWindowContents();
@@ -32,10 +35,11 @@ namespace SynthesisCore.UI.Windows
         
         private void LoadWindowContents()
         {
+            EntityImportManager.RefreshModelList();
             // concrete implementation waiting on file browser, currently just using this stub code to show functionality
-            for (int i = 0; i < 20; i++)
+            foreach (var i in EntityImportManager.GltfAssets)
             {
-                EntityList.Add(new EntityItem(EntityAsset, new FileInfo("Godspeed Robot Team 2374", "3d")).EntityElement);
+                EntityList.Add(new EntityItem(EntityAsset, i, new FileInfo(i.Name, "3d")).EntityElement); // TODO date
             }
         }
 

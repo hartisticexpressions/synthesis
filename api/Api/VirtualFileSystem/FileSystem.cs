@@ -27,6 +27,8 @@ namespace SynthesisAPI.VirtualFileSystem
 
         public static readonly string TestPath = BasePath + TestPathLocal;
 
+        public static readonly string TempPath = Path.GetTempPath() + Path.DirectorySeparatorChar; // TODO put it in BasePath/temp instead?
+
         /// <summary>
         /// Add a new entry to a the file system at a given destination
         /// </summary>
@@ -173,6 +175,8 @@ namespace SynthesisAPI.VirtualFileSystem
         internal static TEntry? TraverseInner<TEntry>(string path) where TEntry : class, IEntry
         {
             var actualPath = CheckPath(path);
+            if (actualPath.Length == 0)
+                return Instance.RootNode as TEntry;
             return Instance.RootNode.TraverseInner<TEntry>(actualPath);
         }
 
@@ -225,6 +229,8 @@ namespace SynthesisAPI.VirtualFileSystem
         internal static IEntry? TraverseInner(string[] path)
         {
             var actualPath = CheckPath(path);
+            if (actualPath.Length == 0)
+                return Instance.RootNode;
             return Instance.RootNode.TraverseInner(actualPath);
         }
 
@@ -244,6 +250,8 @@ namespace SynthesisAPI.VirtualFileSystem
         internal static IEntry? TraverseInner(string path)
         {
             var actualPath = CheckPath(path);
+            if (actualPath.Length == 0)
+                return Instance.RootNode;
             return Instance.RootNode.TraverseInner(actualPath);
         }
 
@@ -367,10 +375,10 @@ namespace SynthesisAPI.VirtualFileSystem
             {
                 using var _ = ApiCallSource.ForceInternalCall();
                 RootNode = new Directory("", Permissions.PublicReadOnly); // root node name is "" so paths begin with "/" (since path strings are split at '/')
-                RootNode.AddEntryInner(new Directory("environment", Permissions.PublicReadWrite));
                 RootNode.AddEntryInner(new Directory("modules", Permissions.PublicReadWrite));
                 RootNode.AddEntryInner(new Directory("runtime", Permissions.PublicReadWrite));
                 RootNode.AddEntryInner(new Directory("temp", Permissions.PublicReadWrite));
+                RootNode.AddEntryInner(new Directory("config", Permissions.PublicReadWrite));
             }
 
             /// <summary>

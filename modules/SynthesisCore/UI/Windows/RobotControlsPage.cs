@@ -3,7 +3,6 @@ using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EnvironmentManager.Components;
 using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.VisualElements;
-using SynthesisAPI.Utilities;
 using SynthesisCore.EntityControl;
 using SynthesisCore.Simulation;
 using System;
@@ -68,11 +67,11 @@ namespace SynthesisCore.UI.Windows
             entityDropdown.ItemHeight = 15;
             entitySelector.Add(entityDropdown);
 
-            selectedEntity = controllableEntities()[entityDropdown.Selected];
+            UpdateDropdownSelectedEntity();
             setupControlsButton = (Button)Page.Get("setup-controls-button");
 
             entityDropdown.Subscribe(_ => {
-                selectedEntity = controllableEntities()[entityDropdown.Selected]; // Select entity
+                UpdateDropdownSelectedEntity();
                 LookAtEntity();
                 
                 // Update the rest of the controls page based on the selected entity
@@ -102,6 +101,11 @@ namespace SynthesisCore.UI.Windows
                     RemoveEntityControlsSection();
                 }
             });
+        }
+
+        private static void UpdateDropdownSelectedEntity()
+        {
+            selectedEntity = entityDropdown.Selected != null ? (Entity?)controllableEntities()[entityDropdown.Selected] : null;
         }
 
         private static void AddEntityControlsSection()

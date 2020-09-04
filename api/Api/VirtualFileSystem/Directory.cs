@@ -1,5 +1,6 @@
 ﻿using SynthesisAPI.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +11,7 @@ namespace SynthesisAPI.VirtualFileSystem
     /// <summary>
     /// A wrapper for a dictionary of entries that gives structure to the virtual file system
     /// </summary>
-    public sealed class Directory : IEntry
+    public sealed class Directory : IEntry, IEnumerable<KeyValuePair<string, IEntry>>
     {
         /// <summary>
         /// Initialize Entry data
@@ -371,6 +372,24 @@ namespace SynthesisAPI.VirtualFileSystem
         {
             ApiCallSource.AssertAccess(Permissions, Access.Read);
             return Entries.ContainsKey(key);
+        }
+
+        [ExposedApi]
+        IEnumerator<KeyValuePair<string, IEntry>> IEnumerable<KeyValuePair<string, IEntry>>.GetEnumerator()
+        {
+            using var _ = ApiCallSource.StartExternalCall();
+            ApiCallSource.AssertAccess(Permissions, Access.Read);
+            // return Entries.Where(e => e.Key != "." && e.Key != "..").GetEnumerator(); // Remove . and .. entries from enumerator
+            return Entries.GetEnumerator();
+        }
+
+        [ExposedApi]
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            using var _ = ApiCallSource.StartExternalCall();
+            ApiCallSource.AssertAccess(Permissions, Access.Read);
+            // return Entries.Where(e => e.Key != "." && e.Key != "..").GetEnumerator(); // Remove . and .. entries from enumerator
+            return Entries.GetEnumerator();
         }
 
         [ExposedApi]

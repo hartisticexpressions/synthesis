@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -21,12 +22,14 @@ namespace SynthesisAPI.AssetManager
 
         public override IEntry Load(byte[] data)
         {
-            string tempFile = Path.GetTempPath() + "\\synthesis_temp.wav";
+            string tempFile = FileSystem.TempPath + "synthesis_temp.wav";
             File.WriteAllBytes(tempFile, data);
             var request = UnityWebRequestMultimedia.GetAudioClip(tempFile, AudioType.WAV);
             var handle = request.SendWebRequest();
             while (!handle.isDone)
-                _ = 0; //
+            {
+                Thread.Sleep(100);
+            }
             _clip = DownloadHandlerAudioClip.GetContent(request);
             return this;
         }

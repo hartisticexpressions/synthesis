@@ -1,5 +1,6 @@
 ﻿using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EnvironmentManager.Components;
+using SynthesisAPI.Utilities;
 
 namespace SynthesisCore.Simulation
 {
@@ -23,6 +24,10 @@ namespace SynthesisCore.Simulation
             set
             {
                 motorCount = System.Math.Max(value, 1);
+                if(motorCount != value)
+                {
+                    Logger.Log("Cannot set motor count to be less than 1", LogLevel.Warning);
+                }
             }
         }
         public double GearReduction;
