@@ -143,18 +143,21 @@ namespace SynthesisCore.UI
 
             if (!_isDeselectDropdownAssigned) InputManager.AssignDigitalInput("_deselect dropdown", new MouseDown("mouse 0"));
 
+            //assign button once for all dropdowns
+            if (!_isDeselectDropdownAssigned)
+                InputManager.AssignDigitalInput("_deselect dropdown", new MouseDown("mouse 0"));
+
+            //mouse click listener to close dropdown
             EventBus.NewTagListener("input/_deselect dropdown", e =>
             {
                 if (e is MouseDownEvent downEvent && downEvent.State == DigitalState.Down)
                 {
                     var point = new Vector2D(downEvent.MousePosition.X, ApplicationWindow.Height - downEvent.MousePosition.Y);
-                    if (_isListViewVisible && !_listView.ContainsPoint(point) && !_button.ContainsPoint(point))
-                    {
+                    if (_isListViewVisible && !_listView.ContainsPoint(point) && !_button.ContainsPoint(point)) //auto close if clicked anywhere but dropdown
                         CloseListView();
-                    }
                 }
             });
-           
+
             _isDeselectDropdownAssigned = true;
         }
 
@@ -203,7 +206,6 @@ namespace SynthesisCore.UI
                                     button.SetStyleProperty("margin-bottom", "0");
                                 });
             RefreshListView();
-            //lose focus
         }
         private void OnOptionClick(Button button, int index)
         {
@@ -266,7 +268,7 @@ namespace SynthesisCore.UI
 
         private void Select(string option)
         {
-            if(Selected != option)
+            if (Selected != option)
             {
                 int index = _options.IndexOf(option);
                 if (index == -1) //does not exist
@@ -282,7 +284,7 @@ namespace SynthesisCore.UI
                 }
             }
         }
-        
+
         private void RefreshButton()
         {
             _button.Text = Selected == null ? " " : Selected;

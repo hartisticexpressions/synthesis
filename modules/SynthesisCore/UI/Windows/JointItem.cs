@@ -14,11 +14,15 @@ namespace SynthesisCore.UI
 
         public VisualElement JointElement { get; }
         
-        public JointItem(VisualElementAsset jointAsset, MotorAssembly assembly)
+        public JointItem(VisualElementAsset jointAsset, MotorAssembly assembly) : this(jointAsset)
+        {
+            RegisterJointButtons(assembly);
+        }
+
+        public JointItem(VisualElementAsset jointAsset)
         {
             jointItems.Add(this);
             JointElement = jointAsset.GetElement("joint");
-            RegisterJointButtons(assembly);
         }
 
         private void RegisterJointButtons(MotorAssembly assembly)
@@ -110,10 +114,14 @@ namespace SynthesisCore.UI
 
             highlightButton.Subscribe(x =>
             {
-                UnHighlightAllButtons();
-                HighlightButton(true);
+                //toggle highlight
+                if (!IsHighlighted)
+                {
+                    UnHighlightAllButtons();
+                    HighlightButton(true);
 
-                Highlighter.HighlightJoint(assembly.Joint, assembly.Entity);
+                    Highlighter.HighlightJoint(assembly.Joint, assembly.Entity);
+                }
             });
         }
 
@@ -121,13 +129,15 @@ namespace SynthesisCore.UI
         {
             if (stick)
                 IsHighlighted = true;
-            highlightButton.SetStyleProperty("background-color", "rgba(255, 255, 0, 1)");
+            if(highlightButton != null)
+                highlightButton.SetStyleProperty("background-color", "rgba(255, 255, 0, 1)");
         }
 
         private void UnHighlightButton()
         {
             IsHighlighted = false;
-            highlightButton.SetStyleProperty("background-color", "rgba(255, 255, 0, 0)");
+            if (highlightButton != null)
+                highlightButton.SetStyleProperty("background-color", "rgba(255, 255, 0, 0)");
         }
 
         public static void UnHighlightAllButtons()

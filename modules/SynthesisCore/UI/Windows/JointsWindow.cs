@@ -14,12 +14,18 @@ namespace SynthesisCore.UI
         public static Panel Panel { get; private set; }
         private static VisualElement Window;
         private static VisualElementAsset JointAsset = null;
+        private static VisualElementAsset NoJointsAsset = null;
         private static ListView JointList;
+
+        private static bool hasJoints = false;
 
         public static void CreateWindow()
         {
             if (JointAsset == null)
                 JointAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Joint.uxml");
+
+            if (NoJointsAsset == null)
+                NoJointsAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/JointNone.uxml");
 
             var jointsAssset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Joints.uxml");
 
@@ -43,8 +49,12 @@ namespace SynthesisCore.UI
 
         public static void OnWindowClose()
         {
-            JointItem.UnHighlightAllButtons();
-            Highlighter.UnhighlightJoint();
+            if (hasJoints)
+            {
+                JointItem.UnHighlightAllButtons();
+                Highlighter.UnhighlightJoint();
+            }
+
             UIManager.ClosePanel(Panel.Name);
             RemoveWindowsContents();
         }
@@ -59,6 +69,7 @@ namespace SynthesisCore.UI
                     if (Parent.IsDescendant(Selectable.Selected.Entity.Value, entity))
                     {
                         var motorAssemblyManager = entity.GetComponent<MotorAssemblyManager>();
+                        hasJoints = true;
                         if (motorAssemblyManager != null)
                         {
                             foreach (var assembly in motorAssemblyManager.AllMotorAssemblies)
@@ -67,7 +78,11 @@ namespace SynthesisCore.UI
                             }
                         }
                     }
-                    else Logger.Log("No joints are associated with this entity.", LogLevel.Debug);
+                    else
+                    {
+                        hasJoints = false;
+                        JointList.Add(new JointItem(NoJointsAsset).JointElement);
+                    }
                 }
             }
         }

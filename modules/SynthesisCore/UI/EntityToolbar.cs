@@ -46,8 +46,7 @@ namespace SynthesisCore.UI
                     _ => {
                         if (isEntitySelected)
                         {
-                            openedMoveArrows = !openedMoveArrows;
-                            if (openedMoveArrows)
+                            if (!MoveArrows.IsMovingEntity)
                                 MoveArrows.MoveEntity(Selectable.Selected.Entity.Value);
                             else
                                 MoveArrows.StopMovingEntity();

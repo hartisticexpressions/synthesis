@@ -33,6 +33,7 @@
     <string>UI/uxml/DrivetrainConfiguration.uxml</string>
     <string>UI/uxml/Controls.uxml</string>
     <string>UI/uxml/Control.uxml</string>
+    <string>UI/uxml/JointNone.uxml</string>
     <string>UI/uxml/Dropdown.uxml</string>
     <string>UI/uxml/Option.uxml</string>
     <string>UI/uxml/Toggle.uxml</string>
