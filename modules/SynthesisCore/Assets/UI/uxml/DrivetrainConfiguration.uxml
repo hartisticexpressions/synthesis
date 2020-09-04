@@ -8,7 +8,8 @@
         </ui:VisualElement>
         <ui:VisualElement name="content" class="window-content">
             <ui:ListView focusable="True" name="content-list" style="height: 200px;" >
-				<ui:VisualElement name="motor-type-dropdown-container" />
+				<ui:Label name="motor-type-configure-label" class="motor-type-configure-label" />
+				<ui:VisualElement name="motor-type-dropdown-container" class="motor-type-dropdown-container" />
 			</ui:ListView>
         </ui:VisualElement>
         <ui:VisualElement name="bottom-button-panel" class="window-bottom-button-panel">

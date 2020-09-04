@@ -14,6 +14,7 @@ namespace SynthesisCore.UI.Windows
         public Panel Panel { get; }
         private VisualElement Window;
         private Dropdown motorTypeDropdown;
+        private Label motorTypeLabel;
 
         private int motorIndex = 0;
         private List<MotorAssembly>? motorAssemblies => RobotControlsPage.selectedEntity?.GetComponent<MotorAssemblyManager>()?.AllMotorAssemblies;
@@ -41,16 +42,18 @@ namespace SynthesisCore.UI.Windows
             motorIndex = 0;
             HighlightNextMotor();
 
-
             LoadWindowContents();
             RegisterButtons();
         }
 
         private void LoadWindowContents()
         {
+            motorTypeLabel = (Label)Window.Get("motor-type-configure-label");
+            UpdateMotorTypeLabel();
+
             var dropdownContainer = Window.Get("motor-type-dropdown-container");
 
-            motorTypeDropdown = new Dropdown("motor-type-dropdown", 0, new string[] { "Other", "Left drivetrain motor", "Right drivetrain motor" });
+            motorTypeDropdown = new Dropdown("motor-type-dropdown", 0, new string[] { "Other", "Left drivetrain motor", "Right drivetrain motor", "Ignore" });
             motorTypeDropdown.ItemHeight = 25;
             dropdownContainer.Add(motorTypeDropdown);
         }
@@ -66,6 +69,8 @@ namespace SynthesisCore.UI.Windows
                         break;
                     case "Right drivetrain motor":
                         pendingRightDrivetrainMotors.Add(motorAssemblies[motorIndex]);
+                        break;
+                    case "Ignore":
                         break;
                     case "Other":
                     default:
@@ -89,6 +94,7 @@ namespace SynthesisCore.UI.Windows
                 else
                 {
                     HighlightNextMotor();
+                    UpdateMotorTypeLabel();
                 }
             });
 
@@ -97,6 +103,11 @@ namespace SynthesisCore.UI.Windows
                 Highlighter.UnhighlightJoint();
                 UIManager.ClosePanel("Configure Drivetrain Motors");
             });
+        }
+
+        private void UpdateMotorTypeLabel()
+        {
+            motorTypeLabel.Text = $"Select type of highlighted motor {motorIndex + 1}/{motorAssemblies.Count}";
         }
 
         private void HighlightNextMotor()

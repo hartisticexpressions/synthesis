@@ -43,3 +43,12 @@
     margin-bottom: 10px;
     flex-shrink: 0;
 }
+
+.motor-type-configure-label {
+	margin-bottom: 25px;
+}
+
+.motor-type-dropdown-container {
+	width: 200px;
+	align-self: center;
+}
