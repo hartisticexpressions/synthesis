@@ -60,7 +60,7 @@ namespace SynthesisAPI.UIManager.VisualElements
             return null!;
         }
 
-        public void Subscribe(Action<IEvent> action)
+        public void Subscribe(EventBus.EventBus.EventCallback<IEvent> action)
         {
             _callback = e => action(e);
             EventBus.EventBus.NewTagListener(EventTag, _callback);

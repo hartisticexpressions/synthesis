@@ -85,7 +85,7 @@ namespace SynthesisAPI.UIManager.VisualElements
             Element.SetValueWithoutNotify(value);
         }
 
-        public void SubscribeOnChange(Action<IEvent> action)
+        public void SubscribeOnChange(EventBus.EventBus.EventCallback<IEvent> action)
         {
             _changeCallback = e => action(e);
             EventBus.EventBus.NewTagListener(ChangeEventTag, _changeCallback);
@@ -100,7 +100,7 @@ namespace SynthesisAPI.UIManager.VisualElements
             }
         }
 
-        public void SubscribeOnFocusLeave(Action<IEvent> action)
+        public void SubscribeOnFocusLeave(EventBus.EventBus.EventCallback<IEvent> action)
         {
             _focusCallback = e => action(e);
             EventBus.EventBus.NewTagListener(FocusLeaveEventTag, _focusCallback);

@@ -225,9 +225,9 @@ namespace SynthesisCore.UI
             EventBus.Push(EventTag, new SelectionEvent(Name, Selected));
         }
 
-        public void Subscribe(Action<IEvent> action)
+        public void Subscribe(EventBus.EventCallback action)
         {
-            EventBus.NewTagListener(EventTag, e => action(e));
+            EventBus.NewTagListener(EventTag, action);
         }
 
         public bool Add(string option)

@@ -56,17 +56,10 @@ namespace TestApi
             Count1 -= 1;
         }
 
-        public void TestMethod4(IEvent e)
+        public void TestMethod4(ParameterizedEvent e)
         {
-            if (e is ParameterizedEvent paramEvent)
-            {
-                Num = paramEvent.NumberArg;
-                String = paramEvent.StringArg;
-            }
-            else
-            {
-                throw new Exception();
-            }
+            Num = e.NumberArg;
+            String = e.StringArg;
         }
     }
 

@@ -7,6 +7,7 @@ namespace SynthesisAPI.EventBus
     public static class EventBus
     {
         public delegate void EventCallback(IEvent eventInfo);
+        public delegate void EventCallback<in TEvent>(TEvent eventInfo) where TEvent : IEvent;
 
         /// <summary>
         /// Activates all callback functions that are listening to a particular
@@ -17,10 +18,11 @@ namespace SynthesisAPI.EventBus
         /// <returns>True if message was pushed to subscribers, false if no subscribers were found</returns>
         public static bool Push<TEvent>(TEvent eventInfo) where TEvent : IEvent
         {
-            var type = eventInfo.Name();
-            if (Instance.TypeSubscribers.ContainsKey(type) && Instance.TypeSubscribers[type] != null)
+            var type = typeof(TEvent);
+            if (TypeSubscribers.TryGetValue(type, out var obj) && obj != null)
             {
-                Instance.TypeSubscribers[type](eventInfo);
+                var callback = (EventCallback<TEvent>)obj;
+                callback(eventInfo);
                 return true;
             }
             return false;
@@ -38,19 +40,13 @@ namespace SynthesisAPI.EventBus
 
         public static bool Push<TEvent>(string tag, TEvent eventInfo) where TEvent : IEvent
         {
-            string type = eventInfo.Name();
-            if (Instance.TagSubscribers.ContainsKey(tag) && Instance.TagSubscribers[tag] != null)
+            if (TagSubscribers.TryGetValue(tag, out var callback) && callback != null)
             {
-                Instance.TagSubscribers[tag](eventInfo);
+                callback(eventInfo);
                 Push<TEvent>(eventInfo);
                 return true;
             }
-            if (Instance.TypeSubscribers.ContainsKey(type) && Instance.TypeSubscribers[type] != null)
-            {
-                Instance.TypeSubscribers[type](eventInfo);
-                return true;
-            }
-            return false;
+            return Push<TEvent>(eventInfo);
         }
 
         /// <summary>
@@ -78,13 +74,20 @@ namespace SynthesisAPI.EventBus
         /// </summary>
         /// <typeparam name="TEvent">Type of event to listen for</typeparam>
         /// <param name="callback">The callback function to be activated</param>
-        public static void NewTypeListener<TEvent>(EventCallback callback) where TEvent : IEvent
+
+        public static void NewTypeListener<TEvent>(EventCallback<TEvent> callback) where TEvent : IEvent
         {
-            string type = typeof(TEvent).FullName;
-            if (Instance.TypeSubscribers.ContainsKey(type))
-                Instance.TypeSubscribers[type] += callback;
+            var type = typeof(TEvent);
+            if (TypeSubscribers.TryGetValue(type, out var obj) && obj != null)
+            {
+                var existingCallback = (EventCallback<TEvent>)obj;
+                existingCallback += callback;
+                TypeSubscribers[type] = existingCallback;
+            }
             else
-                Instance.TypeSubscribers.Add(type, callback);
+            {
+                TypeSubscribers.Add(type, callback);
+            }
         }
 
         /// <summary>
@@ -95,10 +98,10 @@ namespace SynthesisAPI.EventBus
         /// <param name="callback">The callback function to be activated</param>
         public static void NewTagListener(string tag, EventCallback callback)
         {
-            if (Instance.TagSubscribers.ContainsKey(tag))
-                Instance.TagSubscribers[tag] += callback;
+            if (TagSubscribers.ContainsKey(tag) && TagSubscribers[tag] != null)
+                TagSubscribers[tag] += callback;
             else
-                Instance.TagSubscribers.Add(tag, callback);
+                TagSubscribers.Add(tag, callback);
         }
 
         /// <summary>
@@ -107,15 +110,17 @@ namespace SynthesisAPI.EventBus
         /// <typeparam name="TEvent">Type of event to stop listening for</typeparam>
         /// <param name="callback">The callback function to be removed</param>
         /// <returns>True if listener was successfully removed and false if type was not found</returns>
-        public static bool RemoveTypeListener<TEvent>(EventCallback callback) where TEvent : IEvent
+        public static bool RemoveTypeListener<TEvent>(EventCallback<TEvent> callback) where TEvent : IEvent
         {
-            string type = typeof(TEvent).FullName;
-            if (TypeSubscribers.ContainsKey(type) && Instance.TypeSubscribers[type] != null)
+            var type = typeof(TEvent);
+            if (TypeSubscribers.TryGetValue(type, out var obj) && obj != null)
             {
-                if (Instance.TypeSubscribers[type].GetInvocationList().Contains(callback))
+                var existingCallback = (EventCallback<TEvent>)obj;
+                if (existingCallback.GetInvocationList().Contains(callback))
                 {
                     // ReSharper disable once DelegateSubtraction
-                    TypeSubscribers[type] -= callback;
+                    existingCallback -= callback;
+                    TypeSubscribers[type] = existingCallback;
                     return true;
                 }
                 return false;
@@ -125,8 +130,8 @@ namespace SynthesisAPI.EventBus
 
         public static bool RemoveAllTypeListeners<TEvent>() where TEvent : IEvent
         {
-            string type = typeof(TEvent).FullName;
-            if (TypeSubscribers.ContainsKey(type) && Instance.TypeSubscribers[type] != null)
+            var type = typeof(TEvent);
+            if (TypeSubscribers.ContainsKey(type))
             {
                 TypeSubscribers.Remove(type);
                 return true;
@@ -155,7 +160,7 @@ namespace SynthesisAPI.EventBus
 
         public static bool RemoveAllTagListeners(string tag)
         {
-            if (TagSubscribers.ContainsKey(tag) && TagSubscribers[tag] != null)
+            if (TagSubscribers.ContainsKey(tag))
             {
                 TagSubscribers.Remove(tag);
                 return true;
@@ -169,19 +174,19 @@ namespace SynthesisAPI.EventBus
         }
 
         public static bool HasTagSubscriber(string tag) => TagSubscribers.ContainsKey(tag);
-        public static bool HasTypeSubscriber(Type type) => TypeSubscribers.ContainsKey(type.FullName);
+        public static bool HasTypeSubscriber(Type type) => TypeSubscribers.ContainsKey(type);
 
         private class Inner
         {
-            public Dictionary<string, EventCallback> TypeSubscribers;
+            public Dictionary<Type, object> TypeSubscribers;
             public Dictionary<string, EventCallback> TagSubscribers;
 
-            public static void ResetAllListeners()
+            public static void ResetAllListeners() // TODO remove this?
             {
                 if (AppDomain.CurrentDomain.GetAssemblies()
                     .Any(a => a.FullName.ToLowerInvariant().StartsWith("nunit.framework")))
                 {
-                    _inst!.TypeSubscribers = new Dictionary<string, EventCallback>();
+                    _inst!.TypeSubscribers = new Dictionary<Type, object>();
                     _inst!.TagSubscribers = new Dictionary<string, EventCallback>();
                 }
                 else
@@ -192,7 +197,7 @@ namespace SynthesisAPI.EventBus
 
             private Inner()
             {
-                TypeSubscribers = new Dictionary<string, EventCallback>();
+                TypeSubscribers = new Dictionary<Type, object>();
                 TagSubscribers = new Dictionary<string, EventCallback>();
             }
 
@@ -200,7 +205,7 @@ namespace SynthesisAPI.EventBus
             public static Inner InnerInstance => _inst ??= new Inner();
         }
 
-        private static Dictionary<string, EventCallback> TypeSubscribers => Instance.TypeSubscribers;
+        private static Dictionary<Type, object> TypeSubscribers => Instance.TypeSubscribers;
         private static Dictionary<string, EventCallback> TagSubscribers => Instance.TagSubscribers;
 
         private static Inner Instance => Inner.InnerInstance;

@@ -55,7 +55,7 @@ namespace SynthesisCore.UI
         {
             EventBus.NewTypeListener<ShowPanelEvent>(info =>
             {
-                if (info != null && ((ShowPanelEvent)info).Panel.Name.Equals("Settings"))
+                if (info != null && info.Panel.Name.Equals("Settings"))
                 {
                     if(pageContainer.GetChildren().Any(e => e.Name == "robot-controls-page"))
                         RobotControlsPage.LookAtEntity();
@@ -64,7 +64,7 @@ namespace SynthesisCore.UI
 
             EventBus.NewTypeListener<ClosePanelEvent>(info =>
             {
-                if (info != null && ((ClosePanelEvent) info).Panel.Name.Equals("Settings"))
+                if (info != null && info.Panel.Name.Equals("Settings"))
                 {
                     GeneralPage.RefreshPreferences();
                     ControlsPage.RefreshPreferences();

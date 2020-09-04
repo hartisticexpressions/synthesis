@@ -104,7 +104,7 @@ namespace SynthesisAPI.UIManager.VisualElements
             }
         }
 
-        public void SubscribeOnSelectionChanged(Action<IEvent> callback)
+        public void SubscribeOnSelectionChanged(EventBus.EventBus.EventCallback<IEvent> callback)
         {
             EventBus.EventBus.RemoveTagListener(SelectedEventTag, _callback);
             _callback = e => callback(e);
@@ -113,7 +113,7 @@ namespace SynthesisAPI.UIManager.VisualElements
             Element.onSelectionChanged += l => EventBus.EventBus.Push(SelectedEventTag, new SelectionChangedEvent(l));
         }
 
-        public void SubscribeOnItemChosen(Action<IEvent> callback)
+        public void SubscribeOnItemChosen(EventBus.EventBus.EventCallback<IEvent> callback)
         {
             EventBus.EventBus.RemoveTagListener(ItemChosenEventTag, _callback);
             _callback = e => callback(e);

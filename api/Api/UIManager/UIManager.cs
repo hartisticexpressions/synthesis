@@ -10,6 +10,7 @@ using SynthesisAPI.AssetManager;
 using SynthesisAPI.Utilities;
 using SynthesisAPI.InputManager.Inputs;
 using SynthesisAPI.InputManager.InputEvents;
+using SynthesisAPI.EventBus;
 
 namespace SynthesisAPI.UIManager
 {
@@ -48,18 +49,18 @@ namespace SynthesisAPI.UIManager
         {
             if (LoadedTabs.ContainsKey(tab.Name))
             {
-                Logger.Log($"Adding tab with duplicate name {tab.Name}", LogLevel.Warning);
+                Logger.Log($"Cannot add tab with duplicate name \"{tab.Name}\"", LogLevel.Error);
             }
             else
             {
-                tab.buttonElement = new VisualElements.Button(CreateTab(tab.Name).Q<UnityButton>(name: "blank-tab"));
+                tab.tabElement = new VisualElements.Button(CreateTab(tab.Name).Q<UnityButton>(name: "blank-tab"));
                 LoadedTabs.Add(tab.Name, tab);
                 // TODO: Spawn in tab button
-                tab.buttonElement.Element.name = $"tab-{tab.Name}";
-                tab.buttonElement.Element.text = tab.Name;
-                tab.buttonElement.Element.clickable.clicked += () =>
+                tab.tabElement.Element.name = tab.TabElementName;
+                tab.tabElement.Element.text = tab.Name;
+                tab.tabElement.Element.clickable.clicked += () =>
                     EventBus.EventBus.Push("ui/select-tab", new SelectTabEvent(tab.Name));
-                Instance.TabContainer.Add(tab.buttonElement);
+                Instance.TabContainer.Add(tab.tabElement);
                 if (SelectedTabName == SelectedTabBlankName && tab.Name == DefaultSelectedTabName)
                     SelectTab(tab.Name);
             }
@@ -103,18 +104,18 @@ namespace SynthesisAPI.UIManager
             // Add class active-tab to currently selected tab
             foreach (var i in LoadedTabs)
             {
-                if (i.Value.buttonElement != null)
+                if (i.Value.tabElement != null)
                 {
-                    i.Value.buttonElement.RemoveFromClassList("active-tab");
-                    i.Value.buttonElement.AddToClassList("inactive-tab");
-                    StyleSheetManager.ApplyClassFromStyleSheets("inactive-tab", i.Value.buttonElement.UnityVisualElement);
+                    i.Value.tabElement.RemoveFromClassList("active-tab");
+                    i.Value.tabElement.AddToClassList("inactive-tab");
+                    StyleSheetManager.ApplyClassFromStyleSheets("inactive-tab", i.Value.tabElement.UnityVisualElement);
                 }
             }
             if (LoadedTabs.ContainsKey(SelectedTabName))
             {
-                LoadedTabs[SelectedTabName].buttonElement.AddToClassList("active-tab");
-                LoadedTabs[SelectedTabName].buttonElement.RemoveFromClassList("inactive-tab");
-                StyleSheetManager.ApplyClassFromStyleSheets("active-tab", LoadedTabs[SelectedTabName].buttonElement.UnityVisualElement);
+                LoadedTabs[SelectedTabName].tabElement.AddToClassList("active-tab");
+                LoadedTabs[SelectedTabName].tabElement.RemoveFromClassList("inactive-tab");
+                StyleSheetManager.ApplyClassFromStyleSheets("active-tab", LoadedTabs[SelectedTabName].tabElement.UnityVisualElement);
             }
 
             // TODO: Maybe some event
@@ -376,8 +377,7 @@ namespace SynthesisAPI.UIManager
                 EventBus.EventBus.NewTagListener($"ui/select-tab", info =>
                 {
                     string tabName = (info as SelectTabEvent)!.TabName;
-                    UIManager.SelectTab(tabName);
-                    // Logger.Log($"Selecting Tab: {tabName}");
+                    SelectTab(tabName);
                 });
             }
             

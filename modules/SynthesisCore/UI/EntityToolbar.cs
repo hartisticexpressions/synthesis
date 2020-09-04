@@ -1,9 +1,11 @@
 ﻿using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EnvironmentManager.Components;
+using SynthesisAPI.EventBus;
 using SynthesisAPI.Modules.Attributes;
 using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.UIComponents;
 using SynthesisAPI.UIManager.VisualElements;
+using SynthesisCore.Components;
 using SynthesisCore.EntityMovement;
 
 namespace SynthesisCore.UI
@@ -11,6 +13,7 @@ namespace SynthesisCore.UI
     public static class EntityToolbar
     {
         private static Tab entityTab;
+        private static Button entityTabButton;
         private static bool toolbarCreated = false;
         private static bool isToolbarBound = false;
 
@@ -75,59 +78,67 @@ namespace SynthesisCore.UI
             });
 
             UIManager.AddTab(entityTab);
+            entityTabButton = (Button)UIManager.RootElement.Get(entityTab.TabElementName);
 
             JointsWindow.CreateWindow();
             UIManager.AddPanel(JointsWindow.Panel);
+
+            EventBus.NewTypeListener<Selectable.SelectionChangeEvent>(OnSelectionChange);
 
             toolbarCreated = true;
         }
 
         private static void UpdateIcons()
         {
-            if (!toolbarCreated || !isToolbarBound)
+            if (isEntitySelected)
+            {
+                var name = Selectable.Selected.Entity?.GetComponent<Name>();
+                if (name != null)
+                {
+                    entityTabButton.Text = $"Entity - {name.Value}";
+                }
+                if (isToolbarBound)
+                {
+                    moveEntityButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", MoveEntityButtonIcon);
+                    deleteEntityButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", DeleteEntityButtonIcon);
+                    editJointsButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", EditJointsButtonIcon);
+                }
+            }
+            else
+            {
+                entityTabButton.Text = "Entity";
+                if (isToolbarBound)
+                {
+                    moveEntityButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", MoveEntityButtonIconDisabled);
+                    deleteEntityButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", DeleteEntityButtonIconDisabled);
+                    editJointsButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", EditJointsButtonIconDisabled);
+                }
+            }
+        }
+
+        private static void OnSelectionChange(Selectable.SelectionChangeEvent _)
+        {
+            UpdateIcons();
+
+            if (!isToolbarBound)
                 return;
 
             if (isEntitySelected)
             {
-                moveEntityButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", MoveEntityButtonIcon);
-                deleteEntityButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", DeleteEntityButtonIcon);
-                editJointsButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", EditJointsButtonIcon);
+
             }
             else
             {
-                moveEntityButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", MoveEntityButtonIconDisabled);
-                deleteEntityButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", DeleteEntityButtonIconDisabled);
-                editJointsButton.Get(className: "toolbar-button-icon").SetStyleProperty("background-image", EditJointsButtonIconDisabled);
-            }
-        }
-
-        public class EntityToolbarCallbacks
-        {
-            [Callback]
-            public void OnSelectionChange(Selectable.SelectionChangeEvent _)
-            {
-                if (!toolbarCreated || !isToolbarBound)
-                    return;
-
-                UpdateIcons();
-
-                if (isEntitySelected)
+                if (openedJointEditor)
                 {
-
+                    JointsWindow.OnWindowClose();
+                    UIManager.ClosePanel("Joints");
+                    openedJointEditor = false;
                 }
-                else
+                if (openedMoveArrows)
                 {
-                    if (openedJointEditor)
-                    {
-                        JointsWindow.OnWindowClose();
-                        UIManager.ClosePanel("Joints");
-                        openedJointEditor = false;
-                    }
-                    if (openedMoveArrows)
-                    {
-                        MoveArrows.StopMovingEntity();
-                        openedMoveArrows = false;
-                    }
+                    MoveArrows.StopMovingEntity();
+                    openedMoveArrows = false;
                 }
             }
         }
