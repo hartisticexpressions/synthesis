@@ -8,8 +8,8 @@ namespace SynthesisCore.UI.Windows
     public class EntityItem
     {
         public VisualElement EntityElement { get; }
-        private DialogInfo dialogInfo = new DialogInfo();
-        private bool isStaticEntity = false;
+        private bool isStaticEntity = true;
+        private bool isStaticEnvironment = false;
         EntityStaticity entityStaticity = new EntityStaticity();
 
         public EntityItem(VisualElementAsset entityAsset, FileInfo fileInfo)
@@ -57,11 +57,15 @@ namespace SynthesisCore.UI.Windows
                 dialogInfo.SubmitButtonAction = ev =>
                 {
                     entityStaticity.SetEntityStaticity(true);
-                    Logger.Log("Submit button clicked");
+                    isStaticEntity = true;
+                    isStaticEnvironment = false;
+                    Logger.Log("Entity button clicked");
                 };
                 dialogInfo.CloseButtonAction = ev =>
                 {
                     entityStaticity.SetEntityStaticity(false);
+                    isStaticEntity = false;
+                    isStaticEnvironment = true;
                     Logger.Log("Close button clicked");
                 };
                 Dialog.SendDialog(dialogInfo);
