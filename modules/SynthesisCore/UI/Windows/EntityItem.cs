@@ -1,12 +1,16 @@
 ﻿using SynthesisAPI.AssetManager;
 using SynthesisAPI.UIManager.VisualElements;
 using SynthesisAPI.Utilities;
+using SynthesisCore.EntityMovement;
 
 namespace SynthesisCore.UI.Windows
 {
     public class EntityItem
     {
         public VisualElement EntityElement { get; }
+        private DialogInfo dialogInfo = new DialogInfo();
+        private bool isStaticEntity = false;
+        EntityStaticity entityStaticity = new EntityStaticity();
 
         public EntityItem(VisualElementAsset entityAsset, FileInfo fileInfo)
         {
