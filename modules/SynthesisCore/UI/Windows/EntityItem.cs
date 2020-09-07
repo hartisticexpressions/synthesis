@@ -46,6 +46,25 @@ namespace SynthesisCore.UI.Windows
             {
                 Logger.Log("Spawn entity");
                 // implementation to add entity from file reference (to come)
+
+                DialogInfo dialogInfo = new DialogInfo();
+                dialogInfo.Title = "Entity or Environment Settings";
+                dialogInfo.Prompt = "Please set object type.";
+                dialogInfo.Description =
+                    "Is this object an entity or environment?";
+                dialogInfo.SubmitButtonText = "Entity";
+                dialogInfo.CloseButtonText = "Environment";
+                dialogInfo.SubmitButtonAction = ev =>
+                {
+                    entityStaticity.SetEntityStaticity(true);
+                    Logger.Log("Submit button clicked");
+                };
+                dialogInfo.CloseButtonAction = ev =>
+                {
+                    entityStaticity.SetEntityStaticity(false);
+                    Logger.Log("Close button clicked");
+                };
+                Dialog.SendDialog(dialogInfo);
             });
         }
 
