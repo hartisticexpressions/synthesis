@@ -7,7 +7,7 @@
             <ui:Label text="Import Asset: Step 1 of 3" name="title" class="window-header-title" />
         </ui:VisualElement>
         <ui:VisualElement name="instructions" class="instructions-container">
-            <ui:Label text="%description%" name="description" />
+            <ui:Label text="asdljkfhas;dkjfhlskdafjhasldkfjhasdlkfjhasldkfjhasdlkfjhasdlkfjhasdlfkjhasdlfkjhasasdljkfhas;dkjfhlskdafjhasldkfjhasdlkfjhasldkfjhasdlkfjhasdlkfjhasdlfkjhasdlfkjhas" name="description" class="description" />
         </ui:VisualElement>
         <ui:VisualElement name="content" class="window-content" />
         <ui:VisualElement name="bottom-button-panel" class="window-bottom-button-panel">

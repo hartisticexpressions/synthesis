@@ -5,3 +5,9 @@
     margin-bottom: 10px;
     height: 60px;
 }
+
+.description {
+    width: 100%;
+    white-space: normal;
+    font-size: 18px;
+}
