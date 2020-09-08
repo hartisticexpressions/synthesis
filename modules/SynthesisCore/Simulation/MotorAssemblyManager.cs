@@ -33,7 +33,7 @@ namespace SynthesisCore.Simulation
                         e => IsDescendant(Entity.Value, e) &&
                         e.GetComponent<Joints>() != null))
                     {
-                        foreach (var j in entity.GetComponent<Joints>().AllJoints)
+                        foreach (var j in (List<IJoint>) entity.GetComponent<Joints>())
                         {
                             if (j is HingeJoint hingeJoint)
                             {

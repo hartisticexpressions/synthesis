@@ -89,19 +89,16 @@ namespace SynthesisCore.Systems
                 cameraTransform.LookAt(new Vector3D());
             }
             // Bind controls for free roam
-            InputManager.AssignDigitalInput("camera_forward", new Digital("w"));
-            InputManager.AssignDigitalInput("camera_left", new Digital("a"));
-            InputManager.AssignDigitalInput("camera_backward", new Digital("s"));
-            InputManager.AssignDigitalInput("camera_right", new Digital("d"));
-            InputManager.AssignDigitalInput("camera_up", new Digital("space"));
-            InputManager.AssignDigitalInput("camera_down", new Digital("left shift"));
-            InputManager.AssignDigitalInput("camera_boost", new Digital("left ctrl"));
+            InputManager.AssignInput("camera_forward", new Digital("w"));
+            InputManager.AssignInput("camera_left", new Digital("a"));
+            InputManager.AssignInput("camera_backward", new Digital("s"));
+            InputManager.AssignInput("camera_right", new Digital("d"));
+            InputManager.AssignInput("camera_up", new Digital("space"));
+            InputManager.AssignInput("camera_down", new Digital("left shift"));
+            InputManager.AssignInput("camera_boost", new Digital("left ctrl"));
 
             // Bind controls for orbit
-            InputManager.AssignDigitalInput("camera_drag", new Digital("mouse 0 non-ui")); // TODO put control settings in preference manager
-            InputManager.AssignAxis("ZoomCamera", new Analog("Mouse ScrollWheel"));
-            InputManager.AssignAxis("Mouse X", new Analog("Mouse X"));
-            InputManager.AssignAxis("Mouse Y", new Analog("Mouse Y"));
+            InputManager.AssignInput("camera_drag", new Digital("mouse 0 non-ui")); // TODO put control settings in preference manager
         }
 
         public override void Teardown() { }
@@ -271,7 +268,7 @@ namespace SynthesisCore.Systems
 
         private void UpdateMouseInput()
         {
-            zMod = UIManager.CursorBlockedByUI ? 0 : InputManager.GetAxisValue("ZoomCamera") * SensitivityZoom;
+            zMod = UIManager.CursorBlockedByUI ? 0 : InputManager.GetAnalogValue("Mouse ScrollWheel") * SensitivityZoom;
 
             if (zMod != 0 && Math.SameSign(zMod, lastZMod))
                 zMod += lastZMod * 0.5f;
@@ -281,8 +278,8 @@ namespace SynthesisCore.Systems
             if (isMouseDragging && EnableCameraPan)
             {
                 // Add an intertial effect to camera movement (TODO use actual last cameraTransform.Position delta instead?), and add an option to enable this to preference manager
-                xMod = -InputManager.GetAxisValue("Mouse X") * SensitivityX;
-                yMod = InputManager.GetAxisValue("Mouse Y") * SensitivityY;
+                xMod = -InputManager.GetAnalogValue("Mouse X") * SensitivityX;
+                yMod = InputManager.GetAnalogValue("Mouse Y") * SensitivityY;
 
                 if (xMod != 0 && Math.SameSign(xMod, lastXMod))
                     xMod += lastXMod * 0.3f;

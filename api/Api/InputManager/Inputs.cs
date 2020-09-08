@@ -25,13 +25,26 @@ namespace SynthesisAPI.InputManager.Inputs
             BaseValue = baseValue;
         }
 
-        public bool Update()
+        public virtual bool Update()
         {
             Value = UnityEngine.Input.GetAxis(Name);
             Value = Inverted ? Value *= -1 : Value;
             return Value != BaseValue;
         }
     }
+
+    public class MouseScroll : Analog
+    {
+        public Vector2D MousePosition { get; private set; }
+        public MouseScroll() : base("Mouse ScrollWheel") { }
+        public override bool Update()
+        {
+            var r = base.Update();
+            MousePosition = ((UnityEngine.Vector2)UnityEngine.Input.mousePosition).Map();
+            return r;
+        }
+    }
+
     public class Digital : Input
     {
         public string Name { get; private set; }

@@ -9,7 +9,7 @@ namespace SynthesisAPI.InputManager.InputEvents
     {
         string Name { get; }
     }
-    /*
+
     public class AnalogEvent : IInputEvent // TODO make an event stream type instead
     {
         public string Name { get; private set; }
@@ -20,7 +20,16 @@ namespace SynthesisAPI.InputManager.InputEvents
             Value = value;
         }
     }
-    */
+
+    public class MouseScrollEvent : AnalogEvent
+    {
+        public Vector2D MousePosition { get; private set; }
+        public MouseScrollEvent(string name, float value, Vector2D mousePosition) : base(name, value)
+        {
+            MousePosition = mousePosition;
+        }
+    }
+
     public class DigitalEvent : IInputEvent
     {
         public string Name { get; private set; }

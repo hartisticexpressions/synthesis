@@ -52,7 +52,7 @@ namespace SynthesisCore.EntityMovement
         public override void Setup()
         {
             Digital[] closeButtons = { new Digital("return"), new Digital("escape") };
-            InputManager.AssignDigitalInputs("close move arrows", closeButtons, x => StopMovingEntity());
+            InputManager.AssignInputs("close move arrows", closeButtons, x => StopMovingEntity());
         }
 
         public override void Teardown() { }
@@ -118,8 +118,8 @@ namespace SynthesisCore.EntityMovement
         {
             if (selectedMarker != null)
             {
-                var xMod = InputManager.GetAxisValue("Mouse X");
-                var yMod = InputManager.GetAxisValue("Mouse Y");
+                var xMod = InputManager.GetAnalogValue("Mouse X");
+                var yMod = InputManager.GetAnalogValue("Mouse Y");
 
                 if (xMod != 0 || yMod != 0)
                 {

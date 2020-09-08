@@ -8,73 +8,73 @@ namespace SynthesisAPI.InputManager
 {
     public static class InputManager
     {
-        internal static Dictionary<string, Digital[]> _mappedDigitalInputs = new Dictionary<string, Digital[]>();
-        private static Dictionary<string, Analog> _mappedAxisInputs = new Dictionary<string, Analog>();
+        internal static Dictionary<string, Input[]> _mappedInputs = new Dictionary<string, Input[]>();
 
-        public static void AssignDigitalInput(string name, Digital input, EventBus.EventBus.EventCallback callback = null) // TODO remove callback argument?
+        public static void AssignInput(string name, Input input, EventBus.EventBus.EventCallback callback = null) // TODO remove callback argument?
         {
-            _mappedDigitalInputs[name] = new Digital[] { input };
+            _mappedInputs[name] = new Input[] { input };
             if (callback != null)
                 EventBus.EventBus.NewTagListener($"input/{name}", callback);
         }
 
-        public static void UnassignDigitalInput(string name)
+        public static void AssignInputs(string name, Input[] input, EventBus.EventBus.EventCallback callback = null)
         {
-            _mappedDigitalInputs.Remove(name);
-            EventBus.EventBus.RemoveAllTagListeners($"input/{name}");
-        }
-
-        public static void AssignDigitalInputs(string name, Digital[] input, EventBus.EventBus.EventCallback callback = null)
-        {
-            _mappedDigitalInputs[name] = input;
-            if(callback != null)
+            _mappedInputs[name] = input;
+            if (callback != null)
                 EventBus.EventBus.NewTagListener($"input/{name}", callback);
         }
 
-        public static void AssignAxis(string name, Analog axis)
+        public static void UnassignInput(string name)
         {
-            _mappedAxisInputs[name] = axis;
+            _mappedInputs.Remove(name);
+            EventBus.EventBus.RemoveAllTagListeners($"input/{name}");
         }
 
         public static void UpdateInputs()
         {
-            foreach(string name in _mappedDigitalInputs.Keys)
+            foreach(string name in _mappedInputs.Keys)
             {
-                foreach(Input input in _mappedDigitalInputs[name])
+                foreach(Input input in _mappedInputs[name])
                 {
                     if (!input.Name.EndsWith("non-ui") && input.Update())
                     {
+                        if (input is MouseScroll onMouseScroll)
+                            EventBus.EventBus.Push($"input/{name}", new MouseScrollEvent(input.Name, onMouseScroll.Value, onMouseScroll.MousePosition));
                         if (input is MouseDown mouseDown)
                         {
-                            EventBus.EventBus.Push($"input/{name}", new MouseDownEvent(name, mouseDown.State, mouseDown.MousePosition));
+                            EventBus.EventBus.Push($"input/{name}", new MouseDownEvent(input.Name, mouseDown.State, mouseDown.MousePosition));
                         }
                         else if (input is Digital digitalInput)
                         {
-                            EventBus.EventBus.Push($"input/{name}", new DigitalEvent(name, digitalInput.State));
+                            EventBus.EventBus.Push($"input/{name}", new DigitalEvent(input.Name, digitalInput.State));
                         }
                     }
                 }
             }
         }
 
-        public static float GetAxisValue(string name)
+        public static DigitalState GetDigitalState(string name)
         {
-            if (_mappedAxisInputs.ContainsKey(name))
-            {
-                _mappedAxisInputs[name].Update();
-                return _mappedAxisInputs[name].Value;
-            }
-            throw new Exception($"Axis value is not mapped with name \"{name}\"");
+            Digital d = new Digital(name);
+            d.Update();
+            return d.State;
         }
 
-        public static void SetAllInputs(Dictionary<string, Digital[]> input)
+        public static float GetAnalogValue(string name)
         {
-            _mappedDigitalInputs = input;
+            Analog a = new Analog(name);
+            a.Update();
+            return a.Value;
         }
 
-        public static Dictionary<string, Digital[]> GetAllInputs()
+        public static void SetAllInputs(Dictionary<string, Input[]> input)
         {
-            return _mappedDigitalInputs;
+            _mappedInputs = input;
+        }
+
+        public static Dictionary<string, Input[]> GetAllInputs()
+        {
+            return _mappedInputs;
         }
     }
 }

@@ -31,12 +31,12 @@ namespace Engine.ModuleLoader.Adapters
 				meshCollider.sharedMesh = new UnityEngine.Mesh();
 				meshCollider.convex = true;
 			}
-			InputManager.AssignDigitalInput($"_internal MeshCollider2DAdapter select", new Digital($"mouse 0 non-ui"), e => ProcessInput((DigitalEvent)e)); // TODO use preference manager for this
+			InputManager.AssignInput($"_internal MeshCollider2DAdapter select", new Digital($"mouse 0 non-ui"), e => ProcessInput((DigitalEvent)e)); // TODO use preference manager for this
 		}
 
 		public void OnDestroy()
 		{
-			InputManager.UnassignDigitalInput($"_internal MeshCollider2DAdapter select");
+			InputManager.UnassignInput($"_internal MeshCollider2DAdapter select");
 		}
 
 		public void Update()

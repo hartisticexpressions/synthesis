@@ -114,6 +114,10 @@ namespace SynthesisCore.UI
             Init(name);
         }
 
+        public void Open() => OpenListView();
+        public void Close() => CloseListView();
+        
+
         private void Init(string name)
         {
             Name = name;
@@ -129,7 +133,7 @@ namespace SynthesisCore.UI
 
             //assign button once for all dropdowns
             if (!_isDeselectDropdownAssigned)
-                InputManager.AssignDigitalInput("_deselect dropdown", new MouseDown("mouse 0"));
+                InputManager.AssignInputs("_deselect dropdown", new Input[] { new MouseDown("mouse 0"), new MouseScroll() });
 
             //mouse click listener to close dropdown
             EventBus.NewTagListener("input/_deselect dropdown", e =>
@@ -139,7 +143,8 @@ namespace SynthesisCore.UI
                     var point = new Vector2D(downEvent.MousePosition.X, ApplicationWindow.Height - downEvent.MousePosition.Y);
                     if (_isListViewVisible && !_listView.ContainsPoint(point) && !_button.ContainsPoint(point)) //auto close if clicked anywhere but dropdown
                         CloseListView();
-                }
+                } else if(e is MouseScrollEvent)
+                    CloseListView();
             });
 
             _isDeselectDropdownAssigned = true;

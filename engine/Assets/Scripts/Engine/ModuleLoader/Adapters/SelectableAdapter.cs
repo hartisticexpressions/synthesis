@@ -135,11 +135,11 @@ namespace Engine.ModuleLoader.Adapters
 					}
 				}
 			}
-			InputManager.AssignDigitalInput($"_internal SelectableAdapter select {myIndex}", new Digital($"mouse 0 non-ui"), e => ProcessInput((DigitalEvent)e)); // TODO use preference manager for this
+			InputManager.AssignInput($"_internal SelectableAdapter select {myIndex}", new Digital($"mouse 0 non-ui"), e => ProcessInput((DigitalEvent)e)); // TODO use preference manager for this
 
 			if (selectableAdapterCount == 0)
 			{
-				InputManager.AssignDigitalInput($"_internal SelectableAdapter deselect", new Digital($"mouse 1 non-ui"), e =>
+				InputManager.AssignInput($"_internal SelectableAdapter deselect", new Digital($"mouse 1 non-ui"), e =>
 				{
 					if (Selectable.Selected != null)
 					{
@@ -153,10 +153,10 @@ namespace Engine.ModuleLoader.Adapters
 
 		public void OnDestroy()
 		{
-			InputManager.UnassignDigitalInput($"_internal SelectableAdapter select {myIndex}");
+			InputManager.UnassignInput($"_internal SelectableAdapter select {myIndex}");
 			if (selectableAdapterCount == 0)
 			{
-				InputManager.UnassignDigitalInput($"_internal SelectableAdapter deselect {myIndex}");
+				InputManager.UnassignInput($"_internal SelectableAdapter deselect {myIndex}");
 			}
 			if (Selectable.Selected?.Entity != null && Selectable.Selected?.Entity == instance.Entity)
 			{

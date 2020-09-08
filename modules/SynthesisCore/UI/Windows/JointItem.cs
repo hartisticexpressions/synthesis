@@ -2,6 +2,9 @@
 using SynthesisAPI.AssetManager;
 using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EnvironmentManager.Components;
+using SynthesisAPI.InputManager;
+using SynthesisAPI.InputManager.InputEvents;
+using SynthesisAPI.InputManager.Inputs;
 using SynthesisAPI.UIManager.VisualElements;
 using SynthesisAPI.Utilities;
 using SynthesisCore.Meshes;
@@ -41,6 +44,7 @@ namespace SynthesisCore.UI
             {
                 ItemHeight = 15
             };
+
             JointElement.Get("motor-type-dropdown-container").Add(motorTypeDropdown);
             TextField gearField = (TextField)JointElement.Get("motor-gear-field");
             TextField countField = (TextField)JointElement.Get("motor-count-field");

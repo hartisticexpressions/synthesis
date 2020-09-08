@@ -15,7 +15,6 @@ namespace SynthesisCore.UI
         private static bool isToolbarBound = false;
 
         private static bool openedMoveArrows = false;
-        private static bool openedJointEditor = false;
 
         private static bool isEntitySelected => Selectable.Selected != null;
 
@@ -61,8 +60,7 @@ namespace SynthesisCore.UI
                     _ => {
                         if (isEntitySelected)
                         {
-                            openedJointEditor = !openedJointEditor;
-                            if (openedJointEditor)
+                            if (!JointsWindow.Open)
                                 UIManager.ShowPanel("Joints");
                             else
                                 UIManager.ClosePanel("Joints");
@@ -116,17 +114,10 @@ namespace SynthesisCore.UI
                 }
                 else
                 {
-                    if (openedJointEditor)
-                    {
+                    if (JointsWindow.Open)
                         JointsWindow.OnWindowClose();
-                        UIManager.ClosePanel("Joints");
-                        openedJointEditor = false;
-                    }
-                    if (openedMoveArrows)
-                    {
+                    if (MoveArrows.IsMovingEntity)
                         MoveArrows.StopMovingEntity();
-                        openedMoveArrows = false;
-                    }
                 }
             }
         }

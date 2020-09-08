@@ -322,7 +322,7 @@ namespace SynthesisAPI.UIManager
 
             private void ForwardNonUIMouseEvent(int button)
             {
-                InputManager.InputManager.AssignDigitalInput($"_internal mouse {button} non-ui-forwarder", new Digital($"mouse {button}"), e =>
+                InputManager.InputManager.AssignInput($"_internal mouse {button} non-ui-forwarder", new Digital($"mouse {button}"), e =>
                 {
                     if (nonUIMouseDown[button])
                     {
@@ -341,9 +341,9 @@ namespace SynthesisAPI.UIManager
             }
             private void SendNonUIMouseEvent(int button, DigitalState state)
             {
-                foreach (string name in InputManager.InputManager._mappedDigitalInputs.Keys)
+                foreach (string name in InputManager.InputManager._mappedInputs.Keys)
                 {
-                    foreach (Input input in InputManager.InputManager._mappedDigitalInputs[name])
+                    foreach (Input input in InputManager.InputManager._mappedInputs[name])
                     {
                         if (input.Name.EndsWith("non-ui") && input is Digital digitalInput)
                         {

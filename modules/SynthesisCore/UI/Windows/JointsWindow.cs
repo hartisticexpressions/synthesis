@@ -1,6 +1,10 @@
 ﻿using SynthesisAPI.AssetManager;
 using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EnvironmentManager.Components;
+using SynthesisAPI.EventBus;
+using SynthesisAPI.InputManager;
+using SynthesisAPI.InputManager.InputEvents;
+using SynthesisAPI.InputManager.Inputs;
 using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.UIComponents;
 using SynthesisAPI.UIManager.VisualElements;
@@ -11,6 +15,8 @@ namespace SynthesisCore.UI
 {
     public static class JointsWindow
     {
+        public static bool Open { get; private set; }
+
         public static Panel Panel { get; private set; }
         private static VisualElement Window;
         private static VisualElementAsset JointAsset = null;
@@ -35,6 +41,8 @@ namespace SynthesisCore.UI
 
         private static void OnWindowOpen(VisualElement jointsWindow)
         {
+            Open = true;
+
             Window = jointsWindow;
 
             Window.SetStyleProperty("position", "absolute");
@@ -44,6 +52,7 @@ namespace SynthesisCore.UI
             Window.SetStyleProperty("top", "70");
 
             JointList = (ListView)Window.Get("joint-list");
+
             LoadWindowContents();
             RegisterButtons();
         }
@@ -57,7 +66,11 @@ namespace SynthesisCore.UI
                     jointHighlightEntity = null;
             }
 
+
             UIManager.ClosePanel(Panel.Name);
+
+            Open = false;
+
             RemoveWindowsContents();
         }
 

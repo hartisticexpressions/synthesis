@@ -46,7 +46,7 @@ namespace SynthesisCore
             Bundle o = g.Parse();
             testBody.AddBundle(o);
             SynthesisCoreData.ModelsDict.Add("TestBody", testBody);
-            var body = testBody.GetComponent<Joints>().AllJoints;
+            List<IJoint> body = testBody.GetComponent<Joints>();
 
             var selectable = testBody.AddComponent<Selectable>();
 
@@ -66,11 +66,8 @@ namespace SynthesisCore
             backRight.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
             arm.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
 
-            InputManager.AssignAxis("vert", new Analog("Vertical"));
-            InputManager.AssignAxis("hori", new Analog("Horizontal"));
-
-            InputManager.AssignDigitalInput("move_arm_up", new Digital("t"));
-            InputManager.AssignDigitalInput("move_arm_down", new Digital("y"));
+            InputManager.AssignInput("move_arm_up", new Digital("t"));
+            InputManager.AssignInput("move_arm_down", new Digital("y"));
 
             foreach (var i in EnvironmentManager.GetComponentsWhere<Rigidbody>(_ => true))
             {
@@ -92,8 +89,8 @@ namespace SynthesisCore
 
         public override void OnUpdate()
         {
-            float forward = InputManager.GetAxisValue("vert");
-            float turn = InputManager.GetAxisValue("hori");
+            float forward = InputManager.GetAnalogValue("Vertical");
+            float turn = InputManager.GetAnalogValue("Horizontal");
 
             var percent = forward + turn;
             frontLeft.SetVoltage(powerSupply.VoltagePercent(percent));
