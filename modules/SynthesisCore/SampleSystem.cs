@@ -46,7 +46,7 @@ namespace SynthesisCore
             Bundle o = g.Parse();
             testBody.AddBundle(o);
             SynthesisCoreData.ModelsDict.Add("TestBody", testBody);
-            List<IJoint> body = testBody.GetComponent<Joints>();
+            List<IJoint> body = testBody.GetComponent<Joints>().AllJoints;
 
             var selectable = testBody.AddComponent<Selectable>();
 

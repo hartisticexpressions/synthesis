@@ -15,7 +15,7 @@ namespace SynthesisCore.UI
 {
     public static class JointsWindow
     {
-        public static bool Open { get; private set; }
+        public static bool Open { get; internal set; }
 
         public static Panel Panel { get; private set; }
         private static VisualElement Window;
@@ -41,7 +41,6 @@ namespace SynthesisCore.UI
 
         private static void OnWindowOpen(VisualElement jointsWindow)
         {
-            Open = true;
 
             Window = jointsWindow;
 

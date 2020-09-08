@@ -64,6 +64,8 @@ namespace SynthesisCore.UI
                                 UIManager.ShowPanel("Joints");
                             else
                                 UIManager.ClosePanel("Joints");
+
+                            JointsWindow.Open = !JointsWindow.Open;
                         }
                     });
 
