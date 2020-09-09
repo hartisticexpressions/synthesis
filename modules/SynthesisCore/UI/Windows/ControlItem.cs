@@ -1,10 +1,7 @@
 ﻿using Api.InputManager;
-using SynthesisAPI.AssetManager;
 using SynthesisAPI.EventBus;
-using SynthesisAPI.InputManager;
 using SynthesisAPI.PreferenceManager;
 using SynthesisAPI.UIManager.VisualElements;
-using SynthesisAPI.Utilities;
 
 namespace SynthesisCore.UI
 {
@@ -15,9 +12,9 @@ namespace SynthesisCore.UI
         private Label NameLabel;
         private Button KeyButton;
 
-        public ControlItem(VisualElementAsset controlAsset, string controlName)
+        public ControlItem(string controlName)
         {
-            Element = controlAsset.GetElement("control");
+            Element = AssetCache.ControlAsset.GetElement("control");
             ControlName = controlName;
             
             NameLabel = (Label) Element.Get("name");
@@ -46,7 +43,7 @@ namespace SynthesisCore.UI
                 
                 void Callback(IEvent e)
                 {
-                    SettingsWindow.AddPendingChange(ControlName, ((KeyEvent) e).KeyString);
+                    PendingChanges.Add("Settings", ControlName, ((KeyEvent) e).KeyString);
                     KeyButton.Text = Utilities.ReformatCondensedString(((KeyEvent) e).KeyString);
 
                     // InputManager.UnassignDigitalInput(""); TODO unassign previous input, assign new one

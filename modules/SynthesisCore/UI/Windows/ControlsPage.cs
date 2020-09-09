@@ -1,16 +1,12 @@
 ﻿using SynthesisAPI.AssetManager;
 ﻿using System.Collections.Generic;
-using SynthesisAPI.AssetManager;
-using SynthesisAPI.PreferenceManager;
 using SynthesisAPI.UIManager.VisualElements;
-using SynthesisAPI.Utilities;
 
 namespace SynthesisCore.UI
 {
     public class ControlsPage
     {
         public VisualElement Page { get; }
-        private VisualElementAsset ControlAsset;
         private List<ControlItem> ControlsList = new List<ControlItem>();
         private ListView ControlListView;
 
@@ -19,7 +15,6 @@ namespace SynthesisCore.UI
             Page = controlsAsset.GetElement("page");
             Page.SetStyleProperty("height", "100%");
             
-            ControlAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Control.uxml");
             ControlListView = (ListView) Page.Get("controls");
 
             LoadPageContent();
@@ -43,7 +38,7 @@ namespace SynthesisCore.UI
 
         private void AddControl(string controlName)
         {
-            ControlsList.Add(new ControlItem(ControlAsset, controlName));
+            ControlsList.Add(new ControlItem(controlName));
         }
 
         public void RefreshPreferences()

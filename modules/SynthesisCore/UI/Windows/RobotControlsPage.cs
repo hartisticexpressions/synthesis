@@ -220,7 +220,7 @@ namespace SynthesisCore.UI.Windows
 
         private static void AddControl(string controlName)
         {
-            var item = new ControlItem(controlAsset, controlName);
+            var item = new ControlItem(controlName);
             controlsList.Add(item);
             motorControlsSection.Add(item.Element);
             controlListView.Add(item.Element);

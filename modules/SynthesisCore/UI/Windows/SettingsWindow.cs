@@ -18,8 +18,6 @@ namespace SynthesisCore.UI
         private GeneralPage GeneralPage;
         private ControlsPage ControlsPage;
 
-        private static Dictionary<string, object> PendingChanges = new Dictionary<string, object>();
-        
         public SettingsWindow()
         {
             var generalAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/General.uxml");
@@ -103,14 +101,7 @@ namespace SynthesisCore.UI
             Button okButton = (Button) Window.Get("ok-button");
             okButton?.Subscribe(x =>
             {
-                if (PendingChanges.Count > 0)
-                {
-                    foreach (string key in PendingChanges.Keys)
-                    {
-                        PreferenceManager.SetPreference("SynthesisCore", key, PendingChanges[key]);
-                    }
-                }
-                PreferenceManager.Save();
+                PendingChanges.ApplyAnyCategoryChanges("Settings");
 
                 OnPageChange();
                 UIManager.ClosePanel(Panel.Name);
@@ -119,7 +110,7 @@ namespace SynthesisCore.UI
             Button closeButton = (Button) Window.Get("close-button");
             closeButton?.Subscribe(x =>
             {
-                PendingChanges.Clear();
+                PendingChanges.ClearCategoryChanges("Settings");
 
                 OnPageChange();
                 UIManager.ClosePanel(Panel.Name);
@@ -134,11 +125,6 @@ namespace SynthesisCore.UI
             }
             pageContainer.Add(newContent);
             OnPageChange();
-        }
-
-        public static void AddPendingChange(string key, object value)
-        {
-            PendingChanges[key] = value;
         }
 
         private void OnPageChange()

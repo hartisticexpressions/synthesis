@@ -12,9 +12,9 @@ namespace SynthesisCore.UI.Windows
         private VisualElement ModifierContainer;
         private string PreferenceName;
         
-        public ToggleItem(VisualElementAsset optionAsset, string preferenceName, Toggle toggle)
+        public ToggleItem(string preferenceName, Toggle toggle)
         {
-            Element = optionAsset.GetElement("option");
+            Element = AssetCache.OptionAsset.GetElement("option");
             Toggle = toggle;
 
             NameLabel = (Label) Element.Get("option-name");
@@ -39,7 +39,7 @@ namespace SynthesisCore.UI.Windows
         {
             Toggle.OnValueChanged += value =>
             {
-                SettingsWindow.AddPendingChange(PreferenceName, value);
+                PendingChanges.Add("Settings", PreferenceName, value);
             };
         }
 
