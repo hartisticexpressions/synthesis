@@ -6,6 +6,7 @@ using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.VisualElements;
 using SynthesisAPI.Utilities;
 using SynthesisCore.UI.Windows;
+using SynthesisCore.UI.Windows.EntityStuff;
 
 namespace SynthesisCore.UI
 {
@@ -66,6 +67,7 @@ namespace SynthesisCore.UI
             UIManager.AddPanel(new DrivetrainConfigurationWindow().Panel);
             UIManager.AddPanel(new ModuleWindow().Panel);
             // UIManager.AddPanel(new HelpWindow().Panel);
+            UIManager.AddPanel(new ControlsWindow().Panel);
             UIManager.AddPanel(new ImportWindow().Panel);
 
             Button hideToolbarButton = (Button)UIManager.RootElement.Get("hide-toolbar-button");

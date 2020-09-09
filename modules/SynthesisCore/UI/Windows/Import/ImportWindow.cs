@@ -1,8 +1,9 @@
-﻿using SynthesisAPI.AssetManager;
+﻿using System.Collections.Generic;
+using SynthesisAPI.AssetManager;
 using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.UIComponents;
 using SynthesisAPI.UIManager.VisualElements;
-using SynthesisAPI.Utilities;
+using SynthesisCore.UI.Windows.EntityStuff;
 
 namespace SynthesisCore.UI.Windows
 {
@@ -16,9 +17,11 @@ namespace SynthesisCore.UI.Windows
         private Button PreviousPageButton;
         private Button NextPageButton;
         private Button CancelButton;
+
+        private Controls ControlsPage;
         
         private int CurrentPageIndex;
-        
+
         public ImportWindow()
         {
             var windowAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Import.uxml");
@@ -26,8 +29,8 @@ namespace SynthesisCore.UI.Windows
             Panel = new Panel("Import", windowAsset, OnWindowCreate);
 
             // TEMPORARY
-            Button helpButton = (Button)UIManager.RootElement.Get("help-button");
-            helpButton.Subscribe(x => UIManager.TogglePanel("Import"));
+            // Button helpButton = (Button)UIManager.RootElement.Get("help-button");
+            // helpButton.Subscribe(x => UIManager.TogglePanel("Import"));
             //
         }
 
@@ -39,11 +42,13 @@ namespace SynthesisCore.UI.Windows
             
             TitleLabel = (Label) Window.Get("title");
             DescriptionLabel = (Label) Window.Get("description");
-            PageContainer = Window.Get("window-content");
-            
+            PageContainer = Window.Get("content");
+
             CancelButton = (Button) Window.Get("cancel-button");
             PreviousPageButton = (Button) Window.Get("previous-button");
             NextPageButton = (Button) Window.Get("next-button");
+
+            ControlsPage = new Controls();
 
             RegisterButtons();
             LoadWindowContent();
@@ -100,6 +105,8 @@ namespace SynthesisCore.UI.Windows
                                         "your robot or vehicle you must specify a control scheme. Configuring your " +
                                         "Controls are optional and the default values are sufficient. These controls " +
                                         "are specific to this robot or vehicle.";
+
+                SetPageContainer(ControlsPage.Content);
                 
                 CancelButton.SetStyleProperty("visibility", "visible");
                 TitleLabel.Text = "Import Asset: Step 3 of 3";
@@ -121,6 +128,15 @@ namespace SynthesisCore.UI.Windows
                 PreviousPageButton.Enabled = true;
                 CurrentPageIndex = 5;
             }
+        }
+
+        private void SetPageContainer(VisualElement content)
+        {
+            foreach (VisualElement child in PageContainer.GetChildren())
+            {
+                child.RemoveFromHierarchy();
+            }
+            PageContainer.Add(content);
         }
 
         private void RegisterButtons()

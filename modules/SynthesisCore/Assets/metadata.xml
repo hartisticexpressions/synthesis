@@ -39,6 +39,8 @@
     <string>UI/uxml/Toggle.uxml</string>
     <string>UI/uxml/Help.uxml</string>
     <string>UI/uxml/Import.uxml</string>
+    <string>UI/uxml/Container.uxml</string>
+    <string>UI/uxml/Window.uxml</string>
     <string>UI/uss/Entity.uss</string>
     <string>UI/uss/Modules.uss</string>
     <string>UI/uss/Module.uss</string>
@@ -74,6 +76,7 @@
     <string>UI/images/bug-icon.png</string>
     <string>UI/images/wrench-icon.png</string>
     <string>UI/images/controls-icon.png</string>
+    <string>UI/images/controls-icon-2.png</string>
     <string>UI/images/environments-icon.png</string>
     <string>UI/images/general-settings-icon.png</string>
     <string>UI/images/help-icon.png</string>
