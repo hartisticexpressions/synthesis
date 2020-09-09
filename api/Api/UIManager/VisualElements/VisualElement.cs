@@ -181,6 +181,14 @@ namespace SynthesisAPI.UIManager.VisualElements
                 }
             }
         }
+
+        public void Add(params VisualElement[] elements)
+        {
+            foreach (VisualElement element in elements)
+            {
+                _visualElement.Add(element._visualElement);
+            }
+        }
         
 		public void OnLoseFocus(Action onLose) => _visualElement.RegisterCallback<FocusOutEvent>(_ => onLose());
         public void Focus() => _visualElement.Focus();
