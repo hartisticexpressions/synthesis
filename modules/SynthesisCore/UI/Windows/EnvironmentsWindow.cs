@@ -3,6 +3,7 @@ using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.UIComponents;
 using SynthesisAPI.UIManager.VisualElements;
 using SynthesisAPI.Utilities;
+using SynthesisCore.EntityMovement;
 
 namespace SynthesisCore.UI.Windows
 {
@@ -47,7 +48,13 @@ namespace SynthesisCore.UI.Windows
             // TODO: save / apply changes implementation?
 
             Button importButton = (Button) Window.Get("import-button");
-            importButton?.Subscribe(x => Logger.Log("TODO: Import"));
+            importButton?.Subscribe(x =>
+            {
+                EntityStaticity.SetEntityStaticity(true);
+
+                // Debug
+                Logger.Log("TODO: Import");
+            });
             
             Button okButton = (Button) Window.Get("ok-button");
             okButton?.Subscribe(x => UIManager.ClosePanel(Panel.Name));

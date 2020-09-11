@@ -12,12 +12,14 @@ using SynthesisAPI.InputManager.InputEvents;
 using SynthesisAPI.Utilities;
 using SynthesisCore.Simulation;
 using SynthesisCore.Meshes;
+using SynthesisCore.EntityMovement;
 
 namespace SynthesisCore
 {
     public class SampleSystem : SystemBase
     {
         private Entity testBody;
+        private Entity testField;
 
         private MotorAssemblyManager motorManager;
         private MotorAssembly frontLeft, frontRight, backLeft, backRight, arm;
@@ -50,27 +52,39 @@ namespace SynthesisCore
 
             var selectable = testBody.AddComponent<Selectable>();
 
-            testBody.AddComponent<Moveable>().Channel = 5;
+            // =======================================
+            testField = EnvironmentManager.AddEntity();
+            EntityStaticity.SetEntityStaticity(true);
+            GltfAsset gF = AssetManager.GetAsset<GltfAsset>("/modules/synthesis_core/TestField.glb");
+            Bundle oF = gF.Parse();
+            testField.AddBundle(oF);
+            testField.AddComponent<MeshCollider>();
+            testField.AddComponent<Rigidbody>();
 
-            motorManager = testBody.AddComponent<MotorAssemblyManager>();
+            var selectableField = testField.AddComponent<Selectable>();
+            // =======================================
 
-            frontLeft = motorManager.AllMotorAssemblies[3];
-            frontRight = motorManager.AllMotorAssemblies[4];
-            backLeft = motorManager.AllMotorAssemblies[1];
-            backRight = motorManager.AllMotorAssemblies[2];
-            arm = motorManager.AllMotorAssemblies[0];
+            //testBody.AddComponent<Moveable>().Channel = 5;
 
-            frontLeft.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
-            frontRight.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
-            backLeft.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
-            backRight.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
-            arm.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
+            //motorManager = testBody.AddComponent<MotorAssemblyManager>();
 
-            InputManager.AssignAxis("vert", new Analog("Vertical"));
-            InputManager.AssignAxis("hori", new Analog("Horizontal"));
+            //frontLeft = motorManager.AllMotorAssemblies[3];
+            //frontRight = motorManager.AllMotorAssemblies[4];
+            //backLeft = motorManager.AllMotorAssemblies[1];
+            //backRight = motorManager.AllMotorAssemblies[2];
+            //arm = motorManager.AllMotorAssemblies[0];
 
-            InputManager.AssignDigitalInput("move_arm_up", new Digital("t"));
-            InputManager.AssignDigitalInput("move_arm_down", new Digital("y"));
+            //frontLeft.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
+            //frontRight.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
+            //backLeft.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
+            //backRight.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
+            //arm.Configure(MotorTypes.Get("CIM"), gearReduction: 9.29);
+
+            //InputManager.AssignAxis("vert", new Analog("Vertical"));
+            //InputManager.AssignAxis("hori", new Analog("Horizontal"));
+
+            //InputManager.AssignDigitalInput("move_arm_up", new Digital("t"));
+            //InputManager.AssignDigitalInput("move_arm_down", new Digital("y"));
 
             foreach (var i in EnvironmentManager.GetComponentsWhere<Rigidbody>(_ => true))
             {
@@ -92,23 +106,23 @@ namespace SynthesisCore
 
         public override void OnUpdate()
         {
-            float forward = InputManager.GetAxisValue("vert");
-            float turn = InputManager.GetAxisValue("hori");
+            //float forward = InputManager.GetAxisValue("vert");
+            //float turn = InputManager.GetAxisValue("hori");
 
-            var percent = forward + turn;
-            frontLeft.SetVoltage(powerSupply.VoltagePercent(percent));
-            percent = forward - turn;
-            frontRight.SetVoltage(powerSupply.VoltagePercent(percent));
-            percent = forward + turn;
-            backLeft.SetVoltage(powerSupply.VoltagePercent(percent));
-            percent = forward - turn;
-            backRight.SetVoltage(powerSupply.VoltagePercent(percent));
+            //var percent = forward + turn;
+            //frontLeft.SetVoltage(powerSupply.VoltagePercent(percent));
+            //percent = forward - turn;
+            //frontRight.SetVoltage(powerSupply.VoltagePercent(percent));
+            //percent = forward + turn;
+            //backLeft.SetVoltage(powerSupply.VoltagePercent(percent));
+            //percent = forward - turn;
+            //backRight.SetVoltage(powerSupply.VoltagePercent(percent));
             
-            frontLeft.Update();
-            frontRight.Update();
-            backLeft.Update();
-            backRight.Update();
-            arm.Update();
+            //frontLeft.Update();
+            //frontRight.Update();
+            //backLeft.Update();
+            //backRight.Update();
+            //arm.Update();
         }
 
         [TaggedCallback("input/move_arm_up")]
