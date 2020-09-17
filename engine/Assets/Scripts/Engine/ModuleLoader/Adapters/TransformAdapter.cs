@@ -76,5 +76,10 @@ namespace Engine.ModuleLoader.Adapters
 
 		private Transform instance;
 		private UnityEngine.Transform unityTransform;
-	}
+
+        public void OnDestroy()
+        {
+			instance.PropertyChanged -= UpdateProperty;
+        }
+    }
 }

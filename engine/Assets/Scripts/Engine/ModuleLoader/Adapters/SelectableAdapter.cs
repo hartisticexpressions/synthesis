@@ -135,8 +135,10 @@ namespace Engine.ModuleLoader.Adapters
 					}
 				}
 			}
-			InputManager.AssignDigitalInput($"_internal SelectableAdapter select {myIndex}", new Digital($"mouse 0 non-ui"), e => ProcessInput((DigitalEvent)e)); // TODO use preference manager for this
-
+			InputManager.AssignDigitalInput($"_internal SelectableAdapter select {myIndex}", new Digital($"mouse 0 non-ui"), e => {
+				if (this != null)
+					ProcessInput((DigitalEvent)e);
+			}); // TODO use preference manager for this
 			if (selectableAdapterCount == 0)
 			{
 				InputManager.AssignDigitalInput($"_internal SelectableAdapter deselect", new Digital($"mouse 1 non-ui"), e =>

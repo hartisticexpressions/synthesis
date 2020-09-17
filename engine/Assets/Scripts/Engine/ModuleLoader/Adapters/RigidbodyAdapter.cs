@@ -138,5 +138,10 @@ namespace Engine.ModuleLoader.Adapters
         }
 
         public TResult ConvertEnum<TResult>(object i) => (TResult)Enum.Parse(typeof(TResult), i.ToString(), true);
+
+        public void OnDestroy()
+        {
+            instance.PropertyChanged -= UpdateProperty;
+        }
     }
 }
