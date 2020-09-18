@@ -4,6 +4,7 @@ using SynthesisAPI.EventBus;
 using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.UIComponents;
 using SynthesisAPI.UIManager.VisualElements;
+using SynthesisAPI.Utilities;
 using SynthesisCore.Components;
 using SynthesisCore.EntityMovement;
 
@@ -57,7 +58,13 @@ namespace SynthesisCore.UI
                 deleteEntityButton = ToolbarTools.AddButton(modifyCategory, "delete-entity-button", "Delete Entity", DeleteEntityButtonIconDisabled,
                     _ => {
                         if (isEntitySelected) {
+                            var name = Selectable.Selected.Entity?.GetComponent<Name>();
+                            EnvironmentManager.RemoveComponent<Name>((Entity)SynthesisCoreData.ModelsDict[name.Value]);
                             EnvironmentManager.RemoveEntity(Selectable.Selected.Entity.Value);
+                            foreach (var t in SynthesisCoreData.ModelsDict)
+                            {
+                                Logger.Log("Models Dict: " + t.Value);
+                            } 
                         }
                     });
 

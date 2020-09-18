@@ -1,9 +1,15 @@
 ﻿using SynthesisAPI.AssetManager;
+using SynthesisAPI.EnvironmentManager;
+using SynthesisAPI.EnvironmentManager.Components;
 using SynthesisAPI.UIManager.VisualElements;
 using SynthesisAPI.Utilities;
+using SynthesisCore.Components;
 using SynthesisCore.EntityControl;
 using SynthesisCore.EntityMovement;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using static SynthesisCoreData;
 
 namespace SynthesisCore.UI.Windows
 {
@@ -47,11 +53,23 @@ namespace SynthesisCore.UI.Windows
             spawnButton.Subscribe(x =>
             {
                 var e = SimulationManager.SpawnEntity(ModelAsset, Path.GetFileNameWithoutExtension(ModelAsset.Name));
+                var eName = e.GetComponent<Name>();
+
                 MoveArrows.MoveEntity(e);
                 if (firstSpawn)
                 {
                     Logger.Log("Press Return or Escape to stop moving entity");
                     firstSpawn = false; // TODO put this in preferences so it's tracked through application launches
+                    
+                    if (eName.IsUnique)
+                    {
+                        var t = ModelsDict[eName.Value];
+                        foreach (var name in ModelsDict)
+                        {
+                            Logger.Log("Entity " + name.Entity);
+                            Logger.Log("Value " + name.Value);
+                        }
+                    }
                 }
             });
         }
