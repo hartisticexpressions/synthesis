@@ -8,12 +8,16 @@ using SynthesisAPI.EnvironmentManager;
 using System.Linq;
 using MathNet.Spatial.Euclidean;
 using SharpGLTF.IO;
+using SynthesisAPI.EnvironmentManager.Components;
+using Mesh = SharpGLTF.Schema2.Mesh;
 
 namespace SynthesisAPI.AssetManager
 {
     public class GltfAsset : Asset
     {
         private ModelRoot model = null;
+        private static int modelCounter = 0;
+        private static long triangleCount = 0;
 
         public GltfAsset(string name, Permissions perm, string sourcePath)
         {
@@ -69,6 +73,8 @@ namespace SynthesisAPI.AssetManager
         {
             if (model == null) return null;
 
+            triangleCount = 0;
+
             preprocessedJoints = new Dictionary<string, List<string>>();
             rigidbodies = new Dictionary<string, EnvironmentManager.Components.Rigidbody>();
             defaultRigidjoints = new List<(EnvironmentManager.Components.Rigidbody, EnvironmentManager.Components.Rigidbody)>();
@@ -80,6 +86,9 @@ namespace SynthesisAPI.AssetManager
 
             bundle.Components.Add(ParseJoints());
 
+            Logger.Log($"Parsed model with {triangleCount} triangles", LogLevel.Debug);
+
+            modelCounter++;
             return bundle;
         }
 
@@ -103,8 +112,6 @@ namespace SynthesisAPI.AssetManager
             foreach (Node child in root.VisualChildren)
                 RecursiveUuidGathering(child);
         }
-
-
 
         private Bundle CreateBundle(Node node, Node parentNode = null, Bundle parentBundle = null)
         {
@@ -230,6 +237,7 @@ namespace SynthesisAPI.AssetManager
         private EnvironmentManager.Components.MeshCollider ParseMeshCollider(Mesh nodeMesh)
         {
             EnvironmentManager.Components.MeshCollider collider = new EnvironmentManager.Components.MeshCollider();
+            collider.collisionLayer = $"ent-{modelCounter}";
             return collider;
         }
 
@@ -248,6 +256,7 @@ namespace SynthesisAPI.AssetManager
                 }
 
                 var triangles = primitive.GetIndices();
+                triangleCount += triangles.Count / 3;
                 for (int i = 0; i < triangles.Count; i++)
                     m.Triangles.Add((int)triangles[i] + c);
             }

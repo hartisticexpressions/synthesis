@@ -5,16 +5,26 @@ using MeshCollider = SynthesisAPI.EnvironmentManager.Components.MeshCollider;
 using Mesh = SynthesisAPI.EnvironmentManager.Components.Mesh;
 using MeshColliderCookingOptions = SynthesisAPI.EnvironmentManager.Components.MeshColliderCookingOptions;
 using PhysicsMaterial = SynthesisAPI.EnvironmentManager.Components.PhysicsMaterial;
+using Logger = SynthesisAPI.Utilities.Logger;
 using System.ComponentModel;
 using SynthesisAPI.EnvironmentManager;
 using static Engine.ModuleLoader.Api;
+using System.Collections.Generic;
 
 namespace Engine.ModuleLoader.Adapters
 {
     public class MeshColliderAdapter : MonoBehaviour, IApiAdapter<MeshCollider>
     {
+        private static List<MeshColliderAdapter> allColliders = new List<MeshColliderAdapter>();
+
         internal UnityEngine.MeshCollider unityCollider;
         internal MeshCollider instance;
+
+        public void OnDestroy()
+        {
+            allColliders.Remove(this);
+            instance.PropertyChanged -= UnityProperty;
+        }
 
         public void SetInstance(MeshCollider collider)
         {
@@ -47,6 +57,15 @@ namespace Engine.ModuleLoader.Adapters
 
             unityCollider.cookingOptions = instance.cookingOptions.Convert<UnityEngine.MeshColliderCookingOptions>();
 
+            foreach (MeshColliderAdapter adapter in allColliders)
+            {
+                if (adapter.instance.collisionLayer.Equals(instance.collisionLayer))
+                {
+                    Physics.IgnoreCollision(unityCollider, adapter.unityCollider);
+                }
+            }
+
+            allColliders.Add(this);
         }
 
         private void UnityProperty(object sender, PropertyChangedEventArgs args)
@@ -118,10 +137,5 @@ namespace Engine.ModuleLoader.Adapters
         }
 
         private TResult ConvertEnum<TResult>(object i) => (TResult)Enum.Parse(typeof(TResult), i.ToString(), true);
-
-        public void OnDestroy()
-        {
-            instance.PropertyChanged -= UnityProperty;
-        }
     }
 }
