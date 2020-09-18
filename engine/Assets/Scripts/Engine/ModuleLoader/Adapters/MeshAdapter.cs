@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using Engine.Util;
 using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.Utilities;
@@ -36,32 +37,34 @@ namespace Engine.ModuleLoader.Adapters
 			filter.mesh.triangles = instance.Triangles.ToArray();
 			filter.mesh.RecalculateNormals();
 
-			instance.PropertyChanged += (s, e) =>
+			instance.PropertyChanged += SetMeshProperties;
+		}
+
+		private void SetMeshProperties(object s, PropertyChangedEventArgs e)
+        {
+			switch (e.PropertyName.ToLower())
 			{
-				switch (e.PropertyName.ToLower())
-				{
-					case "vertices":
-						filter.mesh.vertices = Misc.MapAll(instance._vertices, Misc.MapVector3D).ToArray();
-						UpdateCollider();
-						break;
-					case "uvs":
-						filter.mesh.uv = Misc.MapAll(instance._uvs, x => new Vector2((float)x.X, (float)x.Y)).ToArray();
-						break;
-					case "triangles":
-						filter.mesh.triangles = instance._triangles.ToArray();
-						UpdateCollider();
-						break;
-					case "color":
-						renderer.material.color = new Color(instance._color.r, instance._color.g, instance._color.b, instance._color.a);
-						break;
-					case "recalculate":
-						filter.mesh.RecalculateNormals();
-						break;
-					default:
-						SynthesisAPI.Utilities.Logger.Log($"Unsupported property {e.PropertyName}", LogLevel.Error);
-						break;
-				}
-			};
+				case "vertices":
+					filter.mesh.vertices = Misc.MapAll(instance._vertices, Misc.MapVector3D).ToArray();
+					UpdateCollider();
+					break;
+				case "uvs":
+					filter.mesh.uv = Misc.MapAll(instance._uvs, x => new Vector2((float)x.X, (float)x.Y)).ToArray();
+					break;
+				case "triangles":
+					filter.mesh.triangles = instance._triangles.ToArray();
+					UpdateCollider();
+					break;
+				case "color":
+					renderer.material.color = new Color(instance._color.r, instance._color.g, instance._color.b, instance._color.a);
+					break;
+				case "recalculate":
+					filter.mesh.RecalculateNormals();
+					break;
+				default:
+					SynthesisAPI.Utilities.Logger.Log($"Unsupported property {e.PropertyName}", LogLevel.Error);
+					break;
+			}
 		}
 
 		private void UpdateCollider()
@@ -77,5 +80,10 @@ namespace Engine.ModuleLoader.Adapters
 		internal Mesh instance;
 		internal MeshFilter filter;
 		internal MeshRenderer renderer;
-	}
+
+        public void OnDestroy()
+        {
+			instance.PropertyChanged -= SetMeshProperties;
+        }
+    }
 }

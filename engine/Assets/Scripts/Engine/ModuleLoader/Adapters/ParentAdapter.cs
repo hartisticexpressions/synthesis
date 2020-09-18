@@ -2,6 +2,7 @@
 using SynthesisAPI.EnvironmentManager.Components;
 using SynthesisAPI.EnvironmentManager;
 using static Engine.ModuleLoader.Api;
+using System.ComponentModel;
 
 namespace Engine.ModuleLoader.Adapters
 {
@@ -13,18 +14,20 @@ namespace Engine.ModuleLoader.Adapters
         {
             instance = parent;
 
-            instance.PropertyChanged += (s, e) =>
+            instance.PropertyChanged += SetParent;
+        }
+        private void SetParent(object s, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ParentEntity")
             {
-                if (e.PropertyName == "ParentEntity")
-                {
-                    GameObject _parent = (Entity)instance == 0 ? ApiProviderData.EntityParent : ApiProviderData.GameObjects[instance];
-                    gameObject.transform.SetParent(_parent.transform);
-                }
-            };
+                GameObject _parent = (Entity)instance == 0 ? ApiProviderData.EntityParent : ApiProviderData.GameObjects[instance];
+                gameObject.transform.SetParent(_parent.transform);
+            }
         }
 
         public void OnDestroy()
         {
+            instance.PropertyChanged -= SetParent;
             instance.Entity.Value.RemoveEntity();
         }
 

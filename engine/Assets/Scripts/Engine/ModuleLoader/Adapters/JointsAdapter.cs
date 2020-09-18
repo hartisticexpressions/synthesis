@@ -41,6 +41,10 @@ namespace Engine.ModuleLoader.Adapters
 
         public void OnDestroy()
         {
+            instance.AddJoint -= Add;
+            instance.RemoveJoint -= Remove;
+            foreach(IJointAdapter jointAdapter in _jointAdapters)
+                jointAdapter.Destroy();
             _jointAdapters.Clear();
         }
 
@@ -66,6 +70,7 @@ namespace Engine.ModuleLoader.Adapters
         interface IJointAdapter
         {
             void Update();
+            void Destroy();
             IJoint GetIJoint();
             bool Exists();
         }
@@ -131,6 +136,10 @@ namespace Engine.ModuleLoader.Adapters
                         SynthesisAPI.Utilities.Logger.Log($"Unsupported property {args.PropertyName}", LogLevel.Error);
                         break;
                 }
+            }
+            public void Destroy()
+            {
+                _joint.PropertyChanged -= UpdateProperty;
             }
         }
         class HingeJointAdapter : IJointAdapter
@@ -212,6 +221,10 @@ namespace Engine.ModuleLoader.Adapters
                     default:
                         throw new Exception($"Property {args.PropertyName} not supported");
                 }
+            }
+            public void Destroy()
+            {
+                _joint.PropertyChanged -= UpdateProperty;
             }
         }
     }
