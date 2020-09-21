@@ -17,6 +17,7 @@ namespace SynthesisCore.UI
         private VisualElement pageContainer;
         private GeneralPage GeneralPage;
         private ControlsPage ControlsPage;
+        private RobotControlsPage RobotControlsPage;
 
         private static Dictionary<string, object> PendingChanges = new Dictionary<string, object>();
         
@@ -28,7 +29,8 @@ namespace SynthesisCore.UI
 
             GeneralPage = new GeneralPage(generalAsset);
             ControlsPage = new ControlsPage(controlsAsset);
-            RobotControlsPage.Create(robotControlsAsset);
+            RobotControlsPage = new RobotControlsPage(robotControlsAsset);
+            //RobotControlsPage.Create(robotControlsAsset);
 
             var settingsAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Settings.uxml");
             Panel = new Panel("Settings", settingsAsset, OnWindowCreate);
@@ -56,7 +58,7 @@ namespace SynthesisCore.UI
             {
                 if (info != null && info.Panel.Name.Equals("Settings"))
                 {
-                    if(pageContainer.GetChildren().Any(e => e.Name == "robot-controls-page"))
+                    if(pageContainer.GetChildren().Any(e => e.Name == "page"))
                         RobotControlsPage.LookAtEntity();
                 }
             });
@@ -67,7 +69,7 @@ namespace SynthesisCore.UI
                 {
                     GeneralPage.RefreshPreferences();
                     ControlsPage.RefreshPreferences();
-                    RobotControlsPage.RefreshPreferences();
+                    //RobotControlsPage.RefreshEntityDropdown();
                     RobotControlsPage.StopLookAtEntity();
                 }
             });
@@ -95,7 +97,10 @@ namespace SynthesisCore.UI
             Button robotControlsSettingsButton = (Button)Window.Get("robot-controls-settings-button");
             robotControlsSettingsButton?.Subscribe(x =>
             {
+                var robotControlsAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/RobotControls.uxml");
+                RobotControlsPage = new RobotControlsPage(robotControlsAsset);
                 SetPageContent(RobotControlsPage.Page);
+                //RobotControlsPage.RefreshEntityDropdown();
                 RobotControlsPage.LookAtEntity();
             });
 

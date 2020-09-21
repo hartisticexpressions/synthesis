@@ -59,7 +59,8 @@ namespace SynthesisCore.UI
                     _ => {
                         if (isEntitySelected) {
                             var name = Selectable.Selected.Entity?.GetComponent<Name>();
-                            EnvironmentManager.RemoveComponent<Name>((Entity)SynthesisCoreData.ModelsDict[name.Value]);
+                            //EnvironmentManager.RemoveComponent<Name>((Entity)SynthesisCoreData.ModelsDict[name.Value]);
+                            SynthesisCoreData.ModelsDict[name.Value].Value.RemoveEntity();
                             EnvironmentManager.RemoveEntity(Selectable.Selected.Entity.Value);
                             foreach (var t in SynthesisCoreData.ModelsDict)
                             {

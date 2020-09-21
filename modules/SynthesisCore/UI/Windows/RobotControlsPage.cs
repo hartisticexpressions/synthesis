@@ -3,16 +3,16 @@ using SynthesisAPI.EnvironmentManager;
 using SynthesisAPI.EnvironmentManager.Components;
 using SynthesisAPI.UIManager;
 using SynthesisAPI.UIManager.VisualElements;
+using SynthesisAPI.Utilities;
 using SynthesisCore.EntityControl;
-using SynthesisCore.Simulation;
 using System;
 using System.Collections.Generic;
 
 namespace SynthesisCore.UI.Windows
 {
-    public static class RobotControlsPage
+    public class RobotControlsPage
     {
-        public static VisualElement Page { get; private set; } = null;
+        public VisualElement Page { get; private set; } = null;
         private static ListView controlListView;
         private static Dropdown entityDropdown;
         private static Dropdown driveSchemeDropdown;
@@ -27,11 +27,23 @@ namespace SynthesisCore.UI.Windows
         private static VisualElementAsset controlAsset;
         private static List<ControlItem> controlsList = new List<ControlItem>();
 
-        public static void Create(VisualElementAsset controlsAsset)
+        private static VisualElement entitySelector;
+        public RobotControlsPage(VisualElementAsset robotControlsAsset)
+        {
+            Page = robotControlsAsset.GetElement("page");
+            Page.SetStyleProperty("height", "100%");
+
+            controlListView = (ListView)Page.Get("robot-controls");
+            controlAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Control.uxml");
+
+            LoadPageContent();
+        }
+
+        public void Create(VisualElementAsset controlsAsset)
         {
             if (Page == null)
             {
-                Page = controlsAsset.GetElement("robot-controls-page");
+                Page = controlsAsset.GetElement("page");
                 Page.SetStyleProperty("height", "100%");
 
                 controlListView = (ListView)Page.Get("robot-controls");
@@ -50,25 +62,31 @@ namespace SynthesisCore.UI.Windows
             var a = new Dictionary<string, Entity>();
             foreach(var i in SynthesisCoreData.ModelsDict)
             {
-                if (i.Entity?.GetComponent<MotorAssemblyManager>() != null &&
-                    i.Entity?.GetComponent<MotorAssemblyManager>().AllMotorAssemblies.Count > 0)
-                {
+                //if (i.Entity?.GetComponent<MotorAssemblyManager>() != null &&
+                //    i.Entity?.GetComponent<MotorAssemblyManager>().AllMotorAssemblies.Count > 0)
+                //{
                     a.Add(i.Value, i.Entity.Value);
-                }
+                    Logger.Log(i.Value + i.Entity.Value);
+                //}
             }
             return a;
         }
 
-        private static void LoadPageContent()
+        public void RefreshEntityDropdown()
+        {
+            LoadPageContent();
+        }
+
+        private void LoadPageContent()
         {
             // Entity selector
-            var entitySelector = Page.Get("entity-selector-dropdown-container");
+            setupControlsButton = (Button)Page.Get("setup-controls-button");
+            entitySelector = Page.Get("entity-selector-dropdown-container");
             entityDropdown = new Dropdown("entity-dropdown", 0, controllableEntities().Keys);
             entityDropdown.ItemHeight = 15;
             entitySelector.Add(entityDropdown);
 
             UpdateDropdownSelectedEntity();
-            setupControlsButton = (Button)Page.Get("setup-controls-button");
 
             entityDropdown.Subscribe(_ => {
                 UpdateDropdownSelectedEntity();
@@ -267,7 +285,7 @@ namespace SynthesisCore.UI.Windows
             return divider;
         }
 
-        internal static void LookAtEntity()
+        internal void LookAtEntity()
         {
             if (cameraState == null)
             {
@@ -278,7 +296,7 @@ namespace SynthesisCore.UI.Windows
                 CameraController.Instance.SetNewFocus(pos.Value, true);
         }
 
-        internal static void StopLookAtEntity()
+        internal void StopLookAtEntity()
         {
             if (cameraState != null)
             {
