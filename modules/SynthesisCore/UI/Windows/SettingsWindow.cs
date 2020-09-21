@@ -30,14 +30,13 @@ namespace SynthesisCore.UI
             GeneralPage = new GeneralPage(generalAsset);
             ControlsPage = new ControlsPage(controlsAsset);
             RobotControlsPage = new RobotControlsPage(robotControlsAsset);
-            //RobotControlsPage.Create(robotControlsAsset);
 
             var settingsAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Settings.uxml");
             Panel = new Panel("Settings", settingsAsset, OnWindowCreate);
 
             Button settingsButton = (Button) UIManager.RootElement.Get("settings-button");
             settingsButton.Subscribe(x => UIManager.TogglePanel("Settings"));
-            
+
             SetupWindowToggleCallbacks();
         }
 
@@ -69,7 +68,6 @@ namespace SynthesisCore.UI
                 {
                     GeneralPage.RefreshPreferences();
                     ControlsPage.RefreshPreferences();
-                    //RobotControlsPage.RefreshEntityDropdown();
                     RobotControlsPage.StopLookAtEntity();
                 }
             });
@@ -81,7 +79,7 @@ namespace SynthesisCore.UI
         }
 
         private void RegisterButtons()
-        {
+        { 
             Button generalSettingsButton = (Button) Window.Get("general-settings-button");
             generalSettingsButton?.Subscribe(x =>
             {
@@ -99,8 +97,8 @@ namespace SynthesisCore.UI
             {
                 var robotControlsAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/RobotControls.uxml");
                 RobotControlsPage = new RobotControlsPage(robotControlsAsset);
+
                 SetPageContent(RobotControlsPage.Page);
-                //RobotControlsPage.RefreshEntityDropdown();
                 RobotControlsPage.LookAtEntity();
             });
 

@@ -64,11 +64,6 @@ namespace SynthesisCore.UI.Windows
                     if (eName.IsUnique)
                     {
                         var t = ModelsDict[eName.Value];
-                        foreach (var name in ModelsDict)
-                        {
-                            Logger.Log("Entity " + name.Entity);
-                            Logger.Log("Value " + name.Value);
-                        }
                     }
                 }
             });

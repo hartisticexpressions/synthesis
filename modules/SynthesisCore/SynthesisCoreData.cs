@@ -37,5 +37,6 @@ public static class SynthesisCoreData
         }
     }
 
+    // Local dictionary of current entities
     public static ModelsDictionary ModelsDict = new ModelsDictionary(); // TODO rework this
 }

@@ -39,20 +39,6 @@ namespace SynthesisCore.UI.Windows
             LoadPageContent();
         }
 
-        public void Create(VisualElementAsset controlsAsset)
-        {
-            if (Page == null)
-            {
-                Page = controlsAsset.GetElement("page");
-                Page.SetStyleProperty("height", "100%");
-
-                controlListView = (ListView)Page.Get("robot-controls");
-                controlAsset = AssetManager.GetAsset<VisualElementAsset>("/modules/synthesis_core/UI/uxml/Control.uxml");
-
-                LoadPageContent();
-            }
-        }
-
         /// <summary>
         /// Get the entities with that have MotorAssemblyManager components, which mean they can be controlled by a RobotController
         /// </summary>
@@ -62,19 +48,14 @@ namespace SynthesisCore.UI.Windows
             var a = new Dictionary<string, Entity>();
             foreach(var i in SynthesisCoreData.ModelsDict)
             {
+                // for debugging since sample models do not have motors
                 //if (i.Entity?.GetComponent<MotorAssemblyManager>() != null &&
                 //    i.Entity?.GetComponent<MotorAssemblyManager>().AllMotorAssemblies.Count > 0)
                 //{
                     a.Add(i.Value, i.Entity.Value);
-                    Logger.Log(i.Value + i.Entity.Value);
                 //}
             }
             return a;
-        }
-
-        public void RefreshEntityDropdown()
-        {
-            LoadPageContent();
         }
 
         private void LoadPageContent()

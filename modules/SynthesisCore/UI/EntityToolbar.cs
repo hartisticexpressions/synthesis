@@ -18,7 +18,6 @@ namespace SynthesisCore.UI
         private static bool isToolbarBound = false;
 
         private static bool openedJointEditor = false;
-
         private static bool isEntitySelected => Selectable.Selected != null;
 
         private static VisualElement moveEntityButton = null;
@@ -58,14 +57,10 @@ namespace SynthesisCore.UI
                 deleteEntityButton = ToolbarTools.AddButton(modifyCategory, "delete-entity-button", "Delete Entity", DeleteEntityButtonIconDisabled,
                     _ => {
                         if (isEntitySelected) {
+                            // Remove entity from ModelsDict
                             var name = Selectable.Selected.Entity?.GetComponent<Name>();
-                            //EnvironmentManager.RemoveComponent<Name>((Entity)SynthesisCoreData.ModelsDict[name.Value]);
                             SynthesisCoreData.ModelsDict[name.Value].Value.RemoveEntity();
                             EnvironmentManager.RemoveEntity(Selectable.Selected.Entity.Value);
-                            foreach (var t in SynthesisCoreData.ModelsDict)
-                            {
-                                Logger.Log("Models Dict: " + t.Value);
-                            } 
                         }
                     });
 
