@@ -6,9 +6,4 @@
 *.exe
 *.exe.stackdump
 *.a
-*.dll
-*.dll.meta
 *.so
-
-!engine/CoreEngine/Assets/Api.dll
-!engine/CoreEngine/Assets/Api.dll.meta
