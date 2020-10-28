@@ -56,9 +56,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/Scripts/ModelManager/ModelManager.cs" />
-    <Compile Include="Assets/Scripts/UI/NavBar/NavBar.cs" />
     <Compile Include="Assets/Scripts/Camera/Camera.cs" />
     <Compile Include="Assets/Scripts/ModelManager/Parse.cs" />
+    <Compile Include="Assets/Scripts/UI/Bars/Bar.cs" />
+    <Compile Include="Assets/Scripts/UI/Panels/Panel.cs" />
+    <Compile Include="Assets/Scripts/ModelManager/Models/Model.cs" />
+    <Compile Include="Assets/Scripts/ModelManager/Models/Robot.cs" />
+    <Compile Include="Assets/Scripts/ModelManager/Models/Field.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />

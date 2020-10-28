@@ -10,20 +10,23 @@ namespace Synthesis.ModelManager
 {
     public static class Parse
     {
+        //for testing call -> Synthesis.ModelManager.Parse.AsRobot("Assets/Testing/Test.glb");
+
         private static bool tryFix = true;
 
-        public static void AsRobot(String filePath)
+        public static GameObject AsRobot(string filePath)
         {
             ModelRoot model = GetModelInfo(filePath);
             GameObject gameObject = CreateGameObject(model.DefaultScene.VisualChildren.First());
+            return gameObject;
         }
 
-        public static void AsField(String filePath)
+        public static GameObject AsField(string filePath)
         {
-
+            return null;
         }
 
-        private static ModelRoot GetModelInfo(String filePath)
+        private static ModelRoot GetModelInfo(string filePath)
         {
             //set up file
             byte[] data = File.ReadAllBytes(filePath);

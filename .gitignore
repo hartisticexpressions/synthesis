@@ -7,3 +7,4 @@
 *.exe.stackdump
 *.a
 *.so
+*.log
