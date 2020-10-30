@@ -44,6 +44,11 @@ namespace Synthesis.Camera
 
         void Awake()
         {
+            if (!target)
+            {
+                target = new GameObject("Camera Target").transform;
+                target.position = new Vector3(0, 1, 0); //arbitrary
+            }
             _pitch = Quaternion.Euler(this.transform.rotation.eulerAngles.x, 0, 0);
             _yaw = Quaternion.Euler(0, this.transform.rotation.eulerAngles.y, 0);
         }
@@ -53,7 +58,7 @@ namespace Synthesis.Camera
             if (!Freeze)
             {
                 if (Input.GetMouseButton(0))
-                    Move(Input.GetAxis("Mouse X") * rotationSpeed, -Input.GetAxis("Mouse Y") * rotationSpeed);
+                    Orbit(Input.GetAxis("Mouse X") * rotationSpeed, -Input.GetAxis("Mouse Y") * rotationSpeed);
                 distance = Mathf.Max(distance + Input.mouseScrollDelta.y * zoomSpeed, 0);
             }
         }
@@ -69,7 +74,7 @@ namespace Synthesis.Camera
             this.transform.position = target.position + offset;
         }
 
-        public void Move(float yawDelta, float pitchDelta)
+        public void Orbit(float yawDelta, float pitchDelta)
         {
             _yaw = _yaw * Quaternion.Euler(0, yawDelta, 0);
             _pitch = _pitch * Quaternion.Euler(pitchDelta, 0, 0);
