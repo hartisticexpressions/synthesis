@@ -71,8 +71,9 @@ namespace Synthesis.ModelManager
         {
             var transform = gameObject.transform;
             var nodeTransform = node.LocalTransform;
-            transform.localPosition = new Vector3(nodeTransform.Translation.X * nodeTransform.Scale.X, nodeTransform.Translation.Y * nodeTransform.Scale.Y, nodeTransform.Translation.Z * nodeTransform.Scale.Z);
-            transform.localRotation = new Quaternion(nodeTransform.Rotation.X, nodeTransform.Rotation.Y, nodeTransform.Rotation.Z, nodeTransform.Rotation.W);
+
+            // extension method to Unity transform
+            Design.SetTransform(transform, nodeTransform);
         }
 
         private static void ParseMesh(Node node, GameObject gameObject)
