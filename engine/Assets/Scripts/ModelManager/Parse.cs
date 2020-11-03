@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
+using Assets.Scripts.ModelManager;
 
 namespace Synthesis.ModelManager
 {
