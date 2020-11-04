@@ -7,33 +7,45 @@ namespace Synthesis.Camera
 	public class Camera : MonoBehaviour
 	{
         [SerializeField]
-        Transform target;
+        Transform _target;
 
         [SerializeField, Min(0f)]
-        float distance = 5;
+        float _distance = 5;
+
+        public float Distance { get => _distance; set => _distance = value; }
 
         [SerializeField, Range(0.01f, 0.5f)]
-        float zoomSpeed = 0.1f;
+        float _zoomSensitivity = 0.1f;
+
+        public float ZoomSensitivity { get => _zoomSensitivity; set => _zoomSensitivity = value; }
 
         //[SerializeField, Range(1, 5)]
         //float zoomDamp = 2;
 
         [SerializeField, Range(1, 5)]
-        float rotationDamp = 2;
+        float _orbitSpeed = 2;
+
+        public float OrbitSpeed { get => _orbitSpeed; set => _orbitSpeed = value; }
 
         [SerializeField, Range(1,20)]
-        float rotationSpeed = 4;
+        float _rotationSensitvity = 4;
+
+        public float RotationSensitivity { get => _rotationSensitvity; set => _rotationSensitvity = value; }
 
         [SerializeField, Range(0, 180)]
         float _yawLimit = 180;
 
+        public float YawLimit { get => _yawLimit; set => _yawLimit = value; }
+
         [SerializeField, Range(0, 90)]
         float _pitchLimit = 90;
 
-        [SerializeField]
-        bool freeze = false;
+        public float PitchLimit { get => _pitchLimit; set => _pitchLimit = value; }
 
-        public bool Freeze { get => freeze; set => freeze = value; }
+        [SerializeField]
+        bool _freeze = false;
+
+        public bool Freeze { get => _freeze; set => _freeze = value; }
 
         private Quaternion _pitch; //up and down
         private Quaternion _yaw; //left and right 
@@ -42,12 +54,15 @@ namespace Synthesis.Camera
         private Vector3 _targetPosition;
         //private float _targetDistance;
 
+        private GameObject targetObject;
+
         void Awake()
         {
-            if (!target)
+            targetObject = new GameObject(gameObject.name + " Target");
+            if (!_target)
             {
-                target = new GameObject("Camera Target").transform;
-                target.position = new Vector3(0, 1, 0); //arbitrary
+                _target = targetObject.transform;
+                _target.position = new Vector3(0, 1, 0); //arbitrary
             }
             _pitch = Quaternion.Euler(this.transform.rotation.eulerAngles.x, 0, 0);
             _yaw = Quaternion.Euler(0, this.transform.rotation.eulerAngles.y, 0);
@@ -55,11 +70,11 @@ namespace Synthesis.Camera
 
         private void Update()
         {
-            if (!Freeze)
+            if (!_freeze)
             {
                 if (Input.GetMouseButton(0))
-                    Orbit(Input.GetAxis("Mouse X") * rotationSpeed, -Input.GetAxis("Mouse Y") * rotationSpeed);
-                distance = Mathf.Max(distance + Input.mouseScrollDelta.y * zoomSpeed, 0);
+                    Orbit(Input.GetAxis("Mouse X") * _orbitSpeed, -Input.GetAxis("Mouse Y") * _orbitSpeed);
+                _distance = Mathf.Max(_distance + Input.mouseScrollDelta.y * _zoomSensitivity, 0);
             }
         }
 
@@ -68,10 +83,10 @@ namespace Synthesis.Camera
             _targetRotation = _yaw * _pitch; //target angle from (0,0,0)
 
             //interpolate between current rotation to target rotation for smoothness
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, _targetRotation, Mathf.Clamp01(Time.smoothDeltaTime * rotationDamp));
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, _targetRotation, Mathf.Clamp01(Time.smoothDeltaTime * _orbitSpeed));
 
-            Vector3 offset = this.transform.rotation * (-Vector3.forward * distance); //magnitude of offset (offset - origin) is equal to distance 
-            this.transform.position = target.position + offset;
+            Vector3 offset = this.transform.rotation * (-Vector3.forward * _distance); //magnitude of offset (offset - origin) is equal to distance 
+            this.transform.position = _target.position + offset;
         }
 
         public void Orbit(float yawDelta, float pitchDelta)
@@ -83,8 +98,8 @@ namespace Synthesis.Camera
 
         private void ApplyConstraints()
         {
-            Quaternion targetYaw = Quaternion.Euler(0, target.rotation.eulerAngles.y, 0);
-            Quaternion targetPitch = Quaternion.Euler(target.rotation.eulerAngles.x, 0, 0);
+            Quaternion targetYaw = Quaternion.Euler(0, _target.rotation.eulerAngles.y, 0);
+            Quaternion targetPitch = Quaternion.Euler(_target.rotation.eulerAngles.x, 0, 0);
 
             float yawDifference = Quaternion.Angle(_yaw, targetYaw);
             float pitchDifference = Quaternion.Angle(_pitch, targetPitch);
@@ -96,5 +111,18 @@ namespace Synthesis.Camera
             if (pitchOverflow > 0) { _pitch = Quaternion.Slerp(_pitch, targetPitch, pitchOverflow / pitchDifference); }
         }
 
+        public void LookAt(GameObject g)
+        {
+            _target = g.transform;
+        }
+        public void LookAt(Vector3 v)
+        {
+            targetObject.transform.position = v;
+            _target = targetObject.transform;
+        }
+        public void LookAt(Transform t)
+        {
+            _target = t;
+        }
     }
 }
