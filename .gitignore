@@ -1,14 +1,14 @@
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Mm]emoryCaptures/
+/engine/[Ll]ibrary/
+/engine/[Tt]emp/
+/engine/[Oo]bj/
+/engine/[Bb]uild/
+/engine/[Bb]uilds/
+/engine/[Ll]ogs/
+/engine/[Mm]emoryCaptures/
 
-!/[Aa]ssets/**/*.meta
+!/engine/[Aa]ssets/**/*.meta
 
-/[Aa]ssets/AssetStoreTools*
+/engine/[Aa]ssets/AssetStoreTools*
 
 .vs/
 .DS_Store
