@@ -6,9 +6,9 @@ namespace Synthesis.ModelManager
 {
     public static class ModelManager
     {
-        public static void Add()
+        public static void Add(string filePath)
         {
-
+            Parse.AsRobot(filePath);
         }
         public static void Remove()
         {

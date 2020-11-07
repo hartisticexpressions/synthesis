@@ -14,10 +14,25 @@ namespace Synthesis.ModelManager
 
         private static bool tryFix = true;
 
+        private const float defaultMass = 1;
+
+        private static Dictionary<string, UnityEngine.Rigidbody> rigidbodyCache = new Dictionary<string, UnityEngine.Rigidbody>();
+        private static List<MeshCollider> colliders = new List<MeshCollider>();
+
         public static GameObject AsRobot(string filePath)
         {
             ModelRoot model = GetModelInfo(filePath);
             GameObject gameObject = CreateGameObject(model.DefaultScene.VisualChildren.First());
+            ParseJoints(model);
+            /*for(int i = 0; i < colliders.Count; i++)
+            {
+                for(int j = i + 1; j < colliders.Count; j++)
+                {
+                    Physics.IgnoreCollision(colliders[i], colliders[j]);
+                }
+            }*/
+            colliders.Clear();
+            rigidbodyCache.Clear();
             return gameObject;
         }
 
@@ -57,12 +72,19 @@ namespace Synthesis.ModelManager
             GameObject gameObject = new GameObject();
 
             ParseTransform(node, gameObject);
-            ParseMesh(node, gameObject);
+            if(node.Mesh != null)
+            {
+                ParseMesh(node, gameObject);
+                ParseMeshCollider(node, gameObject);
+                ParseRigidBody(node, gameObject);
+            }
 
             foreach(Node child in node.VisualChildren)
             {
                 GameObject childObject = CreateGameObject(child,node);
                 childObject.transform.parent = gameObject.transform;
+                FixedJoint joint = childObject.AddComponent<FixedJoint>();
+                joint.connectedBody = gameObject.GetComponent<Rigidbody>();
             }
             return gameObject;
         }
@@ -77,43 +99,120 @@ namespace Synthesis.ModelManager
 
         private static void ParseMesh(Node node, GameObject gameObject)
         {
-            if (node.Mesh != null)
+            //mesh
+            var scale = node.LocalTransform.Scale;
+
+            List<Vector3> vertices = new List<Vector3>();
+            List<Vector2> uvs = new List<Vector2>();
+            List<int> triangles = new List<int>();
+
+            var filter = gameObject.AddComponent<UnityEngine.MeshFilter>();
+
+            foreach (MeshPrimitive primitive in node.Mesh.Primitives)
             {
-                //mesh
-                var scale = node.LocalTransform.Scale;
-
-                List<Vector3> vertices = new List<Vector3>();
-                List<Vector2> uvs = new List<Vector2>();
-                List<int> triangles = new List<int>();
-
-                var filter = gameObject.AddComponent<UnityEngine.MeshFilter>();
-
-                foreach (MeshPrimitive primitive in node.Mesh.Primitives)
+                int c = vertices.Count();
+                // checks for POSITION or NORMAL vertex as not all designs have both (TODO: This doesn't trip, if it did would we screw up the triangles?)
+                if (primitive.VertexAccessors.ContainsKey("POSITION"))
                 {
-                    int c = vertices.Count();
-                    // checks for POSITION or NORMAL vertex as not all designs have both (TODO: This doesn't trip, if it did would we screw up the triangles?)
-                    if (primitive.VertexAccessors.ContainsKey("POSITION"))
-                    {
-                        var primitiveVertices = primitive.GetVertices("POSITION").AsVector3Array();
-                        foreach (var vertex in primitiveVertices)
-                            vertices.Add(new Vector3(vertex.X * scale.X, vertex.Y * scale.Y, vertex.Z * scale.Z));
-                    }
-
-                    var primitiveTriangles = primitive.GetIndices();
-                    for (int i = 0; i < primitiveTriangles.Count; i++)
-                        triangles.Add((int)primitiveTriangles[i] + c);
+                    var primitiveVertices = primitive.GetVertices("POSITION").AsVector3Array();
+                    foreach (var vertex in primitiveVertices)
+                        vertices.Add(new Vector3(vertex.X * scale.X, vertex.Y * scale.Y, vertex.Z * scale.Z));
                 }
 
-                filter.mesh = new UnityEngine.Mesh();
-                filter.mesh.vertices = vertices.ToArray();
-                filter.mesh.uv = uvs.ToArray();
-                filter.mesh.triangles = triangles.ToArray();
-                filter.mesh.RecalculateNormals();
-
-                //material
-                var renderer = gameObject.AddComponent<UnityEngine.MeshRenderer>();
-
+                var primitiveTriangles = primitive.GetIndices();
+                for (int i = 0; i < primitiveTriangles.Count; i++)
+                    triangles.Add((int)primitiveTriangles[i] + c);
             }
+
+            filter.mesh = new UnityEngine.Mesh();
+            filter.mesh.vertices = vertices.ToArray();
+            filter.mesh.uv = uvs.ToArray();
+            filter.mesh.triangles = triangles.ToArray();
+            filter.mesh.RecalculateNormals();
+
+            //TODO: material
+            var renderer = gameObject.AddComponent<UnityEngine.MeshRenderer>();
+        }
+
+        private static void ParseMeshCollider(Node node, GameObject gameObject)
+        {
+            MeshCollider collider = gameObject.AddComponent<MeshCollider>();
+            collider.convex = true; //outside
+            collider.sharedMesh = gameObject.GetComponent<MeshFilter>().mesh; //attach mesh
+            colliders.Add(collider);
+        }
+
+        private static void ParseRigidBody(Node node, GameObject gameObject)
+        {
+            Rigidbody rigidbody = gameObject.AddComponent<Rigidbody>();
+
+            //mass
+            if ((node.Mesh.Extras as JsonDictionary).TryGetValue("physicalProperties", out object physicalProperties) && (physicalProperties as JsonDictionary).TryGetValue("mass", out object massStr))
+                rigidbody.mass = float.TryParse(massStr.ToString(), out float mass) ? mass : defaultMass;
+            
+            rigidbodyCache.Add((node.Extras as JsonDictionary)?.Get<string>("uuid"), rigidbody);
+        }
+
+        private static void ParseJoints(ModelRoot model)
+        {
+            var joints = (model.Extras as JsonDictionary)["joints"] as JsonList;
+
+            foreach (var jointObj in joints)
+            {
+                var joint = jointObj as JsonDictionary;
+                string name = joint.Get("header").Get<string>("name"); // Probably not gonna be used
+                Vector3 anchor = ParseJointVector3D(joint.Get("origin"));
+                Rigidbody parent = rigidbodyCache[joint.Get<string>("occurrenceOneUUID")];
+                Rigidbody child = rigidbodyCache[joint.Get<string>("occurrenceTwoUUID")];
+
+                foreach (Joint j in child.gameObject.GetComponents<FixedJoint>())
+                {
+                    Component.Destroy(j);
+                }
+                foreach (Joint j in child.gameObject.GetComponents<HingeJoint>())
+                {
+                    Component.Destroy(j);
+                }
+
+                if (joint.ContainsKey("revoluteJointMotion"))
+                {
+                    var revoluteData = joint.Get("revoluteJointMotion");
+                    Vector3 axis = ParseJointVector3D(revoluteData.Get("rotationAxisVector"));
+                    // TODO: Support limits
+                    HingeJoint result = child.gameObject.AddComponent<HingeJoint>();
+                    result.anchor = anchor;
+                    result.axis = axis;
+                    result.connectedBody = parent;
+                }
+                else
+                { // For yet to be supported and fixed motion joints
+                    FixedJoint result = child.gameObject.AddComponent<FixedJoint>();
+                    result.anchor = anchor;
+                    result.connectedBody = parent;
+                }
+            }
+        }
+
+        private static Vector3 ParseJointVector3D(JsonDictionary dict) =>
+           new Vector3((float)dict.TryGet<decimal>("x", 0),
+                   (float)dict.TryGet<decimal>("y", 0), (float)dict.TryGet<decimal>("z", 0));
+    }
+    public static class GltfAssetExtensions
+    {
+        public static T Get<T>(this JsonDictionary dict, string key) => (T)dict[key];
+        public static T TryGet<T>(this JsonDictionary dict, string key, T defaultObj)
+        {
+            if (dict.ContainsKey(key))
+                return (T)dict[key];
+            else
+                return defaultObj;
+        }
+        public static JsonDictionary Get(this JsonDictionary dict, string key) => (JsonDictionary)dict[key];
+
+        public static void ForEach<T>(this IEnumerable<T> e, Action<int, T> method)
+        {
+            for (int i = 0; i < e.Count(); ++i)
+                method(i, e.ElementAt(i)); // I really hope this holds reference
         }
     }
 }
