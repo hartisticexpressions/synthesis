@@ -1,4 +1,5 @@
 ﻿using System;
+using Synthesis.ModelManager;
 
 namespace Synthesis.ModelManager.Models
 {

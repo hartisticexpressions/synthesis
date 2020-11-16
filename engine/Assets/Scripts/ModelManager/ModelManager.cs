@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Synthesis.ModelManager;
 using UnityEngine;
 
 namespace Synthesis.ModelManager
