@@ -11,8 +11,6 @@ namespace Synthesis.ModelManager
 {
     public static class Parse
     {
-        //for testing call -> Synthesis.ModelManager.Parse.AsRobot("Assets/Testing/Test.glb");
-
         private static bool tryFix = true;
 
         private const float defaultMass = 1;
@@ -22,26 +20,14 @@ namespace Synthesis.ModelManager
         /// </summary>
         private static readonly Dictionary<string, UnityEngine.Rigidbody> RigidbodyCache = new Dictionary<string, UnityEngine.Rigidbody>();
         
-        /// <summary>
-        /// This is a collection of MeshColliders
-        /// </summary>
-        private static readonly List<MeshCollider> Colliders = new List<MeshCollider>();
 
         public static GameObject AsRobot(string filePath)
         {
             var model = GetModelInfo(filePath);
             var gameObject = CreateGameObject(model.DefaultScene.VisualChildren.First());
             ParseJoints(model);
-            /*for(int i = 0; i < colliders.Count; i++)
-            {
-                for(int j = i + 1; j < colliders.Count; j++)
-                {
-                    Physics.IgnoreCollision(colliders[i], colliders[j]);
-                }
-            }*/
-            Colliders.Clear();
             RigidbodyCache.Clear();
-            return gameObject;
+            return Flatten(gameObject);
         }
 
         public static GameObject AsField(string filePath)
@@ -93,10 +79,40 @@ namespace Synthesis.ModelManager
             {
                 var childObject = CreateGameObject(child,node);
                 childObject.transform.parent = gameObject.transform;
-                var joint = childObject.AddComponent<FixedJoint>();
-                joint.connectedBody = gameObject.GetComponent<Rigidbody>();
             }
             return gameObject;
+        }
+
+        public static GameObject Flatten(GameObject gameObject)
+        {
+            GameObject root = new GameObject(gameObject.name);
+            GameObject motionless = new GameObject(gameObject.name + " Rooted");
+            motionless.transform.parent = root.transform;
+            Rigidbody motionlessBody = motionless.AddComponent<Rigidbody>();
+            foreach (Transform t in gameObject.transform)
+                Flatten(t.gameObject, root.transform, motionlessBody);
+            Object.Destroy(gameObject);
+            return root;
+        }
+
+        private static void Flatten(GameObject gameObject, Transform root, Rigidbody motionless)
+        {
+            while (gameObject.transform.childCount > 0)
+                Flatten(gameObject.transform.GetChild(0).gameObject, root, motionless);
+            if (gameObject.GetComponent<HingeJoint>() == null)
+            {
+                Rigidbody r = gameObject.GetComponent<Rigidbody>();
+                if (r != null)
+                    motionless.GetComponent<Rigidbody>().mass += r.mass;
+                gameObject.transform.parent = motionless.transform;
+                Object.Destroy(r);
+            }
+            else
+            {
+                gameObject.transform.parent = root;
+                var joint = gameObject.GetComponent<HingeJoint>();
+                joint.connectedBody = motionless;
+            }
         }
 
         private static void ParseTransform(Node node, GameObject gameObject)
@@ -164,8 +180,6 @@ namespace Synthesis.ModelManager
             var collider = gameObject.AddComponent<MeshCollider>();
             collider.convex = true; //outside
             collider.sharedMesh = gameObject.GetComponent<MeshFilter>().mesh; //attach mesh
-            
-            Colliders.Add(collider); // why is this needed?
         }
 
         private static void ParseRigidBody(Node node, GameObject gameObject)
@@ -209,7 +223,7 @@ namespace Synthesis.ModelManager
                     var axis = ParseJointVector3D(revoluteData.Get("rotationAxisVector"));
                     // TODO: Support limits
                     var result = child.gameObject.AddComponent<HingeJoint>();
-                    result.anchor = anchor;
+                    result.anchor = anchor - result.transform.position;
                     result.axis = axis;
                     result.connectedBody = parent;
                 }
