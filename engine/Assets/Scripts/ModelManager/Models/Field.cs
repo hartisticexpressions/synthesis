@@ -1,5 +1,6 @@
 ﻿using System;
 using Synthesis.ModelManager;
+using UnityEngine;
 
 namespace Synthesis.ModelManager.Models
 {
@@ -7,7 +8,7 @@ namespace Synthesis.ModelManager.Models
     {
         public Field(string filePath)
         {
-            this.gameObject = Parse.AsField(filePath);
+            Parse.AsField(filePath, this);
         }
     }
 }

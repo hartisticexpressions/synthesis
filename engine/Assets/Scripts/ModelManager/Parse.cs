@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using SharpGLTF.IO;
 using SharpGLTF.Schema2;
+using Synthesis.ModelManager.Models;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -21,18 +22,20 @@ namespace Synthesis.ModelManager
         private static readonly Dictionary<string, UnityEngine.Rigidbody> RigidbodyCache = new Dictionary<string, UnityEngine.Rigidbody>();
         
 
-        public static GameObject AsRobot(string filePath)
+        public static Model AsModel(string filePath, Model model = null)
         {
-            var model = GetModelInfo(filePath);
-            var gameObject = CreateGameObject(model.DefaultScene.VisualChildren.First());
-            ParseJoints(model);
+            if (model == null) model = new Model();
+            var modelInfo = GetModelInfo(filePath);
+            var gameObject = CreateGameObject(modelInfo.DefaultScene.VisualChildren.First());
+            ParseJoints(modelInfo, model);
             RigidbodyCache.Clear();
-            return Flatten(gameObject);
+            model.GameObject = Flatten(gameObject);
+            return model;
         }
 
-        public static GameObject AsField(string filePath)
+        public static Field AsField(string filePath, Field field = null)
         {
-            return null;
+            return null; 
         }
 
         private static ModelRoot GetModelInfo(string filePath)
@@ -193,9 +196,9 @@ namespace Synthesis.ModelManager
             RigidbodyCache.Add((node.Extras as JsonDictionary)?.Get<string>("uuid") ?? string.Empty, rigidbody);
         }
 
-        private static void ParseJoints(ModelRoot model)
+        private static void ParseJoints(ModelRoot modelInfo, Model model)
         {
-            var joints = (model.Extras as JsonDictionary)?["joints"] as JsonList;
+            var joints = (modelInfo.Extras as JsonDictionary)?["joints"] as JsonList;
 
             if (joints == null) return;
             
@@ -207,16 +210,6 @@ namespace Synthesis.ModelManager
                 var parent = RigidbodyCache[joint.Get<string>("occurrenceOneUUID")];
                 var child = RigidbodyCache[joint.Get<string>("occurrenceTwoUUID")];
 
-                foreach (var j in child.gameObject.GetComponents<FixedJoint>())
-                {
-                    Object.Destroy(j);
-                }
-
-                foreach (var j in child.gameObject.GetComponents<HingeJoint>())
-                {
-                    Object.Destroy(j);
-                }
-
                 if (joint != null && joint.ContainsKey("revoluteJointMotion"))
                 {
                     var revoluteData = joint.Get("revoluteJointMotion");
@@ -226,13 +219,17 @@ namespace Synthesis.ModelManager
                     result.anchor = anchor - result.transform.position;
                     result.axis = axis;
                     result.connectedBody = parent;
+
+                    model.AddMotor(result);
                 }
                 else
                 {
-                    // For yet to be supported and fixed motion joints
+                    //TODO: Support fixed joints
+                    /*
                     var result = child.gameObject.AddComponent<FixedJoint>();
                     result.anchor = anchor;
                     result.connectedBody = parent;
+                    */
                 }
             }
         }

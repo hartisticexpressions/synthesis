@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4604477148703056511}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcb83a2f418ef4a40a13662aa218bbd5, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fc0296a2834b4290a35ffb4e32cb3dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  list: {fileID: 5349400240547842069}
+  addItem: {fileID: 0}
+  Folder: 
 --- !u!1001 &6951890792853062367
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19,9 +22,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2324863786770955017, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2324863786770955017, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_Spacing
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6889504975140528288, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_Name
-      value: Add-Robot-Panel Variant
+      value: Add-Panel Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6889504975140528291, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -109,12 +120,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6889504975430921150, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_Text
-      value: Add Robot
+      value: Add
       objectReference: {fileID: 0}
     - target: {fileID: 6889504975625441415, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: ed50288adcb834dc69b9c0a82159bb89, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 6889504975669135040, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -147,10 +158,23 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
       value: Assets/Testing/Test.glb
       objectReference: {fileID: 0}
+    - target: {fileID: 7792630795589920052, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7792630795589920052, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
 --- !u!1 &4604477148703056511 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6889504975140528288, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+  m_PrefabInstance: {fileID: 6951890792853062367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5349400240547842069 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3046387157757233866, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
   m_PrefabInstance: {fileID: 6951890792853062367}
   m_PrefabAsset: {fileID: 0}
