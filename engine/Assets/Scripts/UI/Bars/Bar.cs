@@ -19,7 +19,7 @@ namespace Synthesis.UI.Bars
             if (prefab == null) return;
 
             GameObject panel = Instantiate(prefab, panelParent.transform.position, panelParent.transform.rotation); //create
-            panel.transform.parent = panelParent.transform; //set parent
+            panel.transform.SetParent(panelParent.transform); //set parent
 
             panels.Add(panel); //for closing
         }

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   list: {fileID: 5349400240547842069}
-  addItem: {fileID: 0}
-  Folder: 
+  addItem: {fileID: 1103053724854549408, guid: 20663458c0f77431cb1ec35927788991, type: 3}
+  Folder: Autodesk\Synthesis\Robots
 --- !u!1001 &6951890792853062367
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29,6 +29,10 @@ PrefabInstance:
     - target: {fileID: 2324863786770955017, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_Spacing
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529603402327800942, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6889504975140528288, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_Name
@@ -164,6 +168,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7792630795589920052, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9058961863659206739, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

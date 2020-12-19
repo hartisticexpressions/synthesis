@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Synthesis.UI.Panels.Variant
 {
-    public class AddPanel : MonoBehaviour
+    public class AddPanel : Panel
     {
         [SerializeField]
         public GameObject list;
@@ -37,7 +37,8 @@ namespace Synthesis.UI.Panels.Variant
                 Directory.CreateDirectory(filePath);
             else if (list != null)
                 foreach (string path in Directory.GetFiles(filePath, "*.g*"))
-                    Instantiate(addItem, list.transform).GetComponent<AddItem>().Init(path.Substring(_root.Length+ Path.DirectorySeparatorChar.ToString().Length), path);
+                    Instantiate(addItem, list.transform).GetComponent<AddItem>().Init(path.Substring(_root.Length+ Path.DirectorySeparatorChar.ToString().Length),
+                        path, /*GetComponent<Panel>()*/ this);
         }
     }
 }

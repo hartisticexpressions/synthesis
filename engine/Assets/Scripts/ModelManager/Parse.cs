@@ -27,9 +27,12 @@ namespace Synthesis.ModelManager
             if (model == null) model = new Model();
             var modelInfo = GetModelInfo(filePath);
             var gameObject = CreateGameObject(modelInfo.DefaultScene.VisualChildren.First());
-            ParseJoints(modelInfo, model);
+            // model.GameObject = gameObject;
+            ParseJoints(modelInfo, model, out List<Joint> joints);
             RigidbodyCache.Clear();
             model.GameObject = Flatten(gameObject);
+            MotorizeJoints(model, joints);
+            model.Name = Path.GetFileNameWithoutExtension(filePath);
             return model;
         }
 
@@ -196,8 +199,9 @@ namespace Synthesis.ModelManager
             RigidbodyCache.Add((node.Extras as JsonDictionary)?.Get<string>("uuid") ?? string.Empty, rigidbody);
         }
 
-        private static void ParseJoints(ModelRoot modelInfo, Model model)
+        private static void ParseJoints(ModelRoot modelInfo, Model model, out List<Joint> createdJoints)
         {
+            createdJoints = new List<Joint>();
             var joints = (modelInfo.Extras as JsonDictionary)?["joints"] as JsonList;
 
             if (joints == null) return;
@@ -206,9 +210,11 @@ namespace Synthesis.ModelManager
             {
                 var joint = jointObj as JsonDictionary;
                 var name = joint.Get("header").Get<string>("name"); // Probably not gonna be used
+                var uuid = joint.Get("header").Get<string>("uuid");
                 var anchor = ParseJointVector3D(joint.Get("origin"));
                 var parent = RigidbodyCache[joint.Get<string>("occurrenceOneUUID")];
                 var child = RigidbodyCache[joint.Get<string>("occurrenceTwoUUID")];
+                float massScale = child.mass / parent.mass;
 
                 if (joint != null && joint.ContainsKey("revoluteJointMotion"))
                 {
@@ -216,11 +222,14 @@ namespace Synthesis.ModelManager
                     var axis = ParseJointVector3D(revoluteData.Get("rotationAxisVector"));
                     // TODO: Support limits
                     var result = child.gameObject.AddComponent<HingeJoint>();
+                    child.gameObject.AddComponent<JointMeta>().Data = (name, uuid);
                     result.anchor = anchor - result.transform.position;
                     result.axis = axis;
                     result.connectedBody = parent;
+                    result.massScale = massScale;
 
-                    model.AddMotor(result);
+                    createdJoints.Add(result);
+                    // model.AddMotor(result);
                 }
                 else
                 {
@@ -232,6 +241,13 @@ namespace Synthesis.ModelManager
                     */
                 }
             }
+        }
+
+        private static void MotorizeJoints(Model model, List<Joint> joints)
+        {
+            foreach (Joint j in joints)
+                if (j is HingeJoint)
+                    model.AddMotor((HingeJoint)j);
         }
 
         /// <summary>
@@ -278,5 +294,10 @@ namespace Synthesis.ModelManager
             for (int i = 0; i < e.Count(); ++i)
                 method(i, e.ElementAt(i)); // I really hope this holds reference
         }
+    }
+
+    public class JointMeta : MonoBehaviour
+    {
+        public (string Name, string Uuid) Data;
     }
 }

@@ -12,10 +12,14 @@ namespace Synthesis.ModelManager
 
         public static Field Field { get; set; }
 
+        public delegate void ModelSpawned(Model model);
+        public static event ModelSpawned OnModelSpawned;
+
         public static void AddModel(string filePath)
         {
             Model m = Parse.AsModel(filePath);
             //Model m = new Model(filePath);
+            OnModelSpawned(m);
             Models.Add(m.Name,m);
         }
 

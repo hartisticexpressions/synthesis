@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Synthesis.Camera
 {
@@ -70,11 +71,19 @@ namespace Synthesis.Camera
 
         private void Update()
         {
+            float x = 0, y = 0, scroll = 0;
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                x = Input.GetAxis("Mouse X");
+                y = -Input.GetAxis("Mouse Y");
+                scroll = Input.mouseScrollDelta.y;
+            }
+
             if (!_freeze)
             {
                 if (Input.GetMouseButton(0))
-                    Orbit(Input.GetAxis("Mouse X") * _orbitSpeed, -Input.GetAxis("Mouse Y") * _orbitSpeed);
-                _distance = Mathf.Max(_distance + Input.mouseScrollDelta.y * _zoomSensitivity, 0);
+                    Orbit(x * _orbitSpeed, y * _orbitSpeed);
+                _distance = Mathf.Max(_distance + scroll * _zoomSensitivity, 0);
             }
         }
 
