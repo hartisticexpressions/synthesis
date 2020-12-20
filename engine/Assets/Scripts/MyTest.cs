@@ -33,10 +33,10 @@ public class MyTest : MonoBehaviour
         // currentBar.OpenPanel(configGearboxPanel);
 
         // Test Serializing GearboxData
-        GearboxData data = new GearboxData() { Name = "test1", MotorUuids = new string[] { "0a00", "0a01" }, MaxSpeed = 50, Torque = 2.1f };
+        /*GearboxData data = new GearboxData() { Name = "test1", MotorUuids = new string[] { "0a00", "0a01" }, MaxSpeed = 50, Torque = 2.1f };
         string a = JsonConvert.SerializeObject(data);
         Debug.Log(a);
-        var deserialize = JsonConvert.DeserializeObject<GearboxData>(a);
+        var deserialize = JsonConvert.DeserializeObject<GearboxData>(a);*/
         // Debug.Log("How'd it go?");
     }
 

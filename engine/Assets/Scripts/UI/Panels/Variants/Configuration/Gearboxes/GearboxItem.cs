@@ -52,6 +52,16 @@ public class GearboxItem : MonoBehaviour
 
         SelectedJoints = new List<string>();
         PopulateJoints();
+
+        NameField.onDeselect.AddListener(x =>
+        {
+            int count = 0;
+            NameField.text = "TEMP";
+            var allData = this.panel.CompileData();
+            while (allData.Exists(y => y.Name == x + (count == 0 ? "" : $"-{count}")))
+                count++;
+            NameField.text = x + (count == 0 ? "" : $"-{count}");
+        });
     }
 
     public override int GetHashCode()

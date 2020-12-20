@@ -61,12 +61,12 @@ public class GearboxConfigPanel : Panel
         if (SelectedModel == null)
             return; // Not really expecting this but just in case
 
-        var gearbox = Instantiate(GearboxItem);
+        var gearbox = Instantiate(GearboxItem, list.transform);
         if (data.HasValue)
             gearbox.GetComponent<GearboxItem>().Init(this, data.Value);
         else
             gearbox.GetComponent<GearboxItem>().Init(this);
-        gearbox.transform.SetParent(list.transform);
+        // gearbox.transform.SetParent(list.transform);
         GearboxItems.Add(gearbox.GetComponent<GearboxItem>());
     }
 
@@ -94,9 +94,13 @@ public class GearboxConfigPanel : Panel
         GearboxItems.ForEach(x => model.GearboxMeta.Add(x.Data));
     }
 
-    private void LoadFrom(Model model)
+    private void LoadFrom(Model model) => model.GearboxMeta.ForEach(x => AddGearboxItem(x));
+
+    public List<GearboxData> CompileData()
     {
-        model.GearboxMeta.ForEach(x => AddGearboxItem(x));
+        List<GearboxData> data = new List<GearboxData>();
+        GearboxItems.ForEach(x => data.Add(x.Data));
+        return data;
     }
 
     public override void Close()

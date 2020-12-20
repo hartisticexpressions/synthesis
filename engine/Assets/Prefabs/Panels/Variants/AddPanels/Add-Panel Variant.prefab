@@ -22,6 +22,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 939002756327181873, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2324863786770955017, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_Padding.m_Left
       value: 0
@@ -126,6 +130,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: Add
       objectReference: {fileID: 0}
+    - target: {fileID: 6889504975625441412, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6889504975625441412, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6889504975625441415, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -161,6 +173,26 @@ PrefabInstance:
     - target: {fileID: 6889504975669135040, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
       value: Assets/Testing/Test.glb
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256941975562533179, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 128.98999
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256941975562533179, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256941975562533179, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256941975562533179, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256941975562533179, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7792630795589920052, guid: 695ddd8ce7b774363a32251550404da6, type: 3}
       propertyPath: m_AnchorMax.x

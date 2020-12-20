@@ -18,8 +18,8 @@ namespace Synthesis.UI.Bars
         {
             if (prefab == null) return;
 
-            GameObject panel = Instantiate(prefab, panelParent.transform.position, panelParent.transform.rotation); //create
-            panel.transform.SetParent(panelParent.transform); //set parent
+            GameObject panel = Instantiate(prefab, panelParent.transform.position, panelParent.transform.rotation, panelParent.transform); //create
+            // panel.transform.SetParent(panelParent.transform, false); //set parent
 
             panels.Add(panel); //for closing
         }

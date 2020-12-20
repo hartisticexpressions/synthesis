@@ -6,7 +6,16 @@ using UnityEngine;
 public class DrivetrainSubPanel : MonoBehaviour
 {
     public bool IsShown { get; set; }
+    protected Model selectedModel { get; set; }
 
-    protected virtual void Show(Model selectedModel) => IsShown = true;
-    protected virtual void Hide() => IsShown = false;
+    public virtual void Show(Model selectedModel) {
+        IsShown = true;
+        this.selectedModel = selectedModel;
+        gameObject.SetActive(true);
+    }
+    public virtual void Hide() {
+        IsShown = false;
+        this.selectedModel = null;
+        gameObject.SetActive(false);
+    }
 }

@@ -7,6 +7,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 346712921957891044, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 58
+      objectReference: {fileID: 0}
+    - target: {fileID: 346712921957891044, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 346712921957891044, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 346712921957891044, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -25
+      objectReference: {fileID: 0}
+    - target: {fileID: 346712921957891044, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 891413367229048811, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -27,6 +47,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: ed50288adcb834dc69b9c0a82159bb89, type: 3}
+    - target: {fileID: 4604477147868828251, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4604477147868828251, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4604477147942775137, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
       propertyPath: m_Text
       value: Add Robots
@@ -118,6 +146,10 @@ PrefabInstance:
     - target: {fileID: 4604477148703056511, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
       propertyPath: m_Name
       value: Add-Robot-Panel Variant Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7886385550388514030, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8291365839554067116, guid: 59f5090a391f849308ddb7d3474ca136, type: 3}
       propertyPath: m_Size
