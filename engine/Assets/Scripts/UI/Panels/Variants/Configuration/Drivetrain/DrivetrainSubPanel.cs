@@ -7,10 +7,12 @@ public class DrivetrainSubPanel : MonoBehaviour
 {
     public bool IsShown { get; set; }
     protected Model selectedModel { get; set; }
+    protected ConfigureDrivetrainPanel panel { get; set; }
 
-    public virtual void Show(Model selectedModel) {
+    public virtual void Show(Model selectedModel, ConfigureDrivetrainPanel panel) {
         IsShown = true;
         this.selectedModel = selectedModel;
+        this.panel = panel;
         gameObject.SetActive(true);
     }
     public virtual void Hide() {

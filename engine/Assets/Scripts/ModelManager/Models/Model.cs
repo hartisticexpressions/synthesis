@@ -14,7 +14,7 @@ namespace Synthesis.ModelManager.Models
         public HashSet<Motor> Motors { get => motors; } // TODO: This bad, go back and fix
         public List<GearboxData> GearboxMeta = new List<GearboxData>();
 
-        public DrivetrainType DrivetrainType;
+        public DrivetrainMeta DrivetrainMeta;
 
         public static implicit operator GameObject(Model model) => model.GameObject;
 
@@ -39,11 +39,13 @@ namespace Synthesis.ModelManager.Models
     public struct DrivetrainMeta
     {
         public DrivetrainType Type;
-        public List<GearboxData> SelectedGearboxes;
+        public GearboxData[] SelectedGearboxes;
     }
 
     public enum DrivetrainType
     {
-        Arcade, Tank
+        NotSelected = 0, // Default
+        Arcade = 1,
+        Tank = 2
     }
 }
