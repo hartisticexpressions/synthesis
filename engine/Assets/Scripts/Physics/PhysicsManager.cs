@@ -7,41 +7,65 @@ namespace Synthesis.Physics
     /// </summary>
     public class PhysicsManager : MonoBehaviour
     {
-        public static bool isPaused { get; set; } = false;
+        private static float StepRate;
+
+        [SerializeField]
+        public static bool IsPaused { get; private set; } = false;
+        [SerializeField]
+        public static bool IsFast { get; private set; } = false;
+        [SerializeField]
+        public static bool IsSlow { get; private set; } = false;
 
         // Use this for initialization
         void Awake()
         {
+            StepRate = Time.fixedDeltaTime;
             UnityEngine.Physics.autoSimulation = false;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if(!isPaused) StepForward();
+            if (IsSlow)
+                StepRate = Time.fixedDeltaTime / 2;
+            else if (IsFast)
+                StepRate = Time.fixedDeltaTime * 2;
+            else
+                StepRate = Time.fixedDeltaTime;
+            if(!IsPaused) StepForward();
         }
 
         public static void Pause()
         {
-            isPaused = true;
+            IsPaused = true;
         }
 
         public static void Play()
         {
-            isPaused = false;
+            IsPaused = false;
         }
 
         public static void TogglePlay()
         {
-            isPaused = !isPaused;
+            IsPaused = !IsPaused;
         }
         public static void StepForward()
         {
-            UnityEngine.Physics.Simulate(Time.fixedDeltaTime);
+            UnityEngine.Physics.Simulate(StepRate);
         }
         public static void StepBackward()
         {
-            //TODO: save position and rotation of objects each frame?
+            //TODO: save position and rotation of objects each frame and then lerp backward
+        }
+        public static void SpeedUp()
+        {
+            IsSlow = false;
+            IsFast = !IsFast;
+        }
+        public static void SlowDown()
+        {
+            IsFast = false;
+            IsSlow = !IsSlow;
         }
     }
 }

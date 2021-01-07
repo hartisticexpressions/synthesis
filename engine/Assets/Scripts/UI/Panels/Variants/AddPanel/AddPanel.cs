@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.IO;
-using UnityEngine.UI;
 
 namespace Synthesis.UI.Panels.Variant
 {
@@ -20,7 +18,7 @@ namespace Synthesis.UI.Panels.Variant
 
         void Start()
         {
-            _root = Application.persistentDataPath + Path.DirectorySeparatorChar + Folder;
+            _root = Path.Combine(FileSystem.FileSystem.Root, Folder);
             ShowDirectory(_root);
         }
 

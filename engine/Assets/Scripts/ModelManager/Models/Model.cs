@@ -1,49 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Synthesis.ModelManager.Models
 {
-    public class Model
+    public class Model : MonoBehaviour
     {
-        public string Name { get; set; }
+        public string ObjectName { get; set; }
+        public string InstanceName { get => gameObject.name; set => gameObject.name = value; }
 
-        public GameObject GameObject { get; set; }
+        public float Mass { get; private set; }
 
         protected HashSet<Motor> motors = new HashSet<Motor>();
-        public HashSet<Motor> Motors { get => motors; } // TODO: This bad, go back and fix
-        public List<GearboxData> GearboxMeta = new List<GearboxData>();
+        public IEnumerable<Motor> Motors => gameObject.GetComponents<Motor>();
 
-        public DrivetrainType DrivetrainType;
-
-        public static implicit operator GameObject(Model model) => model.GameObject;
-
-        public Model()
+        void Awake()
         {
-
+            if (gameObject.GetComponent<Motor>() != null)
+                return;
+            foreach (Transform t in gameObject.transform)
+            {
+                if (t.GetComponent<Rigidbody>() != null)
+                    Mass += t.GetComponent<Rigidbody>().mass;
+                if (t.GetComponent<HingeJoint>() != null)
+                    gameObject.AddComponent<Motor>().Joint = t.GetComponent<HingeJoint>();
+            }
         }
 
-        public Model(string filePath)
-        {
-            Parse.AsModel(filePath, this);
-        }
+        public void Show() => gameObject.SetActive(true);
 
-        public bool AddMotor(HingeJoint joint)
-        {
-            Motor m = GameObject.AddComponent<Motor>();
-            m.Joint = joint;
-            return motors.Add(m);
-        }
-    }
-
-    public struct DrivetrainMeta
-    {
-        public DrivetrainType Type;
-        public List<GearboxData> SelectedGearboxes;
-    }
-
-    public enum DrivetrainType
-    {
-        Arcade, Tank
+        public void Hide() => gameObject.SetActive(false);
     }
 }

@@ -10,33 +10,34 @@ using Object = UnityEngine.Object;
 
 namespace Synthesis.ModelManager
 {
+    //TODO: Write specs and comment
+
     public static class Parse
     {
+        public static GameObject SpawnRoot = GameObject.Find("Game");
+
         private static bool tryFix = true;
 
         private const float defaultMass = 1;
 
-        /// <summary>
-        /// This is a collection of rigidbody objects
-        /// </summary>
-        private static readonly Dictionary<string, UnityEngine.Rigidbody> RigidbodyCache = new Dictionary<string, UnityEngine.Rigidbody>();
-        
+        private static Dictionary<string, Rigidbody> UUIDtoRigid = new Dictionary<string, Rigidbody>();
 
-        public static Model AsModel(string filePath, Model model = null)
+        public static Model AsModel(string filePath)
         {
-            if (model == null) model = new Model();
             var modelInfo = GetModelInfo(filePath);
             var gameObject = CreateGameObject(modelInfo.DefaultScene.VisualChildren.First());
-            // model.GameObject = gameObject;
-            ParseJoints(modelInfo, model, out List<Joint> joints);
-            RigidbodyCache.Clear();
-            model.GameObject = Flatten(gameObject);
-            MotorizeJoints(model, joints);
-            model.Name = Path.GetFileNameWithoutExtension(filePath);
-            return model;
+            ParseJoints(modelInfo);
+
+            gameObject = Flatten(gameObject);
+
+            UUIDtoRigid.Clear();
+
+            Model result = gameObject.AddComponent<Model>();
+            result.ObjectName = Path.GetFileNameWithoutExtension(filePath);
+            return result;
         }
 
-        public static Field AsField(string filePath, Field field = null)
+        public static Field AsField(string filePath)
         {
             return null; 
         }
@@ -80,7 +81,6 @@ namespace Synthesis.ModelManager
                 ParseRigidBody(node, gameObject);
             }
 
-            // not sure every object should have a joint
             foreach(var child in node.VisualChildren)
             {
                 var childObject = CreateGameObject(child,node);
@@ -92,33 +92,64 @@ namespace Synthesis.ModelManager
         public static GameObject Flatten(GameObject gameObject)
         {
             GameObject root = new GameObject(gameObject.name);
-            GameObject motionless = new GameObject(gameObject.name + " Rooted");
-            motionless.transform.parent = root.transform;
-            Rigidbody motionlessBody = motionless.AddComponent<Rigidbody>();
+            root.transform.parent = SpawnRoot.transform;
+            gameObject.name += " Body";
+            gameObject.transform.parent = root.transform;
+            List<Transform> children = new List<Transform>();
             foreach (Transform t in gameObject.transform)
-                Flatten(t.gameObject, root.transform, motionlessBody);
-            Object.Destroy(gameObject);
+                children.Add(t);
+            foreach (Transform t in children)
+                Flatten(t.gameObject, root);
+            foreach (Transform t in root.transform)
+                Connect(t.gameObject);
             return root;
         }
 
-        private static void Flatten(GameObject gameObject, Transform root, Rigidbody motionless)
+        private static void Flatten(GameObject gameObject, GameObject root)
         {
-            while (gameObject.transform.childCount > 0)
-                Flatten(gameObject.transform.GetChild(0).gameObject, root, motionless);
+            List<Transform> children = new List<Transform>();
+            foreach (Transform t in gameObject.transform)
+                children.Add(t);
+        
+            foreach(Transform t in children)
+                Flatten(t.gameObject, root);
             if (gameObject.GetComponent<HingeJoint>() == null)
             {
-                Rigidbody r = gameObject.GetComponent<Rigidbody>();
-                if (r != null)
-                    motionless.GetComponent<Rigidbody>().mass += r.mass;
-                gameObject.transform.parent = motionless.transform;
-                Object.Destroy(r);
+                Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
+                JointConnectionNode parseNode = gameObject.GetComponent<JointConnectionNode>();
+                if (rigidbody != null)
+                {
+                    GameObject parent = gameObject.transform.parent.gameObject;
+                    if (parent.GetComponent<Rigidbody>() == null)
+                    {
+                        parent.AddComponent<Rigidbody>();
+                        parent.AddComponent<JointConnectionNode>();
+                    }
+                    Rigidbody parentBody = parent.GetComponent<Rigidbody>();
+                    JointConnectionNode parentNode = parent.GetComponent<JointConnectionNode>();
+                    parentBody.mass += rigidbody.mass;
+                    foreach(HingeJoint joint in parseNode.ConnectedJoints)
+                        parentNode.ConnectedJoints.Add(joint);
+                    Object.Destroy(rigidbody);
+                    Object.Destroy(parseNode);
+                }
             }
             else
+                gameObject.transform.parent = root.transform;
+        }
+
+        private static void Connect(GameObject gameObject)
+        {
+            if (gameObject.GetComponent<Rigidbody>() == null)
+                return;
+            Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
+            JointConnectionNode parseNode = gameObject.GetComponent<JointConnectionNode>();
+            foreach (HingeJoint joint in parseNode.ConnectedJoints)
             {
-                gameObject.transform.parent = root;
-                var joint = gameObject.GetComponent<HingeJoint>();
-                joint.connectedBody = motionless;
+                joint.connectedBody = rigidbody;
+                joint.massScale = joint.gameObject.GetComponent<Rigidbody>().mass / rigidbody.mass;
             }
+            Object.Destroy(parseNode);
         }
 
         private static void ParseTransform(Node node, GameObject gameObject)
@@ -191,17 +222,19 @@ namespace Synthesis.ModelManager
         private static void ParseRigidBody(Node node, GameObject gameObject)
         {
             var rigidbody = gameObject.AddComponent<Rigidbody>();
+            gameObject.AddComponent<JointConnectionNode>();
 
             //mass
             if (((JsonDictionary) node.Mesh.Extras).TryGetValue("physicalProperties", out object physicalProperties) && ((JsonDictionary) physicalProperties).TryGetValue("mass", out object massStr))
                 rigidbody.mass = float.TryParse(massStr.ToString(), out var mass) ? mass : defaultMass;
-            
-            RigidbodyCache.Add((node.Extras as JsonDictionary)?.Get<string>("uuid") ?? string.Empty, rigidbody);
+
+            string uuid = (node.Extras as JsonDictionary)?.Get<string>("uuid") ?? null;
+            if(uuid != null)
+                UUIDtoRigid.Add(uuid, rigidbody);
         }
 
-        private static void ParseJoints(ModelRoot modelInfo, Model model, out List<Joint> createdJoints)
+        private static void ParseJoints(ModelRoot modelInfo)
         {
-            createdJoints = new List<Joint>();
             var joints = (modelInfo.Extras as JsonDictionary)?["joints"] as JsonList;
 
             if (joints == null) return;
@@ -209,12 +242,8 @@ namespace Synthesis.ModelManager
             foreach (var jointObj in joints)
             {
                 var joint = jointObj as JsonDictionary;
-                var name = joint.Get("header").Get<string>("name"); // Probably not gonna be used
-                var uuid = joint.Get("header").Get<string>("uuid");
                 var anchor = ParseJointVector3D(joint.Get("origin"));
-                var parent = RigidbodyCache[joint.Get<string>("occurrenceOneUUID")];
-                var child = RigidbodyCache[joint.Get<string>("occurrenceTwoUUID")];
-                float massScale = child.mass / parent.mass;
+                var child = UUIDtoRigid[joint.Get<string>("occurrenceTwoUUID")];
 
                 if (joint != null && joint.ContainsKey("revoluteJointMotion"))
                 {
@@ -222,14 +251,10 @@ namespace Synthesis.ModelManager
                     var axis = ParseJointVector3D(revoluteData.Get("rotationAxisVector"));
                     // TODO: Support limits
                     var result = child.gameObject.AddComponent<HingeJoint>();
-                    child.gameObject.AddComponent<JointMeta>().Data = (name, uuid);
                     result.anchor = anchor - result.transform.position;
                     result.axis = axis;
-                    result.connectedBody = parent;
-                    result.massScale = massScale;
-
-                    createdJoints.Add(result);
-                    // model.AddMotor(result);
+                    var parent = UUIDtoRigid[joint.Get<string>("occurrenceOneUUID")];
+                    parent.GetComponent<JointConnectionNode>().ConnectedJoints.Add(result);
                 }
                 else
                 {
@@ -241,13 +266,6 @@ namespace Synthesis.ModelManager
                     */
                 }
             }
-        }
-
-        private static void MotorizeJoints(Model model, List<Joint> joints)
-        {
-            foreach (Joint j in joints)
-                if (j is HingeJoint)
-                    model.AddMotor((HingeJoint)j);
         }
 
         /// <summary>
@@ -296,8 +314,10 @@ namespace Synthesis.ModelManager
         }
     }
 
-    public class JointMeta : MonoBehaviour
+    class JointConnectionNode : MonoBehaviour
     {
-        public (string Name, string Uuid) Data;
+        public List<HingeJoint> ConnectedJoints = new List<HingeJoint>();
     }
+
+    //TODO: create UuidNode?
 }
