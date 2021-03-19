@@ -1,5 +1,8 @@
 ﻿using Synthesis.UI.Hierarchy.HierarchyItems;
 using UnityEngine;
+using Synthesis.UI.ContextMenus;
+
+using ContextMenu = Synthesis.UI.ContextMenus.ContextMenu;
 
 namespace Synthesis.UI.Hierarchy
 {
@@ -24,6 +27,10 @@ namespace Synthesis.UI.Hierarchy
         }
 
         public void Start() {
+
+            // ContextMenu.Show()
+            // ContextMenu.Show(new Vector2(500, -500), "Test Menu", new string[]{"Hello", "There"});
+
             rootFolder.Init("Scene", null);
 
             var robots = rootFolder.CreateFolder("Robots");

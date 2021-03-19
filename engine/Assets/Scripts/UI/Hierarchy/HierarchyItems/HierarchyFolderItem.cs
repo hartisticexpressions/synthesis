@@ -31,6 +31,15 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
         // private List<HierarchyItem> RootItems = new List<HierarchyItem>();
         // public int nextPos = 0;
 
+        public new void Awake() {
+
+            base.Awake();
+
+            var interactable = GetComponent<InteractableObject>();
+            interactable.AddOption("Remove", () => Remove());
+            interactable.AddOption("Toggle Collapsed", () => Collapsed = !Collapsed);
+        }
+
         public void Start() {
             image = GetComponent<Image>();
 
@@ -77,6 +86,12 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
         }
 
         public override void Remove() {
+
+            if (Parent == null) {
+                Debug.Log("Can't remove root folder");
+                return;
+            }
+
             HierarchyFolderItem parent = Parent!;
             while (parent != null) {
                 foreach (var item in Items) {

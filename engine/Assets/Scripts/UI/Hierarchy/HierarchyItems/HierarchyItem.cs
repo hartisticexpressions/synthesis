@@ -56,6 +56,7 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
                 title = value;
                 TitleText.text = title;
                 gameObject.name = title;
+                GetComponent<InteractableObject>().ContextMenuUID = title;
             }
         }
         private bool visible = true;
@@ -68,11 +69,18 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
         }
 
         // Use this for initialization
-        void Awake() {
+        protected void Awake() {
             var button = GetComponent<Button>();
             button.onClick.AddListener(() => {
                 OnItemClicked?.Invoke();
             });
+
+            if (this.GetType() == typeof(HierarchyItem)) {
+                var interactable = GetComponent<InteractableObject>();
+                interactable.AddOption("Remove", () => Remove());
+            } else {
+                Debug.Log("Avoided thingy");
+            }
         }
 
         public virtual void Init(string title, HierarchyFolderItem? parent) {
