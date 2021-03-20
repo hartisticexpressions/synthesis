@@ -35,7 +35,11 @@ namespace Synthesis.UI.ContextMenus {
                 ContextMenu.Hide();
         }
 
-        public static void Show(Vector2 pos, string title, IEnumerable<(string title, Action callback)> description) {
+        public static void Show<T>(InteractableObject sender, Vector2 pos, string title, T interactable) where T : InteractableObject {
+            Show(sender, pos, title, InteractableObject.GetInteractableOptions(interactable));
+        }
+
+        public static void Show(InteractableObject sender, Vector2 pos, string title, IEnumerable<(string title, Action<object> callback)> description) {
 
             // This order??
             contextMenu.gameObject.SetActive(true);
@@ -49,6 +53,7 @@ namespace Synthesis.UI.ContextMenus {
                 var item = Instantiate(contextMenu.ContextItem, contextMenu.ContentContainer).GetComponent<ContextItem>();
                 item.Text = x.title;
                 item.Callback = x.callback;
+                item.Creator = sender;
                 contextMenu.SpawnedItems.Add(item.gameObject);
             });
 

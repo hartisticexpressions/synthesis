@@ -3,16 +3,19 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Synthesis.Attributes;
 using TMPro;
 
 #nullable enable
 
 namespace Synthesis.UI.Hierarchy.HierarchyItems
 {
-    public class HierarchyItem : MonoBehaviour
+    public class HierarchyItem : InteractableObject
     {
         public delegate void OnClickEvent();
         public event OnClickEvent OnItemClicked;
+
+        #region Properties
 
         public bool IsInherited {
             get => this.GetType() != typeof(HierarchyItem);
@@ -56,7 +59,7 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
                 title = value;
                 TitleText.text = title;
                 gameObject.name = title;
-                GetComponent<InteractableObject>().ContextMenuUID = title;
+                base.ContextMenuUID = title;
             }
         }
         private bool visible = true;
@@ -68,20 +71,17 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
             }
         }
 
+        #endregion
+
         // Use this for initialization
         protected void Awake() {
             var button = GetComponent<Button>();
             button.onClick.AddListener(() => {
                 OnItemClicked?.Invoke();
             });
-
-            if (this.GetType() == typeof(HierarchyItem)) {
-                var interactable = GetComponent<InteractableObject>();
-                interactable.AddOption("Remove", () => Remove());
-            } else {
-                Debug.Log("Avoided thingy");
-            }
         }
+
+        #region Hierarchy
 
         public virtual void Init(string title, HierarchyFolderItem? parent) {
             Title = title;
@@ -110,14 +110,15 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
             Hierarchy.Changes = true;
         }
 
-        /*protected virtual void InitProtected()
-        {
+        #endregion
 
+        #region ContextMenu
+
+        [ContextMenuOption("Remove")]
+        public void RemoveContextMenu() {
+            Remove();
         }
 
-        public virtual int GetSize() => 1;
-
-        public void Show() => Show(!gameObject.activeSelf);
-        public virtual void Show(bool show) => gameObject.SetActive(show);*/
+        #endregion
     }
 }

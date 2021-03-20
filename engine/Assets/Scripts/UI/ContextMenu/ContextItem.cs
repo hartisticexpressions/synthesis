@@ -9,8 +9,9 @@ namespace Synthesis.UI.ContextMenus {
     public class ContextItem : MonoBehaviour {
         public TMP_Text TextObj;
 
-        private Action callback;
-        public Action Callback {
+        public InteractableObject Creator;
+        private Action<object> callback;
+        public Action<object> Callback {
             get => callback;
             set => callback = value;
         }
@@ -24,7 +25,7 @@ namespace Synthesis.UI.ContextMenus {
 
         public void OnClick() {
             ContextMenu.Hide();
-            callback();
+            callback(Creator);
         }
     }
 }

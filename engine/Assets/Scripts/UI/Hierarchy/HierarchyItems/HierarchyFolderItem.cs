@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Synthesis.Attributes;
 using TMPro;
 
 #nullable enable
@@ -10,6 +11,8 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
 {
     public class HierarchyFolderItem : HierarchyItem
     {
+        #region Properties
+
         private Image image;
         private bool collapsed = false;
         public bool Collapsed {
@@ -28,16 +31,11 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
         }
         public int ChildrenCount => Items.Count;
         public List<(bool owned, HierarchyItem item)> Items = new List<(bool, HierarchyItem)>();
-        // private List<HierarchyItem> RootItems = new List<HierarchyItem>();
-        // public int nextPos = 0;
+
+        #endregion
 
         public new void Awake() {
-
             base.Awake();
-
-            var interactable = GetComponent<InteractableObject>();
-            interactable.AddOption("Remove", () => Remove());
-            interactable.AddOption("Toggle Collapsed", () => Collapsed = !Collapsed);
         }
 
         public void Start() {
@@ -45,6 +43,8 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
 
             OnItemClicked += () => Collapsed = !Collapsed;
         }
+
+        #region Hierarchy
 
         public void Insert(int localIndex, HierarchyItem item, bool isOwned = true) {
             int parsedIndex = localIndex;
@@ -128,7 +128,7 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
             }
         }
 
-        // I really hope these actually work
+                // I really hope these actually work
         public int GetIndex(HierarchyItem item) {
             int skipCount = 0;
             int index = -1;
@@ -160,5 +160,22 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
                 print($"[{i.item.Index}][{i.item.LocalIndex}]{prefix}{i.item.Title}");
             }
         }
+
+        #endregion
+
+        #region ContextMenu
+
+        [ContextMenuOption("Remove")]
+        public void RemoveContextMenu2() {
+            Remove();
+        }
+
+        [ContextMenuOption("Toggle Collapse")]
+        public void ToggleCollapseContextMenu() {
+            Collapsed = !Collapsed;
+        }
+
+        #endregion
+
     }
 }

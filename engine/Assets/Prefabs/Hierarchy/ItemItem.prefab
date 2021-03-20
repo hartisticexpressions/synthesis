@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1342325756819048972}
   - component: {fileID: 922227883378749085}
   - component: {fileID: 3060199077404824553}
-  - component: {fileID: 4911253096833178087}
   m_Layer: 5
   m_Name: ItemItem
   m_TagString: Untagged
@@ -91,6 +90,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b142089f6e7f545e5b77bab40b4100a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useReflection: 1
+  ContextMenuUID: 
   TitleText: {fileID: 3464233073391080089}
   Parent: {fileID: 0}
 --- !u!114 &3060199077404824553
@@ -137,21 +138,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4911253096833178087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3430926734492311807}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dd01a67c4c684d9a8693a5f5f37b471, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ContextMenuUID: Item
-  Items:
-  - Remove
 --- !u!1 &4081931193422851191
 GameObject:
   m_ObjectHideFlags: 0
