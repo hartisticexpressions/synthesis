@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Synthesis.Util;
 using TMPro;
 
@@ -12,6 +13,9 @@ namespace Synthesis.UI.ContextMenus {
     public class ContextMenu : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler {
 
         public static bool IsShowing { get; private set; } = false;
+
+        public CanvasScaler canvasScaler;
+        public static CanvasScaler CanvasScaler => contextMenu.canvasScaler;
 
         public GameObject ContextItem;
         public Transform ContentContainer;
@@ -46,7 +50,7 @@ namespace Synthesis.UI.ContextMenus {
             if (IsShowing)
                 ResetItems();
 
-            contextMenu.ContextTitle.text = title;
+            contextMenu.ContextTitle.text = title == string.Empty ? "" : title; // A bit useless?
 
             // Spawn in items
             description.ForEach(x => {
@@ -58,7 +62,7 @@ namespace Synthesis.UI.ContextMenus {
             });
 
             // Move menu
-            contextMenu.GetComponent<RectTransform>().anchoredPosition = pos;
+            contextMenu.GetComponent<RectTransform>().position = pos;
 
             IsShowing = true;
         }

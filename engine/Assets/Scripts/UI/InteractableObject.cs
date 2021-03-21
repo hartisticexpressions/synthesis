@@ -17,28 +17,30 @@ namespace Synthesis.UI
         // public class ContextItemEvent : UnityEvent { }
         public bool useReflection = true;
 
-        public string ContextMenuUID;
+        public string ContextMenuUID = string.Empty;
         public List<(string title, Action<object> callback)> Options = new List<(string title, Action<object> callback)>();
-
-        protected void Awake() {
-
-        }
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            Debug.Log(gameObject.name);
             if (eventData.button == PointerEventData.InputButton.Right)
             {
                 //open right click floating window
                 // Debug.Log(eventData.position);
                 
-                Vector2 position = new Vector2(eventData.position.x, eventData.position.y - 1080); // Maybe have that 1080 number adjust but for rn it's fine
-                if (useReflection) {
-                    ContextMenu.Show(this, position, ContextMenuUID, this);
-                } else {
-                    ContextMenu.Show(this, position, ContextMenuUID, Options);
-                }
+                Vector2 position = new Vector2(eventData.position.x, eventData.position.y); // Maybe have that 1080 number adjust but for rn it's fine
+                OnPointerClick(position);
             } else {
                 ContextMenu.Hide();
+            }
+        }
+
+        public void OnPointerClick(Vector2 position) {
+            // Debug.Log($"{position.x}, {position.y}");
+            if (useReflection) {
+                ContextMenu.Show(this, position, ContextMenuUID, this);
+            } else {
+                ContextMenu.Show(this, position, ContextMenuUID, Options);
             }
         }
 
