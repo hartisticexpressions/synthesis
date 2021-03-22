@@ -22,6 +22,11 @@ def exportRobot():
     # printHierarchy(ao.root_comp)
     print()  # put breakpoint here and view the protoDocumentAsDict local variable
 
+    filePath = '{0}{1}_{2}.{3}'.format('C:/temp/', protoDocument.documentMeta.name.replace(" ", "_"), protoDocument.documentMeta.exportTime, "synimport")
+
+    file = open(filePath, 'wb')
+    file.write(protoDocument.SerializeToString())
+    file.close()
 
 class ExportCommand(apper.Fusion360CommandBase):
 
