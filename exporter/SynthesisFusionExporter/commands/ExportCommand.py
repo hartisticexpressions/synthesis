@@ -97,7 +97,7 @@ def fillComponent(fusionComponent, protoComponent):
     protoComponent.header.revisionId = fusionComponent.revisionId
     protoComponent.partNumber = fusionComponent.partNumber
     fillBoundingBox3D(fusionComponent.boundingBox, protoComponent.boundingBox)
-    protoComponent.materialId = fusionComponent.material.id
+    #protoComponent.materialId = fusionComponent.material.id
     fillPhysicalProperties(fusionComponent.physicalProperties, protoComponent.physicalProperties)
 
     for bRepBody in fusionComponent.bRepBodies:
