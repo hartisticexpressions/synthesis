@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+  <assemblyIdentity name="InventorExporter" version="1.0.0.0"></assemblyIdentity>
+
+  <clrClass clsid="{53e5b4a8-9169-4ac0-8e51-77df9642b295}" progid="InventorExporter.StandardAddInServer" threadingModel="Both" name="InventorExporter.StandardAddInServer" runtimeVersion=""></clrClass>
+
+  <file name="InventorExporter.dll" hashalg="SHA1"></file>
+
+</assembly>
