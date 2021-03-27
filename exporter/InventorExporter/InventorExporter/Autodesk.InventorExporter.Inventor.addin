@@ -2,8 +2,8 @@
   <!--Created for Autodesk Inventor Version 24.0-->
   <ClassId>{53e5b4a8-9169-4ac0-8e51-77df9642b295}</ClassId>
   <ClientId>{53e5b4a8-9169-4ac0-8e51-77df9642b295}</ClientId>
-  <DisplayName>InventorExporter</DisplayName>
-  <Description>InventorExporter</Description>
+  <DisplayName>SynthesisExporter</DisplayName>
+  <Description>Addin for exporting models into Synthesis™</Description>
   <Assembly>InventorExporter.dll</Assembly>
   <LoadOnStartUp>1</LoadOnStartUp>
   <UserUnloadable>1</UserUnloadable>
