@@ -114,7 +114,7 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
 
         #region ContextMenu
 
-        [ContextMenuOption("Remove")]
+        [ContextMenuOption("Remove", "CloseIcon")]
         public void RemoveContextMenu() {
             Remove();
         }

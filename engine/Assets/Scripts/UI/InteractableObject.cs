@@ -5,6 +5,7 @@ using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using Synthesis.UI.ContextMenus;
+using UnityEngine.UI;
 using Synthesis.Attributes;
 using Synthesis.Util;
 using System.Linq;
@@ -18,7 +19,8 @@ namespace Synthesis.UI
         public bool useReflection = true;
 
         public string ContextMenuUID = string.Empty;
-        public List<(string title, Action<object> callback)> Options = new List<(string title, Action<object> callback)>();
+        public List<(string title, Sprite icon, Action<object> callback)> Options
+            = new List<(string title, Sprite icon, Action<object> callback)>();
 
         public void OnPointerClick(PointerEventData eventData)
         {
@@ -54,10 +56,11 @@ namespace Synthesis.UI
             //close tooltips and highlight off
         }
 
-        public void AddOption(string title, Action<object> callback) => Options.Add((title, callback));
+        public void AddOption(string title, Sprite icon, Action<object> callback) => Options.Add((title, icon, callback));
 
-        private static Dictionary<Type, List<(string title, Action<object> callback)>> InteractableTypes = new Dictionary<Type, List<(string, Action<object>)>>();
-        public static List<(string title, Action<object> callback)> GetInteractableOptions<T>(T interactable) where T : InteractableObject {
+        private static Dictionary<Type, List<(string title, Sprite icon, Action<object> callback)>> InteractableTypes
+            = new Dictionary<Type, List<(string, Sprite, Action<object>)>>();
+        public static List<(string title, Sprite icon, Action<object> callback)> GetInteractableOptions<T>(T interactable) where T : InteractableObject {
 
             Type type = interactable.GetType();
 
@@ -68,7 +71,7 @@ namespace Synthesis.UI
 
             } else {
 
-                var list = new List<(string title, Action<object> callback)>();
+                var list = new List<(string title, Sprite icon, Action<object> callback)>();
                 type.GetMethods().ForEach(x => {
                     if (x.DeclaringType == type) {
                         // Debug.Log(x.Name);
@@ -88,7 +91,7 @@ namespace Synthesis.UI
                             else
                                 callback = a => attr.Callback();
 
-                            list.Add((title, callback));
+                            list.Add((title, attr.Icon, callback));
                         }
                     }
                 });

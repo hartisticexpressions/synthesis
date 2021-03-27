@@ -2,14 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using Synthesis.UI;
 
 namespace Synthesis.Attributes {
     public class ContextMenuOptionAttribute : Attribute {
 
-        private string title = string.Empty;
-        public string Title { get; private set; }
-        private Action callback = null;
-        public Action Callback { get; private set; }
+        public string Title { get; private set; } = string.Empty;
+        public Action Callback { get; private set; } = null;
+        public Sprite Icon { get; private set; } = null;
 
         public ContextMenuOptionAttribute() { }
 
@@ -17,8 +18,19 @@ namespace Synthesis.Attributes {
             Title = title;
         }
 
+        public ContextMenuOptionAttribute(string title, string icon) {
+            Title = title;
+            Icon = (Sprite)typeof(ImageManager).GetProperty(icon).GetValue(null);
+        }
+
         public ContextMenuOptionAttribute(string title, Action callback) {
             Title = title;
+            Callback = callback;
+        }
+
+        public ContextMenuOptionAttribute(string title, string icon, Action callback) {
+            Title = title;
+            Icon = (Sprite)typeof(ImageManager).GetProperty(icon).GetValue(null);
             Callback = callback;
         }
     }

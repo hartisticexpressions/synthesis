@@ -19,7 +19,7 @@ namespace Synthesis.UI.ContextMenus {
 
         public GameObject ContextItem;
         public Transform ContentContainer;
-        public TMP_Text ContextTitle;
+        // public TMP_Text ContextTitle;
         private List<GameObject> SpawnedItems = new List<GameObject>();
 
         private static ContextMenu contextMenu;
@@ -43,19 +43,24 @@ namespace Synthesis.UI.ContextMenus {
             Show(sender, pos, title, InteractableObject.GetInteractableOptions(interactable));
         }
 
-        public static void Show(InteractableObject sender, Vector2 pos, string title, IEnumerable<(string title, Action<object> callback)> description) {
+        public static void Show(InteractableObject sender, Vector2 pos, string title, IEnumerable<(string title, Sprite icon, Action<object> callback)> description) {
 
             // This order??
             contextMenu.gameObject.SetActive(true);
             if (IsShowing)
                 ResetItems();
 
-            contextMenu.ContextTitle.text = title == string.Empty ? "" : title; // A bit useless?
+            // contextMenu.ContextTitle.text = title == string.Empty ? "" : title; // A bit useless?
 
             // Spawn in items
             description.ForEach(x => {
                 var item = Instantiate(contextMenu.ContextItem, contextMenu.ContentContainer).GetComponent<ContextItem>();
                 item.Text = x.title;
+                if (x.icon == null) {
+                    item.IconImage.color = new Color(0, 0, 0, 0);
+                } else {
+                    item.Icon = x.icon;
+                }
                 item.Callback = x.callback;
                 item.Creator = sender;
                 contextMenu.SpawnedItems.Add(item.gameObject);

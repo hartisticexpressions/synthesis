@@ -165,12 +165,12 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
 
         #region ContextMenu
 
-        [ContextMenuOption("Remove")]
+        [ContextMenuOption("Remove", "CloseIcon")]
         public void RemoveContextMenu2() {
             Remove();
         }
 
-        [ContextMenuOption("Toggle Collapse")]
+        [ContextMenuOption("Toggle Collapse", "CollapseIcon")]
         public void ToggleCollapseContextMenu() {
             Collapsed = !Collapsed;
         }
