@@ -23,6 +23,7 @@ namespace Synthesis.UI.ContextMenus {
         private List<GameObject> SpawnedItems = new List<GameObject>();
 
         private static ContextMenu contextMenu;
+        private static InteractableObject CurrentInteraction = null;
 
         // public delegate void OnContextItemSelect(string uuid, string item);
         // public static event OnContextItemSelect ContextItemSelected;
@@ -70,10 +71,17 @@ namespace Synthesis.UI.ContextMenus {
             contextMenu.GetComponent<RectTransform>().position = pos;
 
             IsShowing = true;
+            sender.IsBeingInteractedWith = true;
+            CurrentInteraction = sender;
         }
 
         public static void Hide() {
             ResetItems();
+            if (CurrentInteraction != null) {
+                CurrentInteraction.IsBeingInteractedWith = false;
+                CurrentInteraction = null;
+            }
+            
             contextMenu.gameObject.SetActive(false);
 
             IsShowing = false;

@@ -18,6 +18,20 @@ namespace Synthesis.UI
         // public class ContextItemEvent : UnityEvent { }
         public bool useReflection = true;
 
+        private bool isBeingInteractedWith = false;
+        public bool IsBeingInteractedWith {
+            get => isBeingInteractedWith;
+            set {
+                isBeingInteractedWith = value;
+                OnInteraction(value);
+                if (OnInteractionStateChanged != null)
+                    OnInteractionStateChanged(value);
+            }
+        }
+
+        public delegate void InteractionStateChange(bool state);
+        public event InteractionStateChange OnInteractionStateChanged;
+
         public string ContextMenuUID = string.Empty;
         public List<(string title, Sprite icon, Action<object> callback)> Options
             = new List<(string title, Sprite icon, Action<object> callback)>();
@@ -57,6 +71,10 @@ namespace Synthesis.UI
         }
 
         public void AddOption(string title, Sprite icon, Action<object> callback) => Options.Add((title, icon, callback));
+
+        protected virtual void OnInteraction(bool isInteractedWith) { }
+
+        #region Static Methods
 
         private static Dictionary<Type, List<(string title, Sprite icon, Action<object> callback)>> InteractableTypes
             = new Dictionary<Type, List<(string, Sprite, Action<object>)>>();
@@ -101,5 +119,7 @@ namespace Synthesis.UI
 
             }
         }
+
+        #endregion
     }
 }

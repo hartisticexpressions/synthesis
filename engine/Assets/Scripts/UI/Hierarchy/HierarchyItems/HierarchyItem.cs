@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using Synthesis.Attributes;
+using Synthesis.Util;
 using TMPro;
 
 #nullable enable
@@ -13,7 +14,7 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
     public class HierarchyItem : InteractableObject
     {
         public delegate void OnClickEvent();
-        public event OnClickEvent OnItemClicked;
+        public event OnClickEvent? OnItemClicked;
 
         #region Properties
 
@@ -49,7 +50,7 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
                 return Parent.Depth + 1;
             }
         }
-        public TMP_Text TitleText;
+        public TMP_Text TitleText = null!;
         // public Transform Root;
         public HierarchyFolderItem? Parent;
         private string title = String.Empty;
@@ -71,6 +72,10 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
             }
         }
 
+        private Image? imageComponent = null;
+        private readonly Color NormalColor = SynthesisUtil.ColorFromHex(0xf3f3f3ff);
+        private readonly Color InteractionColor = SynthesisUtil.ColorFromHex(0xe8cc2aff);
+
         #endregion
 
         // Use this for initialization
@@ -79,6 +84,16 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
             button.onClick.AddListener(() => {
                 OnItemClicked?.Invoke();
             });
+        }
+
+        protected override sealed void OnInteraction(bool isInteractedWith) {
+            if (imageComponent == null)
+                imageComponent = GetComponent<Image>();
+
+            if (isInteractedWith)
+                imageComponent.color = InteractionColor;
+            else
+                imageComponent.color = NormalColor;
         }
 
         #region Hierarchy

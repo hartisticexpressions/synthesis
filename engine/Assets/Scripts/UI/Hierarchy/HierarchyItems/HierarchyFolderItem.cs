@@ -13,7 +13,7 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
     {
         #region Properties
 
-        private Image image;
+        private Image? image;
         private bool collapsed = false;
         public bool Collapsed {
             get => collapsed;
@@ -22,11 +22,12 @@ namespace Synthesis.UI.Hierarchy.HierarchyItems
                 SetChildrenVisible(!collapsed);
                 Hierarchy.Changes = true;
 
-                if (collapsed) {
-                    image.color = new Color(0.3f, 0.3f, 0.3f, 100f / 255f);
-                } else {
-                    image.color = new Color(1f, 1f, 1f, 100f / 255f);
-                }
+                // TODO: Replace with sprite indication
+                // if (collapsed) {
+                //     image.color = new Color(0.3f, 0.3f, 0.3f, 1f);
+                // } else {
+                //     image.color = new Color(0.9529f, 0.9529f, 0.9529f, 1f);
+                // }
             }
         }
         public int ChildrenCount => Items.Count;
