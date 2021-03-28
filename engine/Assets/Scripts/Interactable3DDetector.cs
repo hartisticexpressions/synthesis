@@ -21,8 +21,9 @@ public class Interactable3DDetector : MonoBehaviour
     private void Update() {
         // Debug.Log($"{Input.mousePosition.x}, {Input.mousePosition.y}");
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
+            Debug.Log("3d Detector");
             var refResolution = ContextMenu.CanvasScaler.referenceResolution;
-            Debug.Log($"{Input.mousePosition.x}, {Input.mousePosition.y}");
+            // Debug.Log($"{Input.mousePosition.x}, {Input.mousePosition.y}");
 
             Vector2 screen = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
             Vector2 mouse = new Vector2(Input.mousePosition.x, Input.mousePosition.y);

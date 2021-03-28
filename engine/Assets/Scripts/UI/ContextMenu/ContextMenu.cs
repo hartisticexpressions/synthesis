@@ -36,8 +36,8 @@ namespace Synthesis.UI.ContextMenus {
         }
 
         private void Update() {
-            if (!isMouseOverMe && (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Mouse1)))
-                ContextMenu.Hide();
+            // if (!isMouseOverMe && (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Mouse1)))
+            //     ContextMenu.Hide();
         }
 
         public static void Show<T>(InteractableObject sender, Vector2 pos, string title, T interactable) where T : InteractableObject {
@@ -47,6 +47,7 @@ namespace Synthesis.UI.ContextMenus {
         public static void Show(InteractableObject sender, Vector2 pos, string title, IEnumerable<(string title, Sprite icon, Action<object> callback)> description) {
 
             // This order??
+            Hide();
             contextMenu.gameObject.SetActive(true);
             if (IsShowing)
                 ResetItems();
