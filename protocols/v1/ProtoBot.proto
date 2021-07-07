@@ -2,81 +2,93 @@ syntax = "proto3";
 
 package SynthesisAPI.Proto;
 
-message ProtoRobot {
-    DynamicObject object = 1;
-    string serializerSignature = 2;
+enum DynamicType {
+    FIELD = 0;
+    SIM = 1;
+    GAMEPIECE = 2;
 }
 
-message ProtoField {
-    DynamicObject object = 1;
-    string serializerSignature = 2;
-    repeated GamepieceDefinition gamepieceDefinitions = 4;
-    repeated Gamepiece gamepieces = 5;
+message ProtoAssembly {
+    DynamicType type = 1;
+    SimObject simObject = 2;
 }
 
-message Gamepiece {
-    Mesh visualMesh = 1;
-    oneof collider {
-        Mesh meshCollider = 2;
-        Sphere sphereCollider = 3;
-    }
-
-    repeated Material visualMaterials = 4;
-    Vec3 position = 5;
-    GamepieceDefinition definition = 6;
-    PhysProps physicalProperties = 7;
-}
-
-message GamepieceDefinition {
+message SimObject {
     string name = 1;
-    Vec3 spawnLocation = 2;
-}
-
-message DynamicObject {
-    repeated Node nodes = 1;
-    string name = 2;
+    string serializerSignature = 2;
+    map<string, Node> nodeRefMap = 3;
+    map<string, Occurrence> occurrenceMap = 6;
+    map<string, Component> componentRefMap = 7;
+    map<string, Joint> jointRefMap = 8;
+    map<string, Material> materialRefMap = 9;
 }
 
 message Node {
-    ProtoGuid guid = 1;
-    Mesh visualMesh = 2;
-    repeated Mesh meshColliders = 3;
+    repeated string occurrences = 1; // Occurrences shouldn't be stored more than once in all given nodes so this is a bit redundant
+    repeated string joints = 2;
+
+    bool isRoot = 3;
+    bool isStatic = 4;
+
+    Spatial transform = 5;
+}
+
+//
+// Occurrences
+// 
+// Occurrences exist once within all given nodes
+//
+message Occurrence {
+    string name = 1;
+    string componentRef = 2;
+
+    string GUID = 5;
+    string parentGUID = 6;
+    repeated string children = 7;
+
+    Spatial transform = 3;
+}
+
+message Component {
+    Spatial transform = 3;
+    PhysProps physicalProperties = 4;
+
+    repeated Body bodies = 2;
+}
+
+message Joint {
+    Vec3 axis = 1;
+    Vec3 anchor = 2;
+
+    float massScale = 7;
+
+    bool useLimits = 8;
+    bool isWheel = 9;
 
     oneof joint {
-        RotationalJoint rotationalJoint = 4;
-        OtherJoint otherJoint = 7;
+        RotationalJoint rotationalJoint = 10;
+        OtherJoint otherJoint = 11;
     }
 
-    PhysProps physicalProperties = 5;
-    ProtoGuid parentGuid = 6;
-    repeated Material visualMaterials = 8;
-    bool isStatic = 9;
-    JointMotor motor = 10;
-
-    // enum ColliderType {
-    //     MESH = 0;
-    //     SPHERE = 1;
-    //     BOX = 2;
-    //     NONE = 3;
-    // }
-
-    // repeated ColliderType colliderTypes = 11;
-
-    repeated Box boxColliders = 11;
-    repeated Sphere sphereColliders = 12;
+    JointMotor motor = 12;
+    
+    string node1 = 13;
+    string node2 = 14;
 }
 
-message Mesh {
+message Body {
+    string GUID = 1;
+    oneof Mesh {
+        UniqueMesh uniqueMesh = 6;
+        Sphere sphereMesh = 7;
+    }
+    Spatial transform = 5;
+}
+
+message UniqueMesh {
     repeated Vec3 vertices = 1;
     repeated int32 triangles = 2;
-    repeated SubMeshDescription subMeshes = 3;
-}
-
-message Box {
-    Vec3 center = 1;
-    Vec3 size = 2;
-    Vec3 position = 3;
-    Quat rotation = 4;
+    repeated SubMeshDefinition subMeshes = 3;
 }
 
 message Sphere {
@@ -84,21 +96,10 @@ message Sphere {
     float radius = 2;
 }
 
-message SubMeshDescription {
-    int32 start = 1;
-    int32 count = 2;
-}
-
 message RotationalJoint {
-    Vec3 axis = 1;
-    Vec3 anchor = 2;
     float currentAngle = 3;
     float lowerLimit = 4;
     float upperLimit = 5;
-    ProtoGuid connectedBody = 6;
-    float massScale = 7;
-    bool useLimits = 8;
-    bool isWheel = 9;
 
     enum ProtoWheelType {
         NORMAL = 0;
@@ -116,7 +117,6 @@ message JointMotor {
 }
 
 message OtherJoint {
-    ProtoGuid connectedBody = 1;
     float massScale = 2;
 }
 
@@ -125,6 +125,12 @@ message PhysProps {
     Vec3 centerOfMass = 2;
     float dynamicFriction = 4;
     float staticFriction = 5;
+}
+
+message SubMeshDefinition {
+    int32 start = 1;
+    int32 count = 2;
+    string material = 3;
 }
 
 message Material {
@@ -149,6 +155,10 @@ message Quat {
     float w = 4;
 }
 
-message ProtoGuid {
-    bytes b = 1;
+message Spatial {
+    repeated float matrix = 1;
 }
+
+// message ProtoGuid {
+//     string guid = 1;
+// }
