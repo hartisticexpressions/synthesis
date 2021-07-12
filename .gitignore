@@ -50,3 +50,4 @@ importer/UpgradeLog2.htm
 # Ignore Inventor obj folder which can regenerate with no issues
 /exporter/InventorRobotExporter/RobotExporterTests/obj
 /exporter/InventorRobotExporter/InventorRobotExporter/obj
+/exporter/InventorRobotExporter/InventorRobotExporter/bin
