@@ -107,7 +107,7 @@ namespace InventorRobotExporter.GUI.Editors.JointEditor
             this.AcceptButton = this.okButton;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(558, 803);
+            this.ClientSize = new System.Drawing.Size(558, 811);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.label1);
@@ -119,6 +119,7 @@ namespace InventorRobotExporter.GUI.Editors.JointEditor
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(0, 850);
             this.Name = "JointEditorForm";
+            this.ShowInTaskbar = false;
             this.Text = "Joint Editor";
             this.TopMost = true;
             this.DefinePartsLayout.ResumeLayout(false);

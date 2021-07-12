@@ -104,7 +104,7 @@
             this.cmbJointDriver.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbJointDriver.FormattingEnabled = true;
             this.cmbJointDriver.Location = new System.Drawing.Point(4, 17);
-            this.cmbJointDriver.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmbJointDriver.Margin = new System.Windows.Forms.Padding(2);
             this.cmbJointDriver.Name = "cmbJointDriver";
             this.cmbJointDriver.Size = new System.Drawing.Size(382, 21);
             this.cmbJointDriver.TabIndex = 0;
@@ -114,9 +114,9 @@
             // 
             this.grpChooseDriver.Controls.Add(this.cmbJointDriver);
             this.grpChooseDriver.Location = new System.Drawing.Point(2, 2);
-            this.grpChooseDriver.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpChooseDriver.Margin = new System.Windows.Forms.Padding(2);
             this.grpChooseDriver.Name = "grpChooseDriver";
-            this.grpChooseDriver.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpChooseDriver.Padding = new System.Windows.Forms.Padding(2);
             this.grpChooseDriver.Size = new System.Drawing.Size(387, 44);
             this.grpChooseDriver.TabIndex = 1;
             this.grpChooseDriver.TabStop = false;
@@ -129,9 +129,9 @@
             this.grpDriveOptions.Controls.Add(this.JointOptionsLayout);
             this.grpDriveOptions.Dock = System.Windows.Forms.DockStyle.Top;
             this.grpDriveOptions.Location = new System.Drawing.Point(2, 129);
-            this.grpDriveOptions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpDriveOptions.Margin = new System.Windows.Forms.Padding(2);
             this.grpDriveOptions.Name = "grpDriveOptions";
-            this.grpDriveOptions.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpDriveOptions.Padding = new System.Windows.Forms.Padding(2);
             this.grpDriveOptions.Size = new System.Drawing.Size(387, 103);
             this.grpDriveOptions.TabIndex = 2;
             this.grpDriveOptions.TabStop = false;
@@ -170,17 +170,17 @@
             this.txtHighLimit.DecimalPlaces = 4;
             this.txtHighLimit.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtHighLimit.Increment = new decimal(new int[] {
-                1,
-                0,
-                0,
-                65536});
+            1,
+            0,
+            0,
+            65536});
             this.txtHighLimit.Location = new System.Drawing.Point(139, 64);
-            this.txtHighLimit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtHighLimit.Margin = new System.Windows.Forms.Padding(2);
             this.txtHighLimit.Minimum = new decimal(new int[] {
-                100,
-                0,
-                0,
-                -2147483648});
+            100,
+            0,
+            0,
+            -2147483648});
             this.txtHighLimit.Name = "txtHighLimit";
             this.txtHighLimit.Size = new System.Drawing.Size(133, 20);
             this.txtHighLimit.TabIndex = 4;
@@ -190,7 +190,7 @@
             // 
             this.lblPort.AutoSize = true;
             this.lblPort.Location = new System.Drawing.Point(3, 3);
-            this.lblPort.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.lblPort.Margin = new System.Windows.Forms.Padding(3);
             this.lblPort.Name = "lblPort";
             this.lblPort.Size = new System.Drawing.Size(26, 13);
             this.lblPort.TabIndex = 1;
@@ -201,17 +201,17 @@
             this.txtLowLimit.DecimalPlaces = 4;
             this.txtLowLimit.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtLowLimit.Increment = new decimal(new int[] {
-                1,
-                0,
-                0,
-                65536});
+            1,
+            0,
+            0,
+            65536});
             this.txtLowLimit.Location = new System.Drawing.Point(2, 64);
-            this.txtLowLimit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtLowLimit.Margin = new System.Windows.Forms.Padding(2);
             this.txtLowLimit.Minimum = new decimal(new int[] {
-                100,
-                0,
-                0,
-                -2147483648});
+            100,
+            0,
+            0,
+            -2147483648});
             this.txtLowLimit.Name = "txtLowLimit";
             this.txtLowLimit.Size = new System.Drawing.Size(133, 20);
             this.txtLowLimit.TabIndex = 3;
@@ -221,35 +221,35 @@
             // 
             this.txtPort1.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtPort1.Location = new System.Drawing.Point(2, 21);
-            this.txtPort1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPort1.Margin = new System.Windows.Forms.Padding(2);
             this.txtPort1.Name = "txtPort1";
             this.txtPort1.Size = new System.Drawing.Size(133, 20);
             this.txtPort1.TabIndex = 1;
             this.txtPort1.Value = new decimal(new int[] {
-                1,
-                0,
-                0,
-                0});
+            1,
+            0,
+            0,
+            0});
             // 
             // txtPort2
             // 
             this.txtPort2.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtPort2.Location = new System.Drawing.Point(139, 21);
-            this.txtPort2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPort2.Margin = new System.Windows.Forms.Padding(2);
             this.txtPort2.Name = "txtPort2";
             this.txtPort2.Size = new System.Drawing.Size(133, 20);
             this.txtPort2.TabIndex = 2;
             this.txtPort2.Value = new decimal(new int[] {
-                1,
-                0,
-                0,
-                0});
+            1,
+            0,
+            0,
+            0});
             // 
             // lblLimits
             // 
             this.lblLimits.AutoSize = true;
             this.lblLimits.Location = new System.Drawing.Point(3, 46);
-            this.lblLimits.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.lblLimits.Margin = new System.Windows.Forms.Padding(3);
             this.lblLimits.Name = "lblLimits";
             this.lblLimits.Size = new System.Drawing.Size(58, 13);
             this.lblLimits.TabIndex = 4;
@@ -261,7 +261,7 @@
             this.rbCAN.AutoSize = true;
             this.rbCAN.Dock = System.Windows.Forms.DockStyle.Right;
             this.rbCAN.Location = new System.Drawing.Point(332, 21);
-            this.rbCAN.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbCAN.Margin = new System.Windows.Forms.Padding(2);
             this.rbCAN.Name = "rbCAN";
             this.rbCAN.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
             this.rbCAN.Size = new System.Drawing.Size(49, 20);
@@ -277,7 +277,7 @@
             this.rbPWM.AutoSize = true;
             this.rbPWM.Dock = System.Windows.Forms.DockStyle.Right;
             this.rbPWM.Location = new System.Drawing.Point(276, 21);
-            this.rbPWM.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbPWM.Margin = new System.Windows.Forms.Padding(2);
             this.rbPWM.Name = "rbPWM";
             this.rbPWM.Size = new System.Drawing.Size(52, 20);
             this.rbPWM.TabIndex = 7;
@@ -291,7 +291,7 @@
             this.chkBoxDriveWheel.AutoSize = true;
             this.chkBoxDriveWheel.Dock = System.Windows.Forms.DockStyle.Right;
             this.chkBoxDriveWheel.Location = new System.Drawing.Point(289, 21);
-            this.chkBoxDriveWheel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chkBoxDriveWheel.Margin = new System.Windows.Forms.Padding(2);
             this.chkBoxDriveWheel.Name = "chkBoxDriveWheel";
             this.chkBoxDriveWheel.Size = new System.Drawing.Size(88, 21);
             this.chkBoxDriveWheel.TabIndex = 5;
@@ -301,7 +301,7 @@
             // SaveButton
             // 
             this.SaveButton.Location = new System.Drawing.Point(2, 236);
-            this.SaveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SaveButton.Margin = new System.Windows.Forms.Padding(2);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(385, 23);
             this.SaveButton.TabIndex = 11;
@@ -315,12 +315,12 @@
             this.cmbWheelType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbWheelType.FormattingEnabled = true;
             this.cmbWheelType.Items.AddRange(new object[] {
-                "Not a Wheel",
-                "Normal",
-                "Omni",
-                "Mecanum"});
+            "Not a Wheel",
+            "Normal",
+            "Omni",
+            "Mecanum"});
             this.cmbWheelType.Location = new System.Drawing.Point(2, 21);
-            this.cmbWheelType.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmbWheelType.Margin = new System.Windows.Forms.Padding(2);
             this.cmbWheelType.Name = "cmbWheelType";
             this.cmbWheelType.Size = new System.Drawing.Size(122, 21);
             this.cmbWheelType.TabIndex = 7;
@@ -333,11 +333,11 @@
             this.cmbPneumaticPressure.FormattingEnabled = true;
             this.cmbPneumaticPressure.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.cmbPneumaticPressure.Items.AddRange(new object[] {
-                "60 psi",
-                "20 psi",
-                "10 psi"});
+            "60 psi",
+            "20 psi",
+            "10 psi"});
             this.cmbPneumaticPressure.Location = new System.Drawing.Point(191, 21);
-            this.cmbPneumaticPressure.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmbPneumaticPressure.Margin = new System.Windows.Forms.Padding(2);
             this.cmbPneumaticPressure.Name = "cmbPneumaticPressure";
             this.cmbPneumaticPressure.Size = new System.Drawing.Size(186, 21);
             this.cmbPneumaticPressure.TabIndex = 6;
@@ -360,7 +360,7 @@
             // 
             this.metaWheel.Controls.Add(this.WheelLayout);
             this.metaWheel.Location = new System.Drawing.Point(4, 22);
-            this.metaWheel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.metaWheel.Margin = new System.Windows.Forms.Padding(2);
             this.metaWheel.Name = "metaWheel";
             this.metaWheel.Size = new System.Drawing.Size(379, 49);
             this.metaWheel.TabIndex = 0;
@@ -393,7 +393,7 @@
             // 
             this.lblFriction.AutoSize = true;
             this.lblFriction.Location = new System.Drawing.Point(129, 3);
-            this.lblFriction.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.lblFriction.Margin = new System.Windows.Forms.Padding(3);
             this.lblFriction.Name = "lblFriction";
             this.lblFriction.Size = new System.Drawing.Size(70, 13);
             this.lblFriction.TabIndex = 15;
@@ -405,11 +405,11 @@
             this.cmbFrictionLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbFrictionLevel.FormattingEnabled = true;
             this.cmbFrictionLevel.Items.AddRange(new object[] {
-                "High",
-                "Medium",
-                "Low"});
+            "High",
+            "Medium",
+            "Low"});
             this.cmbFrictionLevel.Location = new System.Drawing.Point(128, 21);
-            this.cmbFrictionLevel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmbFrictionLevel.Margin = new System.Windows.Forms.Padding(2);
             this.cmbFrictionLevel.Name = "cmbFrictionLevel";
             this.cmbFrictionLevel.Size = new System.Drawing.Size(122, 21);
             this.cmbFrictionLevel.TabIndex = 13;
@@ -418,7 +418,7 @@
             // 
             this.lblType.AutoSize = true;
             this.lblType.Location = new System.Drawing.Point(3, 3);
-            this.lblType.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.lblType.Margin = new System.Windows.Forms.Padding(3);
             this.lblType.Name = "lblType";
             this.lblType.Size = new System.Drawing.Size(65, 13);
             this.lblType.TabIndex = 14;
@@ -428,7 +428,7 @@
             // 
             this.metaPneumatic.Controls.Add(this.PneumaticLayout);
             this.metaPneumatic.Location = new System.Drawing.Point(4, 22);
-            this.metaPneumatic.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.metaPneumatic.Margin = new System.Windows.Forms.Padding(2);
             this.metaPneumatic.Name = "metaPneumatic";
             this.metaPneumatic.Size = new System.Drawing.Size(379, 49);
             this.metaPneumatic.TabIndex = 1;
@@ -463,7 +463,7 @@
             this.tableLayoutPanel2.Controls.Add(this.numericUpDownPnuDia, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.PnuDiaUnits, 1, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(2, 21);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -474,12 +474,12 @@
             // 
             this.numericUpDownPnuDia.DecimalPlaces = 6;
             this.numericUpDownPnuDia.Location = new System.Drawing.Point(2, 2);
-            this.numericUpDownPnuDia.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.numericUpDownPnuDia.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDownPnuDia.Maximum = new decimal(new int[] {
-                10,
-                0,
-                0,
-                0});
+            10,
+            0,
+            0,
+            0});
             this.numericUpDownPnuDia.Name = "numericUpDownPnuDia";
             this.numericUpDownPnuDia.Size = new System.Drawing.Size(134, 20);
             this.numericUpDownPnuDia.TabIndex = 0;
@@ -489,7 +489,7 @@
             this.PnuDiaUnits.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.PnuDiaUnits.AutoSize = true;
             this.PnuDiaUnits.Location = new System.Drawing.Point(141, 6);
-            this.PnuDiaUnits.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.PnuDiaUnits.Margin = new System.Windows.Forms.Padding(3);
             this.PnuDiaUnits.Name = "PnuDiaUnits";
             this.PnuDiaUnits.Size = new System.Drawing.Size(21, 13);
             this.PnuDiaUnits.TabIndex = 15;
@@ -500,7 +500,7 @@
             // 
             this.lblPressure.AutoSize = true;
             this.lblPressure.Location = new System.Drawing.Point(192, 3);
-            this.lblPressure.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.lblPressure.Margin = new System.Windows.Forms.Padding(3);
             this.lblPressure.Name = "lblPressure";
             this.lblPressure.Size = new System.Drawing.Size(48, 13);
             this.lblPressure.TabIndex = 13;
@@ -511,7 +511,7 @@
             // 
             this.lblDiameter.AutoSize = true;
             this.lblDiameter.Location = new System.Drawing.Point(3, 3);
-            this.lblDiameter.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.lblDiameter.Margin = new System.Windows.Forms.Padding(3);
             this.lblDiameter.Name = "lblDiameter";
             this.lblDiameter.Size = new System.Drawing.Size(87, 13);
             this.lblDiameter.TabIndex = 9;
@@ -522,7 +522,7 @@
             // 
             this.metaGearing.Controls.Add(this.GearLayout);
             this.metaGearing.Location = new System.Drawing.Point(4, 22);
-            this.metaGearing.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.metaGearing.Margin = new System.Windows.Forms.Padding(2);
             this.metaGearing.Name = "metaGearing";
             this.metaGearing.Size = new System.Drawing.Size(379, 49);
             this.metaGearing.TabIndex = 2;
@@ -553,31 +553,31 @@
             // 
             this.OutputGeartxt.DecimalPlaces = 5;
             this.OutputGeartxt.Location = new System.Drawing.Point(191, 25);
-            this.OutputGeartxt.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.OutputGeartxt.Margin = new System.Windows.Forms.Padding(2);
             this.OutputGeartxt.Maximum = new decimal(new int[] {
-                1000,
-                0,
-                0,
-                0});
+            1000,
+            0,
+            0,
+            0});
             this.OutputGeartxt.Minimum = new decimal(new int[] {
-                1,
-                0,
-                0,
-                0});
+            1,
+            0,
+            0,
+            0});
             this.OutputGeartxt.Name = "OutputGeartxt";
             this.OutputGeartxt.Size = new System.Drawing.Size(154, 20);
             this.OutputGeartxt.TabIndex = 16;
             this.OutputGeartxt.Value = new decimal(new int[] {
-                1,
-                0,
-                0,
-                0});
+            1,
+            0,
+            0,
+            0});
             // 
             // lblOutputGear
             // 
             this.lblOutputGear.AutoSize = true;
             this.lblOutputGear.Location = new System.Drawing.Point(192, 3);
-            this.lblOutputGear.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.lblOutputGear.Margin = new System.Windows.Forms.Padding(3);
             this.lblOutputGear.Name = "lblOutputGear";
             this.lblOutputGear.Size = new System.Drawing.Size(66, 17);
             this.lblOutputGear.TabIndex = 14;
@@ -588,7 +588,7 @@
             // 
             this.lblInputGear.AutoSize = true;
             this.lblInputGear.Location = new System.Drawing.Point(3, 3);
-            this.lblInputGear.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.lblInputGear.Margin = new System.Windows.Forms.Padding(3);
             this.lblInputGear.Name = "lblInputGear";
             this.lblInputGear.Size = new System.Drawing.Size(57, 13);
             this.lblInputGear.TabIndex = 11;
@@ -598,31 +598,31 @@
             // 
             this.InputGeartxt.DecimalPlaces = 5;
             this.InputGeartxt.Location = new System.Drawing.Point(2, 25);
-            this.InputGeartxt.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.InputGeartxt.Margin = new System.Windows.Forms.Padding(2);
             this.InputGeartxt.Maximum = new decimal(new int[] {
-                1000,
-                0,
-                0,
-                0});
+            1000,
+            0,
+            0,
+            0});
             this.InputGeartxt.Minimum = new decimal(new int[] {
-                1,
-                0,
-                0,
-                0});
+            1,
+            0,
+            0,
+            0});
             this.InputGeartxt.Name = "InputGeartxt";
             this.InputGeartxt.Size = new System.Drawing.Size(154, 20);
             this.InputGeartxt.TabIndex = 15;
             this.InputGeartxt.Value = new decimal(new int[] {
-                1,
-                0,
-                0,
-                0});
+            1,
+            0,
+            0,
+            0});
             // 
             // metaBrake
             // 
             this.metaBrake.Controls.Add(this.BreakLayout);
             this.metaBrake.Location = new System.Drawing.Point(4, 22);
-            this.metaBrake.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.metaBrake.Margin = new System.Windows.Forms.Padding(2);
             this.metaBrake.Name = "metaBrake";
             this.metaBrake.Size = new System.Drawing.Size(379, 49);
             this.metaBrake.TabIndex = 3;
@@ -661,7 +661,7 @@
             // 
             this.metaMotorType.Controls.Add(this.tableLayoutPanel1);
             this.metaMotorType.Location = new System.Drawing.Point(4, 22);
-            this.metaMotorType.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.metaMotorType.Margin = new System.Windows.Forms.Padding(2);
             this.metaMotorType.Name = "metaMotorType";
             this.metaMotorType.Size = new System.Drawing.Size(379, 49);
             this.metaMotorType.TabIndex = 4;
@@ -680,7 +680,7 @@
             this.tableLayoutPanel1.Controls.Add(this.MotorTypeLabel, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -694,12 +694,12 @@
             this.RobotCompetitionDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.RobotCompetitionDropDown.FormattingEnabled = true;
             this.RobotCompetitionDropDown.Items.AddRange(new object[] {
-                "GENERIC",
-                "FRC",
-                "FTC",
-                "VEX"});
+            "GENERIC",
+            "FRC",
+            "FTC",
+            "VEX"});
             this.RobotCompetitionDropDown.Location = new System.Drawing.Point(2, 26);
-            this.RobotCompetitionDropDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RobotCompetitionDropDown.Margin = new System.Windows.Forms.Padding(2);
             this.RobotCompetitionDropDown.Name = "RobotCompetitionDropDown";
             this.RobotCompetitionDropDown.Size = new System.Drawing.Size(141, 21);
             this.RobotCompetitionDropDown.TabIndex = 14;
@@ -712,7 +712,7 @@
             this.MotorTypeDropDown.Enabled = false;
             this.MotorTypeDropDown.FormattingEnabled = true;
             this.MotorTypeDropDown.Location = new System.Drawing.Point(147, 26);
-            this.MotorTypeDropDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MotorTypeDropDown.Margin = new System.Windows.Forms.Padding(2);
             this.MotorTypeDropDown.Name = "MotorTypeDropDown";
             this.MotorTypeDropDown.Size = new System.Drawing.Size(230, 21);
             this.MotorTypeDropDown.TabIndex = 13;
@@ -761,7 +761,7 @@
             this.ConfigJointLayout.Size = new System.Drawing.Size(391, 261);
             this.ConfigJointLayout.TabIndex = 12;
             // 
-            // DriveChooser
+            // JointDriverEditorForm
             // 
             this.AcceptButton = this.SaveButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -772,10 +772,11 @@
             this.Controls.Add(this.ConfigJointLayout);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "JointDriverEditorForm";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Driver Configuration";
             this.grpChooseDriver.ResumeLayout(false);

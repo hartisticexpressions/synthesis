@@ -45,15 +45,15 @@
             // WeightBox
             // 
             this.WeightBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.WeightBox.Location = new System.Drawing.Point(65, 5);
-            this.WeightBox.Margin = new System.Windows.Forms.Padding(5);
+            this.WeightBox.Location = new System.Drawing.Point(51, 4);
+            this.WeightBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.WeightBox.Maximum = new decimal(new int[] {
             150,
             0,
             0,
             0});
             this.WeightBox.Name = "WeightBox";
-            this.WeightBox.Size = new System.Drawing.Size(244, 22);
+            this.WeightBox.Size = new System.Drawing.Size(180, 20);
             this.WeightBox.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -66,13 +66,12 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.WeightLabel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.UnitBox, 2, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 4);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(421, 61);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(316, 50);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // tableLayoutPanel2
@@ -84,25 +83,24 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Controls.Add(this.CalculatedWeightCheck, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 32);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 28);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(421, 29);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(316, 23);
             this.tableLayoutPanel2.TabIndex = 2;
             // 
             // CalculatedWeightCheck
             // 
             this.CalculatedWeightCheck.AutoSize = true;
             this.CalculatedWeightCheck.Dock = System.Windows.Forms.DockStyle.Left;
-            this.CalculatedWeightCheck.Location = new System.Drawing.Point(4, 4);
-            this.CalculatedWeightCheck.Margin = new System.Windows.Forms.Padding(4);
+            this.CalculatedWeightCheck.Location = new System.Drawing.Point(3, 3);
             this.CalculatedWeightCheck.Name = "CalculatedWeightCheck";
-            this.CalculatedWeightCheck.Size = new System.Drawing.Size(167, 21);
+            this.CalculatedWeightCheck.Size = new System.Drawing.Size(131, 17);
             this.CalculatedWeightCheck.TabIndex = 3;
             this.CalculatedWeightCheck.Text = "Use calculated weight";
             this.CalculatedWeightCheck.UseVisualStyleBackColor = true;
@@ -112,10 +110,10 @@
             // 
             this.WeightLabel.AutoSize = true;
             this.WeightLabel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.WeightLabel.Location = new System.Drawing.Point(4, 4);
-            this.WeightLabel.Margin = new System.Windows.Forms.Padding(4);
+            this.WeightLabel.Location = new System.Drawing.Point(3, 3);
+            this.WeightLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
             this.WeightLabel.Name = "WeightLabel";
-            this.WeightLabel.Size = new System.Drawing.Size(52, 24);
+            this.WeightLabel.Size = new System.Drawing.Size(41, 22);
             this.WeightLabel.TabIndex = 1;
             this.WeightLabel.Text = "Weight";
             this.WeightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -126,20 +124,19 @@
             this.UnitBox.Items.AddRange(new object[] {
             "Pounds",
             "Kilograms"});
-            this.UnitBox.Location = new System.Drawing.Point(318, 4);
-            this.UnitBox.Margin = new System.Windows.Forms.Padding(4);
+            this.UnitBox.Location = new System.Drawing.Point(238, 3);
             this.UnitBox.Name = "UnitBox";
-            this.UnitBox.Size = new System.Drawing.Size(99, 24);
+            this.UnitBox.Size = new System.Drawing.Size(75, 21);
             this.UnitBox.TabIndex = 2;
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(304, 40);
-            this.cancelButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cancelButton.Location = new System.Drawing.Point(228, 32);
+            this.cancelButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(121, 27);
+            this.cancelButton.Size = new System.Drawing.Size(91, 22);
             this.cancelButton.TabIndex = 17;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -147,10 +144,10 @@
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(177, 40);
-            this.okButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.okButton.Location = new System.Drawing.Point(133, 32);
+            this.okButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(121, 27);
+            this.okButton.Size = new System.Drawing.Size(91, 22);
             this.okButton.TabIndex = 16;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = false;
@@ -159,21 +156,21 @@
             // DrivetrainWeightForm
             // 
             this.AcceptButton = this.okButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(430, 74);
+            this.ClientSize = new System.Drawing.Size(322, 60);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DrivetrainWeightForm";
+            this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Set Drivetrain Weight";
             ((System.ComponentModel.ISupportInitialize)(this.WeightBox)).EndInit();

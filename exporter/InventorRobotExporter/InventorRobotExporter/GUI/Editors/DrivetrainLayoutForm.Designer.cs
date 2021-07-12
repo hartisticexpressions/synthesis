@@ -64,11 +64,12 @@
             this.tableLayoutPanel1.Controls.Add(this.tankOption, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(20, 20, 20, 0);
+            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(15, 16, 15, 0);
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(480, 187);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(360, 151);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // customOption
@@ -80,14 +81,14 @@
             this.customOption.Controls.Add(this.pictureBox3, 0, 0);
             this.customOption.Controls.Add(this.label3, 0, 1);
             this.customOption.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.customOption.Location = new System.Drawing.Point(313, 22);
+            this.customOption.Location = new System.Drawing.Point(235, 18);
             this.customOption.Margin = new System.Windows.Forms.Padding(0);
             this.customOption.Name = "customOption";
-            this.customOption.Padding = new System.Windows.Forms.Padding(8);
+            this.customOption.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.customOption.RowCount = 2;
             this.customOption.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.customOption.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.customOption.Size = new System.Drawing.Size(145, 163);
+            this.customOption.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.customOption.Size = new System.Drawing.Size(108, 131);
             this.customOption.TabIndex = 12;
             // 
             // pictureBox3
@@ -95,10 +96,10 @@
             this.pictureBox3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox3.BackColor = System.Drawing.SystemColors.Control;
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(11, 11);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.pictureBox3.Location = new System.Drawing.Point(8, 8);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 8);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(123, 114);
+            this.pictureBox3.Size = new System.Drawing.Size(92, 93);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox3.TabIndex = 6;
             this.pictureBox3.TabStop = false;
@@ -108,9 +109,10 @@
             this.label3.AutoSize = true;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(11, 135);
+            this.label3.Location = new System.Drawing.Point(8, 109);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(123, 20);
+            this.label3.Size = new System.Drawing.Size(92, 16);
             this.label3.TabIndex = 7;
             this.label3.Text = "Other";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -124,14 +126,14 @@
             this.hdriveOption.Controls.Add(this.label2, 0, 1);
             this.hdriveOption.Controls.Add(this.pictureBox2, 0, 0);
             this.hdriveOption.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hdriveOption.Location = new System.Drawing.Point(167, 22);
+            this.hdriveOption.Location = new System.Drawing.Point(126, 18);
             this.hdriveOption.Margin = new System.Windows.Forms.Padding(0);
             this.hdriveOption.Name = "hdriveOption";
-            this.hdriveOption.Padding = new System.Windows.Forms.Padding(8);
+            this.hdriveOption.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.hdriveOption.RowCount = 2;
             this.hdriveOption.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.hdriveOption.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.hdriveOption.Size = new System.Drawing.Size(144, 163);
+            this.hdriveOption.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.hdriveOption.Size = new System.Drawing.Size(107, 131);
             this.hdriveOption.TabIndex = 11;
             // 
             // label2
@@ -139,9 +141,10 @@
             this.label2.AutoSize = true;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(11, 135);
+            this.label2.Location = new System.Drawing.Point(8, 109);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(122, 20);
+            this.label2.Size = new System.Drawing.Size(91, 16);
             this.label2.TabIndex = 7;
             this.label2.Text = "H-Drive";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -151,10 +154,10 @@
             this.pictureBox2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox2.BackColor = System.Drawing.SystemColors.Control;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(11, 11);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.pictureBox2.Location = new System.Drawing.Point(8, 8);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 8);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(122, 114);
+            this.pictureBox2.Size = new System.Drawing.Size(91, 93);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 6;
             this.pictureBox2.TabStop = false;
@@ -168,14 +171,14 @@
             this.tankOption.Controls.Add(this.tankLabel, 0, 1);
             this.tankOption.Controls.Add(this.pictureBox1, 0, 0);
             this.tankOption.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tankOption.Location = new System.Drawing.Point(22, 22);
+            this.tankOption.Location = new System.Drawing.Point(17, 18);
             this.tankOption.Margin = new System.Windows.Forms.Padding(0);
             this.tankOption.Name = "tankOption";
-            this.tankOption.Padding = new System.Windows.Forms.Padding(8);
+            this.tankOption.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.tankOption.RowCount = 2;
             this.tankOption.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tankOption.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tankOption.Size = new System.Drawing.Size(143, 163);
+            this.tankOption.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tankOption.Size = new System.Drawing.Size(107, 131);
             this.tankOption.TabIndex = 10;
             // 
             // tankLabel
@@ -183,9 +186,10 @@
             this.tankLabel.AutoSize = true;
             this.tankLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tankLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tankLabel.Location = new System.Drawing.Point(11, 135);
+            this.tankLabel.Location = new System.Drawing.Point(8, 109);
+            this.tankLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.tankLabel.Name = "tankLabel";
-            this.tankLabel.Size = new System.Drawing.Size(121, 20);
+            this.tankLabel.Size = new System.Drawing.Size(91, 16);
             this.tankLabel.TabIndex = 7;
             this.tankLabel.Text = "Basic";
             this.tankLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -195,20 +199,20 @@
             this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox1.BackColor = System.Drawing.SystemColors.Control;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(11, 11);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.pictureBox1.Location = new System.Drawing.Point(8, 8);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 8);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(121, 114);
+            this.pictureBox1.Size = new System.Drawing.Size(91, 93);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
             // 
-            // btnOk
+            // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(210, 197);
-            this.okButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.okButton.Location = new System.Drawing.Point(158, 160);
+            this.okButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(121, 27);
+            this.okButton.Size = new System.Drawing.Size(91, 22);
             this.okButton.TabIndex = 4;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = false;
@@ -217,10 +221,10 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(337, 197);
-            this.cancelButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cancelButton.Location = new System.Drawing.Point(253, 160);
+            this.cancelButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(121, 27);
+            this.cancelButton.Size = new System.Drawing.Size(91, 22);
             this.cancelButton.TabIndex = 5;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -229,19 +233,21 @@
             // DrivetrainLayoutForm
             // 
             this.AcceptButton = this.okButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(480, 235);
+            this.ClientSize = new System.Drawing.Size(360, 191);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DrivetrainLayoutForm";
+            this.ShowInTaskbar = false;
             this.Text = "Select Drivetrain Layout";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

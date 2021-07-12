@@ -66,7 +66,7 @@ namespace InventorRobotExporter.GUI.Editors.JointSubEditors
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // btnCancel
+            // cancelButton
             // 
             this.cancelButton.Location = new System.Drawing.Point(175, 199);
             this.cancelButton.Margin = new System.Windows.Forms.Padding(2);
@@ -77,7 +77,7 @@ namespace InventorRobotExporter.GUI.Editors.JointSubEditors
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // btnOkay
+            // okButton
             // 
             this.okButton.Location = new System.Drawing.Point(77, 200);
             this.okButton.Margin = new System.Windows.Forms.Padding(2);
@@ -384,7 +384,7 @@ namespace InventorRobotExporter.GUI.Editors.JointSubEditors
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Animate";
             // 
-            // EditLimits
+            // JointLimitEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

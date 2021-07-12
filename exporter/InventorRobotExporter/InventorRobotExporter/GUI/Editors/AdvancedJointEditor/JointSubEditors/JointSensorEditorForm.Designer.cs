@@ -51,9 +51,10 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Location = new System.Drawing.Point(2, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 42);
+            this.label1.Size = new System.Drawing.Size(71, 34);
             this.label1.TabIndex = 0;
             this.label1.Text = "Sensor Type:";
             // 
@@ -64,44 +65,45 @@
             this.typeBox.FormattingEnabled = true;
             this.typeBox.Items.AddRange(new object[] {
             "Encoder"});
-            this.typeBox.Location = new System.Drawing.Point(103, 2);
-            this.typeBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.typeBox.Location = new System.Drawing.Point(77, 2);
+            this.typeBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.typeBox.Name = "typeBox";
-            this.typeBox.Size = new System.Drawing.Size(194, 24);
+            this.typeBox.Size = new System.Drawing.Size(146, 21);
             this.typeBox.TabIndex = 0;
             this.typeBox.SelectedIndexChanged += new System.EventHandler(this.typeBox_SelectedIndexChanged);
             // 
             // PortALbl
             // 
             this.PortALbl.AutoSize = true;
-            this.PortALbl.Location = new System.Drawing.Point(3, 42);
+            this.PortALbl.Location = new System.Drawing.Point(2, 34);
+            this.PortALbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.PortALbl.Name = "PortALbl";
-            this.PortALbl.Size = new System.Drawing.Size(51, 17);
+            this.PortALbl.Size = new System.Drawing.Size(39, 13);
             this.PortALbl.TabIndex = 2;
             this.PortALbl.Text = "Port A:";
             // 
-            // SaveButton
+            // okButton
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.okButton, 2);
             this.okButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.okButton.Location = new System.Drawing.Point(203, 128);
-            this.okButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.okButton.Location = new System.Drawing.Point(152, 104);
+            this.okButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(194, 34);
+            this.okButton.Size = new System.Drawing.Size(146, 28);
             this.okButton.TabIndex = 0;
             this.okButton.Text = "Save Sensor";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
-            // CancelButton
+            // cancelButton
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.cancelButton, 2);
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cancelButton.Location = new System.Drawing.Point(3, 128);
-            this.cancelButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cancelButton.Location = new System.Drawing.Point(2, 104);
+            this.cancelButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(194, 34);
+            this.cancelButton.Size = new System.Drawing.Size(146, 28);
             this.cancelButton.TabIndex = 12;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -128,18 +130,20 @@
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(400, 165);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(300, 134);
             this.tableLayoutPanel1.TabIndex = 13;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(303, 3);
+            this.button1.Location = new System.Drawing.Point(227, 2);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(0, 0);
             this.button1.TabIndex = 13;
@@ -149,37 +153,41 @@
             // PortBLbl
             // 
             this.PortBLbl.AutoSize = true;
-            this.PortBLbl.Location = new System.Drawing.Point(203, 42);
+            this.PortBLbl.Location = new System.Drawing.Point(152, 34);
+            this.PortBLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.PortBLbl.Name = "PortBLbl";
-            this.PortBLbl.Size = new System.Drawing.Size(51, 17);
+            this.PortBLbl.Size = new System.Drawing.Size(39, 13);
             this.PortBLbl.TabIndex = 15;
             this.PortBLbl.Text = "Port B:";
             // 
             // PortBNumericUpDown
             // 
-            this.PortBNumericUpDown.Location = new System.Drawing.Point(303, 45);
+            this.PortBNumericUpDown.Location = new System.Drawing.Point(227, 36);
+            this.PortBNumericUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.PortBNumericUpDown.Maximum = new decimal(new int[] {
             50,
             0,
             0,
             0});
             this.PortBNumericUpDown.Name = "PortBNumericUpDown";
-            this.PortBNumericUpDown.Size = new System.Drawing.Size(94, 22);
+            this.PortBNumericUpDown.Size = new System.Drawing.Size(70, 20);
             this.PortBNumericUpDown.TabIndex = 16;
             // 
             // ConversionLbl
             // 
             this.ConversionLbl.AutoSize = true;
-            this.ConversionLbl.Location = new System.Drawing.Point(3, 84);
+            this.ConversionLbl.Location = new System.Drawing.Point(2, 68);
+            this.ConversionLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.ConversionLbl.Name = "ConversionLbl";
-            this.ConversionLbl.Size = new System.Drawing.Size(46, 17);
+            this.ConversionLbl.Size = new System.Drawing.Size(35, 13);
             this.ConversionLbl.TabIndex = 17;
             this.ConversionLbl.Text = "label2";
             // 
             // ConversionNumericUpDown
             // 
             this.ConversionNumericUpDown.DecimalPlaces = 3;
-            this.ConversionNumericUpDown.Location = new System.Drawing.Point(103, 87);
+            this.ConversionNumericUpDown.Location = new System.Drawing.Point(77, 70);
+            this.ConversionNumericUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ConversionNumericUpDown.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -191,35 +199,37 @@
             0,
             -2147483648});
             this.ConversionNumericUpDown.Name = "ConversionNumericUpDown";
-            this.ConversionNumericUpDown.Size = new System.Drawing.Size(94, 22);
+            this.ConversionNumericUpDown.Size = new System.Drawing.Size(70, 20);
             this.ConversionNumericUpDown.TabIndex = 18;
             // 
             // PortANumericUpDown
             // 
-            this.PortANumericUpDown.Location = new System.Drawing.Point(103, 45);
+            this.PortANumericUpDown.Location = new System.Drawing.Point(77, 36);
+            this.PortANumericUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.PortANumericUpDown.Maximum = new decimal(new int[] {
             50,
             0,
             0,
             0});
             this.PortANumericUpDown.Name = "PortANumericUpDown";
-            this.PortANumericUpDown.Size = new System.Drawing.Size(94, 22);
+            this.PortANumericUpDown.Size = new System.Drawing.Size(70, 20);
             this.PortANumericUpDown.TabIndex = 14;
             // 
             // JointSensorEditorForm
             // 
             this.AcceptButton = this.okButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 165);
+            this.ClientSize = new System.Drawing.Size(300, 134);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "JointSensorEditorForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sensor";
             this.TopMost = true;
